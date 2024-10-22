@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+    kotlin("kapt")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
@@ -74,6 +76,12 @@ dependencies {
     //remote
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+
+    //kakao login
+    implementation("com.kakao.sdk:v2-all:2.20.6")
+
+    implementation("com.airbnb.android:mavericks:3.0.9")
+    implementation("com.airbnb.android:mavericks-compose:3.0.9")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
