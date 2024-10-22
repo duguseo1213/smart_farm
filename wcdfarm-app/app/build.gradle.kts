@@ -83,6 +83,8 @@ dependencies {
     implementation("com.airbnb.android:mavericks:3.0.9")
     implementation("com.airbnb.android:mavericks-compose:3.0.9")
 
+    implementation("androidx.compose.material:material-icons-extended-android:1.7.4")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
