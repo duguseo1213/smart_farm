@@ -21,11 +21,11 @@ public class HarmVideo {
     private Long harmVideoId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @Column(name="harm_picture_id")
+    @JoinColumn(name="harm_picture_id")
     private HarmPicture harmPicture;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name="garden_id")
+    @JoinColumn(name="garden_id")
     private Garden garden;
 
     @Column(name="harm_video")

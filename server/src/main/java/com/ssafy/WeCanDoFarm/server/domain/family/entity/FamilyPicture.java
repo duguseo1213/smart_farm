@@ -21,7 +21,7 @@ public class FamilyPicture {
     private Long familyPictureId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "garden_id")
+    @JoinColumn(name = "garden_id")
     private Garden garden;
 
     @Column(name="family_image")

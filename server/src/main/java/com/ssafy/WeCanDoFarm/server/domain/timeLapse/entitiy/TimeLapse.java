@@ -20,13 +20,13 @@ public class TimeLapse {
     private Long timeLapseId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "garden_id")
+    @JoinColumn(name = "garden_id")
     private Garden garden;
 
-    @Column(name = "garden_id")
+    @Column(name = "time_lapse_image")
     private String timeLapseImage;
 
-    @Column(name = "garden_id")
+    @Column(name = "created_date")
     private Date createdDate;
 
     public static TimeLapse create(Garden garden, String timeLapseImage, Date createdDate) {
