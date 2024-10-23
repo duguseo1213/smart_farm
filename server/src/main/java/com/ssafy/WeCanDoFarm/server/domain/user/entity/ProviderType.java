@@ -1,4 +1,4 @@
-package com.najackdo.server.domain.user.entity;
+package com.ssafy.WeCanDoFarm.server.domain.user.entity;
 
 public enum ProviderType {
 	KAKAO, NAVER, GOOGLE

@@ -1,14 +1,14 @@
-package com.najackdo.server.domain.user.repository;
+package com.ssafy.WeCanDoFarm.server.domain.user.repository;
 
-import java.util.Optional;
-
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.najackdo.server.domain.user.entity.User;
+import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long>, UserQueryRepository {
+public interface UserRepository extends JpaRepository<User, Long>{
+
 	/**
 	 * 사용자 이름으로 사용자 조회
 	 *
@@ -18,18 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long>, UserQueryRepo
 	@Query("""
 		SELECT u 
 		FROM User u
-		LEFT JOIN FETCH  u.activityAreaSetting
-		LEFT JOIN FETCH  u.activityAreaSetting.location
 		WHERE u.username = :username
 """)
 	Optional<User> findByUsername(@Param("username") String username);
-
-	/**
-	 * 사용자 닉네임으로 사용자 조회
-	 * @param nickname
-	 * @return
-	 */
-	@Query("SELECT u FROM User u WHERE u.nickName = :nickname")
-	Optional<User> findByNickname(@Param("nickname") String nickname);
-
 }

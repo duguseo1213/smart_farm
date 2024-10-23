@@ -1,6 +1,6 @@
-package com.najackdo.server.domain.auth.response;
+package com.ssafy.WeCanDoFarm.server.domain.auth.response;
 
-import com.najackdo.server.domain.user.entity.ProviderType;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.ProviderType;
 
 public interface OAuth2Response {
 	ProviderType getProvider();

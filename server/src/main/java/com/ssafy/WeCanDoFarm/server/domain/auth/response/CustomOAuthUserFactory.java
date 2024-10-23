@@ -1,11 +1,11 @@
-package com.najackdo.server.domain.auth.response;
+package com.ssafy.WeCanDoFarm.server.domain.auth.response;
+
+import com.ssafy.WeCanDoFarm.server.domain.auth.response.impl.GoogleResponse;
+import com.ssafy.WeCanDoFarm.server.domain.auth.response.impl.KakaoResponse;
+import com.ssafy.WeCanDoFarm.server.domain.auth.response.impl.NaverResponse;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.ProviderType;
 
 import java.util.Map;
-
-import com.najackdo.server.domain.auth.response.impl.GoogleResponse;
-import com.najackdo.server.domain.auth.response.impl.KakaoResponse;
-import com.najackdo.server.domain.auth.response.impl.NaverResponse;
-import com.najackdo.server.domain.user.entity.ProviderType;
 
 public class CustomOAuthUserFactory {
     public static OAuth2Response parseOAuth2Response(ProviderType providerType, Map<String, Object> attributes) {

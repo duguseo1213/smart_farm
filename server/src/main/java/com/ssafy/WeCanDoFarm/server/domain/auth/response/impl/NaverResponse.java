@@ -1,9 +1,9 @@
-package com.najackdo.server.domain.auth.response.impl;
+package com.ssafy.WeCanDoFarm.server.domain.auth.response.impl;
+
+import com.ssafy.WeCanDoFarm.server.domain.auth.response.OAuth2Response;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.ProviderType;
 
 import java.util.Map;
-
-import com.najackdo.server.domain.auth.response.OAuth2Response;
-import com.najackdo.server.domain.user.entity.ProviderType;
 
 public class NaverResponse implements OAuth2Response {
 	private final Map<String, Object> attribute;

@@ -1,18 +1,16 @@
-package com.najackdo.server.domain.auth.service;
+package com.ssafy.WeCanDoFarm.server.domain.auth.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.najackdo.server.core.constants.AuthConst;
-import com.najackdo.server.core.exception.BaseException;
-import com.najackdo.server.core.exception.ErrorCode;
-import com.najackdo.server.domain.auth.entity.JwtToken;
-import com.najackdo.server.domain.auth.repository.AuthCacheRepository;
-import com.najackdo.server.domain.user.entity.User;
-import com.najackdo.server.domain.user.repository.UserRepository;
-
+import com.ssafy.WeCanDoFarm.server.core.constants.AuthConst;
+import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
+import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
+import com.ssafy.WeCanDoFarm.server.domain.auth.entity.JwtToken;
+import com.ssafy.WeCanDoFarm.server.domain.auth.repository.AuthCacheRepository;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
+import com.ssafy.WeCanDoFarm.server.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service

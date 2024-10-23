@@ -1,11 +1,4 @@
-package com.najackdo.server.domain.auth.controller;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+package com.ssafy.WeCanDoFarm.server.domain.auth.controller;
 
 import com.najackdo.server.core.annotation.Authenticated;
 import com.najackdo.server.core.annotation.CurrentUser;
@@ -18,13 +11,14 @@ import com.najackdo.server.core.util.CookieUtils;
 import com.najackdo.server.domain.auth.entity.JwtToken;
 import com.najackdo.server.domain.auth.service.AuthService;
 import com.najackdo.server.domain.user.entity.User;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController

@@ -1,8 +1,14 @@
-package com.najackdo.server.domain.auth.service;
+package com.ssafy.WeCanDoFarm.server.domain.auth.service;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.springframework.context.ApplicationEventPublisher;
+import com.ssafy.WeCanDoFarm.server.core.constants.S3Const;
+import com.ssafy.WeCanDoFarm.server.domain.auth.response.CustomOAuth2User;
+import com.ssafy.WeCanDoFarm.server.domain.auth.response.CustomOAuthUserFactory;
+import com.ssafy.WeCanDoFarm.server.domain.auth.response.OAuth2Response;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.ProviderType;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
+import com.ssafy.WeCanDoFarm.server.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -10,17 +16,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.najackdo.server.core.constants.S3Const;
-import com.najackdo.server.domain.auth.response.CustomOAuth2User;
-import com.najackdo.server.domain.auth.response.CustomOAuthUserFactory;
-import com.najackdo.server.domain.auth.response.OAuth2Response;
-import com.najackdo.server.domain.user.entity.ProviderType;
-import com.najackdo.server.domain.user.entity.User;
-import com.najackdo.server.domain.user.event.S3UploadEvent;
-import com.najackdo.server.domain.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Service

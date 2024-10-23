@@ -1,4 +1,4 @@
-package com.najackdo.server.core.constants;
+package com.ssafy.WeCanDoFarm.server.core.constants;
 
 public abstract class AuthConst {
 	public static final String REFRESH_TOKEN = "refresh-token";

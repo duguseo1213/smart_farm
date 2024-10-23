@@ -1,16 +1,14 @@
-package com.najackdo.server.domain.auth.response;
+package com.ssafy.WeCanDoFarm.server.domain.auth.response;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import com.najackdo.server.domain.user.entity.User;
-
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class CustomOAuth2User implements OAuth2User, UserDetails {

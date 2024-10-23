@@ -1,16 +1,14 @@
-package com.najackdo.server.domain.auth.handler;
+package com.ssafy.WeCanDoFarm.server.domain.auth.handler;
 
-import java.io.IOException;
-
+import com.najackdo.server.core.exception.ErrorCode;
+import com.najackdo.server.core.response.ErrorResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import com.najackdo.server.core.exception.ErrorCode;
-import com.najackdo.server.core.response.ErrorResponse;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {

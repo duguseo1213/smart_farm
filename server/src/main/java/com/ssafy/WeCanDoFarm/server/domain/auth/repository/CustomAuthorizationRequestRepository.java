@@ -1,18 +1,17 @@
-package com.najackdo.server.domain.auth.repository;
+package com.ssafy.WeCanDoFarm.server.domain.auth.repository;
 
 
-import static com.najackdo.server.core.constants.AuthConst.*;
-
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
-import org.springframework.stereotype.Repository;
-
-import com.najackdo.server.core.util.CookieUtils;
-
+import com.ssafy.WeCanDoFarm.server.core.util.CookieUtils;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.stereotype.Repository;
+
+import static com.ssafy.WeCanDoFarm.server.core.constants.AuthConst.*;
+import static com.ssafy.WeCanDoFarm.server.core.constants.AuthConst.OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME;
 
 @Slf4j
 @Repository

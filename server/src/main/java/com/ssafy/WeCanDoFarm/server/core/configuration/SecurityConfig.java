@@ -1,8 +1,12 @@
-package com.najackdo.server.core.configuration;
+package com.ssafy.WeCanDoFarm.server.core.configuration;
 
-import java.util.Collections;
-import java.util.List;
-
+import com.ssafy.WeCanDoFarm.server.core.filter.JWTFilter;
+import com.ssafy.WeCanDoFarm.server.domain.auth.handler.CustomAuthenticationDeniedHandler;
+import com.ssafy.WeCanDoFarm.server.domain.auth.handler.CustomAuthenticationEntryPoint;
+import com.ssafy.WeCanDoFarm.server.domain.auth.handler.CustomSuccessHandler;
+import com.ssafy.WeCanDoFarm.server.domain.auth.repository.CustomAuthorizationRequestRepository;
+import com.ssafy.WeCanDoFarm.server.domain.auth.service.CustomOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -13,14 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import com.najackdo.server.core.filter.JWTFilter;
-import com.najackdo.server.domain.auth.handler.CustomAuthenticationDeniedHandler;
-import com.najackdo.server.domain.auth.handler.CustomAuthenticationEntryPoint;
-import com.najackdo.server.domain.auth.handler.CustomSuccessHandler;
-import com.najackdo.server.domain.auth.repository.CustomAuthorizationRequestRepository;
-import com.najackdo.server.domain.auth.service.CustomOAuth2UserService;
-
-import lombok.RequiredArgsConstructor;
+import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity

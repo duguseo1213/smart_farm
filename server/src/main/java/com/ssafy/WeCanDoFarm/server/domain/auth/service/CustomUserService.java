@@ -1,20 +1,18 @@
-package com.najackdo.server.domain.auth.service;
+package com.ssafy.WeCanDoFarm.server.domain.auth.service;
 
-import java.util.function.Function;
-
+import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
+import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
+import com.ssafy.WeCanDoFarm.server.domain.auth.response.CustomOAuth2User;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
+import com.ssafy.WeCanDoFarm.server.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.najackdo.server.core.exception.BaseException;
-import com.najackdo.server.core.exception.ErrorCode;
-import com.najackdo.server.domain.auth.response.CustomOAuth2User;
-import com.najackdo.server.domain.user.entity.User;
-import com.najackdo.server.domain.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor

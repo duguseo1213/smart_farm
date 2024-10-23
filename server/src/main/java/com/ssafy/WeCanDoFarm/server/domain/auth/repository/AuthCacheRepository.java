@@ -1,10 +1,9 @@
-package com.najackdo.server.domain.auth.repository;
+package com.ssafy.WeCanDoFarm.server.domain.auth.repository;
 
+import com.najackdo.server.core.properties.JwtProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-import com.najackdo.server.core.properties.JwtProperties;
-
-import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor

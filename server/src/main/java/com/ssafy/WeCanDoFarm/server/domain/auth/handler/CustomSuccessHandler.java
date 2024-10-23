@@ -1,14 +1,4 @@
-package com.najackdo.server.domain.auth.handler;
-
-import static com.najackdo.server.core.constants.AuthConst.*;
-
-import java.io.IOException;
-import java.util.Optional;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
+package com.ssafy.WeCanDoFarm.server.domain.auth.handler;
 
 import com.najackdo.server.core.constants.AuthConst;
 import com.najackdo.server.core.properties.JwtProperties;
@@ -17,12 +7,20 @@ import com.najackdo.server.domain.auth.entity.JwtToken;
 import com.najackdo.server.domain.auth.repository.CustomAuthorizationRequestRepository;
 import com.najackdo.server.domain.auth.response.CustomOAuth2User;
 import com.najackdo.server.domain.auth.service.JWTService;
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.io.IOException;
+import java.util.Optional;
+
+import static com.najackdo.server.core.constants.AuthConst.*;
 
 @Slf4j
 @Component

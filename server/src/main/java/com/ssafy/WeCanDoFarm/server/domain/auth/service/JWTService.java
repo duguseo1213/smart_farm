@@ -1,16 +1,13 @@
-package com.najackdo.server.domain.auth.service;
+package com.ssafy.WeCanDoFarm.server.domain.auth.service;
 
-import static com.najackdo.server.core.exception.ErrorCode.*;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
-
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
+import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
+import com.ssafy.WeCanDoFarm.server.domain.auth.entity.JwtToken;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,15 +16,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.najackdo.server.core.exception.BaseException;
-import com.najackdo.server.domain.auth.entity.JwtToken;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
+import static com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode.*;
 
 @Component
 @RequiredArgsConstructor

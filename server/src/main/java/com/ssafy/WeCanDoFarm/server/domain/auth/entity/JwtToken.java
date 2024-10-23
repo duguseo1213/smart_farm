@@ -1,4 +1,4 @@
-package com.najackdo.server.domain.auth.entity;
+package com.ssafy.WeCanDoFarm.server.domain.auth.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
