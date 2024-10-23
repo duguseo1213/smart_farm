@@ -17,7 +17,7 @@ public class Crop {
     private Long cropId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "garden_id")
+    @JoinColumn(name = "garden_id")
     private Garden garden;
 
     @Column(name = "crop_nickname")

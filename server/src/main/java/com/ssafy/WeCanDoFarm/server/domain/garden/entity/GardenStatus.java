@@ -20,7 +20,7 @@ public class GardenStatus {
     private Long gardenStatusId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "garden_id")
+    @JoinColumn(name = "garden_id")
     private Garden garden;
 
     @Column(name = "humidity")
