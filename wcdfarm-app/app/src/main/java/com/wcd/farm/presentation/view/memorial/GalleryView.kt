@@ -25,18 +25,12 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,17 +45,16 @@ import com.wcd.farm.presentation.intent.MemorialViewIntent
 import com.wcd.farm.presentation.state.MemorialViewState
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.MemorialViewModel
-import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun GalleryView() {
     val viewModel: MemorialViewModel = mavericksViewModel()
 
     val calendarState by viewModel.collectAsState(MemorialViewState::showDialog)
+    val selectedDate by viewModel.selectedDate.collectAsState()
 
     Column {
         Row(
@@ -71,8 +64,12 @@ fun GalleryView() {
         ) {
 
             Column {
-                Text("2024", fontSize = 24.sp, color = Color.White)
-                Text("September 17th", fontSize = 32.sp, color = Color.White)
+                Text("${selectedDate.year}", fontSize = 24.sp, color = Color.White)
+                Text(
+                    "${selectedDate.month.name[0]}${
+                        selectedDate.month.name.substring(1).lowercase()
+                    } ${selectedDate.dayOfMonth}", fontSize = 32.sp, color = Color.White
+                )
             }
             Button(
                 onClick = { viewModel.sendIntent(MemorialViewIntent.ShowDialog) },
@@ -156,25 +153,26 @@ fun MemoryView() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarModal(onDismissRequest: () -> Unit) {
-    val snackState = remember { SnackbarHostState() }
-    val snackScope = rememberCoroutineScope()
-    SnackbarHost(hostState = snackState, Modifier)
+    val viewModel: MemorialViewModel = mavericksViewModel()
 
-
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-
-    val dateFormatter = SimpleDateFormat("yyyy.MM.dd.E", Locale.getDefault())
+    val crtYear = LocalDate.now().year
 
 // TODO demo how to read the selected date from the state.
 
-    val datePickerState = rememberDatePickerState()
-    val confirmEnabled = remember {
-        derivedStateOf { datePickerState.selectedDateMillis != null }
-    }
+    val datePickerState = rememberDatePickerState(yearRange = IntRange(crtYear - 5, crtYear))
+
     DatePickerDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
-            TextButton(onClick = { }) {
+            TextButton(onClick = {
+                val date = datePickerState.selectedDateMillis?.let {
+                    Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+                };
+                if (date != null) {
+                    viewModel.setSelectedDate(date)
+                    onDismissRequest()
+                }
+            }) {
                 Text("Confirm")
             }
         },
@@ -183,28 +181,13 @@ fun CalendarModal(onDismissRequest: () -> Unit) {
                 Text("Dismiss")
             }
         }, content = {
-            val formattedDate = dateFormatter.format(
-                Date.from(
-                    selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
-                )
-            )
-            //Text("Selected Date: $formattedDate")
-
             DatePicker(
                 state = datePickerState,
                 dateFormatter = DatePickerDefaults.dateFormatter(
                     yearSelectionSkeleton = "MM YYYY",
                     selectedDateSkeleton = "yyyy MM dd E",
                     selectedDateDescriptionSkeleton = "EEEE, MMMM dd"
-                ),
-                /*headline = {
-                    DatePickerDefaults.DatePickerHeadline(
-                        selectedDateMillis = selectedDate.toEpochDay() * 24 * 60 * 60 * 1000,
-                        displayMode = DisplayMode.Picker,
-                        dateFormatter
-                    )
-                }*/
+                )
             )
-            //DatePicker(state = datePickerState)
         })
 }

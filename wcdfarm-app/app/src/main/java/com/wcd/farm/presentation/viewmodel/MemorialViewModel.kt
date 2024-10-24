@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 class MemorialViewModel @AssistedInject constructor(
@@ -34,6 +35,8 @@ class MemorialViewModel @AssistedInject constructor(
     }
 
     companion object : MavericksViewModelFactory<MemorialViewModel, MemorialViewState> by hiltMavericksViewModelFactory()
+
+    val selectedDate = repository.selectedDate
 
     init {
         handleIntent()
@@ -57,5 +60,9 @@ class MemorialViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    fun setSelectedDate(date: LocalDate) {
+        repository.setSelectedDate(date)
     }
 }
