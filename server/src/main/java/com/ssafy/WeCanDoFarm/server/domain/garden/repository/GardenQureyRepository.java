@@ -1,0 +1,11 @@
+package com.ssafy.WeCanDoFarm.server.domain.garden.repository;
+
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
+import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public interface GardenQureyRepository {
+    public List<Garden> getGardens(String username) throws SQLException;
+}

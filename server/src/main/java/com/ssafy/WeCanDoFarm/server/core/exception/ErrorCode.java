@@ -29,6 +29,7 @@ public enum ErrorCode {
     NOT_SUPPORTED_EXTENSION(8002, HttpStatus.BAD_REQUEST, "지원하지 않는 확장자입니다."),
     FAIL_TO_CREATE_FILE(8003, HttpStatus.INTERNAL_SERVER_ERROR, "파일 생성에 실패하였습니다.");
 
+
     private final int code;
     private final HttpStatus status;
     private final String message;

@@ -2,13 +2,13 @@ package com.ssafy.WeCanDoFarm.server.domain.garden.controller;
 
 
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterUserToGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
+import com.ssafy.WeCanDoFarm.server.domain.garden.service.GardenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +19,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GardenController {
 
-    @GetMapping("/")
-    public SuccessResponse<List<Garden>> getGardenList(){
+    private final GardenService gardenService;
 
+    @GetMapping("/{username}")
+    public SuccessResponse<List<Garden>> getGardenList(@PathVariable String username) throws Exception {
 
-
-        return SuccessResponse.of(new ArrayList<>());
+        return SuccessResponse.of(gardenService.getGardens(username));
 
     }
-    @PostMapping("/")
-    public SuccessResponse<?> registerGarden(Garden garden){
 
-
+    @PostMapping("/add-garden")
+    public SuccessResponse<String> registerGarden(@RequestBody RegisterGardenRequest request) throws Exception {
+        gardenService.registerGarden(request);
         return SuccessResponse.of("텃밭 등록완료");
     }
-    
+
+    @PostMapping("/add-user-to-garden")
+    public SuccessResponse<String> registerUserToGarden(@RequestBody RegisterUserToGardenRequest request) throws Exception {
+
+        gardenService.registerUserToGarden(request);
+        return SuccessResponse.empty();
+    }
+
+
 }
+
+
