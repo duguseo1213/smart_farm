@@ -1,6 +1,10 @@
 package com.wcd.farm.presentation.view.memorial
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -8,10 +12,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CollectionsBookmark
+import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -20,14 +27,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import com.wcd.farm.R
 import com.wcd.farm.presentation.intent.MemorialViewIntent
 import com.wcd.farm.presentation.state.MemorialViewState
+import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.MemorialViewModel
 
 const val GALLERY_VIEW = 1
@@ -64,11 +78,11 @@ fun MemorialScreen() {
         }
         Spacer(modifier = Modifier.fillMaxHeight(0.05f))
 
-        when(showView) {
+        when (showView) {
             GALLERY_VIEW -> GalleryView()
             GROWTH_VIEW -> Text("Growth")
-            ANIMAL_VIEW -> Text("Animal")
-            THEFT_VIEW -> Text("Theft")
+            ANIMAL_VIEW -> AnimalScreen()
+            THEFT_VIEW -> TheftScreen()
         }
     }
 }
@@ -83,7 +97,7 @@ fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
 
     Button(
         onClick = onClick,
-        colors = if(crtMenu) color else color2,
+        colors = if (crtMenu) color else color2,
         shape = RoundedCornerShape(16.dp),
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier
@@ -99,8 +113,81 @@ fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0XFF0D5D32)
 @Composable
-fun PreviewMemorialScreen() {
-    MemorialScreen()
+fun EmptyListView(notify: String) {
+    BoxWithConstraints(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        val height = maxHeight
+        Text(
+            notify,
+            color = Color.White,
+            fontSize = 24.sp,
+            modifier = Modifier.offset(y = -maxHeight / 5)
+        )
+    }
+
+}
+
+@Composable
+fun InvasionView() {
+    Column {
+        Text(
+            "2024-09-17",
+            color = Color.White,
+            fontSize = 28.sp,
+            modifier = Modifier.padding(8.dp, 24.dp)
+        )
+        Column(
+            modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color.White)
+                .padding(8.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            ) {
+                Text("오후 03:30 강아지 방문", fontSize = 20.sp)
+                Button(
+                    onClick = { /*TODO*/ },
+                    shape = RectangleShape,
+                    modifier = Modifier
+                        .padding(0.dp)
+                        .size(32.dp),
+                    colors = buttonTransparentTheme(),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Icon(
+                        Icons.Outlined.DeleteForever,
+                        contentDescription = "Delete",
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
+
+            }
+            Button(
+                onClick = { /*TODO*/ },
+                shape = RectangleShape,
+                colors = buttonTransparentTheme(),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.dog_on_farm),
+                    contentDescription = "invader",
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.clip(RoundedCornerShape(8.dp))
+                )
+            }
+        }
+    }
+
+
+}
+
+@Preview
+@Composable
+fun PreviewInvasionView() {
+    InvasionView()
 }
