@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wcd.farm.R
+import com.wcd.farm.presentation.view.memorial.MemorialScreen
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 
 @Composable
@@ -84,7 +85,7 @@ fun MainLayout() {
 
                 Home -> Text("Home")//HomeView(modifier = Modifier.padding(innerPadding))
                 Info -> Text("Info")//InfoView(modifier = Modifier.padding(innerPadding))
-                Record -> Text("Record")
+                Record -> MemorialScreen()//Text("Record")
                 MyPage -> Text("MyPage")//MyPageView(modifier = Modifier.padding(innerPadding))
 
             }
