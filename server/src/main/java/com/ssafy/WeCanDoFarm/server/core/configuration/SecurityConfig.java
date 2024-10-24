@@ -38,7 +38,8 @@ public class SecurityConfig {
 		return httpSecurity
 			.cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
 				CorsConfiguration configuration = new CorsConfiguration();
-				configuration.setAllowedOrigins(List.of("http://localhost:8090","http://localhost:3000", "https://www.najackdo.kro.kr"));
+//				configuration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:8090","http://localhost:3000", "https://www.najackdo.kro.kr"));
+				configuration.setAllowedOrigins(List.of("*"));
 				configuration.setAllowedMethods(Collections.singletonList("*"));
 				configuration.setAllowCredentials(true);
 				configuration.setAllowedHeaders(Collections.singletonList("*"));

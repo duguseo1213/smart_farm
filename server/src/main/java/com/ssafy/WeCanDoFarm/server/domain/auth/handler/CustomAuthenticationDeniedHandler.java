@@ -1,7 +1,7 @@
 package com.ssafy.WeCanDoFarm.server.domain.auth.handler;
 
-import com.najackdo.server.core.exception.ErrorCode;
-import com.najackdo.server.core.response.ErrorResponse;
+import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
+import com.ssafy.WeCanDoFarm.server.core.response.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;

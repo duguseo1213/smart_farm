@@ -1,12 +1,12 @@
 package com.ssafy.WeCanDoFarm.server.domain.auth.handler;
 
-import com.najackdo.server.core.constants.AuthConst;
-import com.najackdo.server.core.properties.JwtProperties;
-import com.najackdo.server.core.util.CookieUtils;
-import com.najackdo.server.domain.auth.entity.JwtToken;
-import com.najackdo.server.domain.auth.repository.CustomAuthorizationRequestRepository;
-import com.najackdo.server.domain.auth.response.CustomOAuth2User;
-import com.najackdo.server.domain.auth.service.JWTService;
+import com.ssafy.WeCanDoFarm.server.core.constants.AuthConst;
+import com.ssafy.WeCanDoFarm.server.core.properties.JwtProperties;
+import com.ssafy.WeCanDoFarm.server.core.util.CookieUtils;
+import com.ssafy.WeCanDoFarm.server.domain.auth.entity.JwtToken;
+import com.ssafy.WeCanDoFarm.server.domain.auth.repository.CustomAuthorizationRequestRepository;
+import com.ssafy.WeCanDoFarm.server.domain.auth.response.CustomOAuth2User;
+import com.ssafy.WeCanDoFarm.server.domain.auth.service.JWTService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.najackdo.server.core.constants.AuthConst.*;
+import static com.ssafy.WeCanDoFarm.server.core.constants.AuthConst.*;
 
 @Slf4j
 @Component

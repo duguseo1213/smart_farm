@@ -1,16 +1,16 @@
 package com.ssafy.WeCanDoFarm.server.domain.auth.controller;
 
-import com.najackdo.server.core.annotation.Authenticated;
-import com.najackdo.server.core.annotation.CurrentUser;
-import com.najackdo.server.core.constants.AuthConst;
-import com.najackdo.server.core.exception.BaseException;
-import com.najackdo.server.core.exception.ErrorCode;
-import com.najackdo.server.core.properties.JwtProperties;
-import com.najackdo.server.core.response.SuccessResponse;
-import com.najackdo.server.core.util.CookieUtils;
-import com.najackdo.server.domain.auth.entity.JwtToken;
-import com.najackdo.server.domain.auth.service.AuthService;
-import com.najackdo.server.domain.user.entity.User;
+import com.ssafy.WeCanDoFarm.server.core.annotation.Authenticated;
+import com.ssafy.WeCanDoFarm.server.core.annotation.CurrentUser;
+import com.ssafy.WeCanDoFarm.server.core.constants.AuthConst;
+import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
+import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
+import com.ssafy.WeCanDoFarm.server.core.properties.JwtProperties;
+import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
+import com.ssafy.WeCanDoFarm.server.core.util.CookieUtils;
+import com.ssafy.WeCanDoFarm.server.domain.auth.entity.JwtToken;
+import com.ssafy.WeCanDoFarm.server.domain.auth.service.AuthService;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

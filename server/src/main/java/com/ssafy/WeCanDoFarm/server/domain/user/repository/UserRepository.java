@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	 * @return {@link User} 사용자 엔티티 (존재하지 않으면, {@link Optional#empty()} 반환)
 	 */
 	@Query("""
-		SELECT u 
+		SELECT u
 		FROM User u
 		WHERE u.username = :username
 """)

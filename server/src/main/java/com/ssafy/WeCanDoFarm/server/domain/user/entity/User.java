@@ -22,7 +22,6 @@ public class User extends BaseEntity {
     private String username;
 
     @Column(name="gender")
-    @Enumerated(EnumType.STRING)
     private char gender;
 
     @Column(name="age")
@@ -41,9 +40,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
-    @Column(name="role_type")
+    @Column(name="role_type",nullable = false)
     @Enumerated(EnumType.STRING)
-    private RoleType roleType;
+    private RoleType roleType = RoleType.USER;
 
     @Column(name="provider_id")
     private String providerId;
@@ -54,9 +53,6 @@ public class User extends BaseEntity {
     @Column(name="fcm_token")
     private String fcmToken;
 
-    @Column(name="created_date")
-    @CreatedDate
-    private Date createdDate;
 
     public static User createUser(String username, String name, char gender, ProviderType providerType,
                                   String providerId, String profileImage) {
