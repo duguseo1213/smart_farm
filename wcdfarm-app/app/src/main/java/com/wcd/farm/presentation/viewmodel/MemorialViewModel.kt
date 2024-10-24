@@ -1,20 +1,39 @@
 package com.wcd.farm.presentation.viewmodel
 
 import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.hilt.AssistedViewModelFactory
+import com.airbnb.mvrx.hilt.hiltMavericksViewModelFactory
+import com.wcd.farm.data.repository.MemorialRepository
 import com.wcd.farm.presentation.intent.MemorialViewIntent
 import com.wcd.farm.presentation.state.MemorialViewState
 import com.wcd.farm.presentation.view.memorial.ANIMAL_VIEW
 import com.wcd.farm.presentation.view.memorial.GALLERY_VIEW
 import com.wcd.farm.presentation.view.memorial.GROWTH_VIEW
 import com.wcd.farm.presentation.view.memorial.THEFT_VIEW
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MemorialViewModel(memorialViewState: MemorialViewState): MavericksViewModel<MemorialViewState>(memorialViewState) {
+class MemorialViewModel @AssistedInject constructor(
+    @Assisted initialState: MemorialViewState,
+    private val repository: MemorialRepository
+) :
+    MavericksViewModel<MemorialViewState>(initialState) {
 
     private val memorialViewIntent = Channel<MemorialViewIntent>()
+
+    @AssistedFactory
+    interface Factory : AssistedViewModelFactory<MemorialViewModel, MemorialViewState> {
+        override fun create(state: MemorialViewState): MemorialViewModel
+    }
+
+    companion object : MavericksViewModelFactory<MemorialViewModel, MemorialViewState> by hiltMavericksViewModelFactory()
 
     init {
         handleIntent()
