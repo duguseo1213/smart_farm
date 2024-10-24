@@ -5,14 +5,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-
+import com.ssafy.WeCanDoFarm.server.core.entity.BaseEntity;
 import java.util.Date;
 
 @Entity
 @Getter
 @Table(name="users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
@@ -22,8 +22,7 @@ public class User {
     private String username;
 
     @Column(name="gender")
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private char gender;
 
     @Column(name="age")
     private Integer age;
@@ -37,9 +36,13 @@ public class User {
     @Column(name="email")
     private String email;
 
-    @Column(name="role_type")
+    @Column(name = "provider_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private RoleType roleType;
+    private ProviderType providerType;
+
+    @Column(name="role_type",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType = RoleType.USER;
 
     @Column(name="provider_id")
     private String providerId;
@@ -50,21 +53,22 @@ public class User {
     @Column(name="fcm_token")
     private String fcmToken;
 
-    @Column(name="created_date")
-    @CreatedDate
-    private Date createdDate;
 
-    public static User create(String username, Gender gender, Integer age, String name, String nickname, String email, RoleType roleType, String providerId, String profileImage) {
+    public static User createUser(String username, String name, char gender, ProviderType providerType,
+                                  String providerId, String profileImage) {
         User user = new User();
         user.username = username;
-        user.gender = gender;
-        user.age = age;
         user.name = name;
-        user.nickname = nickname;
-        user.email = email;
-        user.roleType = roleType;
+        user.nickname = name;
+        user.email = username;
+        user.gender = gender;
+        user.providerType = providerType;
         user.providerId = providerId;
         user.profileImage = profileImage;
         return user;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 }

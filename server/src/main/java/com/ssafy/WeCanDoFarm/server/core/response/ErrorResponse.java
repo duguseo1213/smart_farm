@@ -1,6 +1,7 @@
 package com.ssafy.WeCanDoFarm.server.core.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nimbusds.jose.shaded.gson.Gson;
 import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
 import lombok.Getter;
 
@@ -36,5 +37,8 @@ public class ErrorResponse extends BaseResponse<Void>{
         return new ErrorResponse(errorCode);
     }
     public static ErrorResponse of(ErrorCode errorCode, Object reference) {return new ErrorResponse(errorCode, reference);
+    }
+    public String toJson() {
+        return new Gson().toJson(this);
     }
 }
