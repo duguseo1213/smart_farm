@@ -1,6 +1,7 @@
 package com.wcd.farm.presentation.view.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -48,11 +51,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.wcd.farm.R
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
+import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 
 @Composable
 fun MainScreen() {
+    val weatherViewModel: WeatherViewModel = hiltViewModel()
+
+    LaunchedEffect(Unit) {
+        // 여기서 원하는 함수를 호출
+        weatherViewModel.getCrtWeather()
+    }
+
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         TodayWeatherView()
         Spacer(modifier = Modifier.fillMaxHeight(0.4f))
@@ -64,76 +76,95 @@ fun MainScreen() {
 
 @Composable
 fun TodayWeatherView() {
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.2f)
-    ) {
-        val width = maxWidth
-        val height = maxHeight
-
-        Text(
-            "Farm-us",
-            modifier = Modifier.offset(x = width / 12, y = height / 6),
-            color = Color.White,
-            fontSize = 30.sp,
-            letterSpacing = (-2).sp,
-            fontWeight = FontWeight.Light
-        )
-
-        Icon(
-            Icons.Outlined.WbSunny,
-            "RAINY",
-            tint = Color.White,
+    Button(onClick = { /*TODO*/ }, contentPadding = PaddingValues(0.dp), colors = buttonTransparentTheme(), shape = RoundedCornerShape(8.dp)) {
+        BoxWithConstraints(
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .offset(x = width / 10)
-                .size(72.dp)
-        )
-
-        Column(
-            modifier = Modifier.align(Alignment.BottomCenter)/*modifier = Modifier.offset(x = width * 3 / 10, y = height / 2)*/,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .fillMaxHeight(0.2f)
         ) {
-            TemperatureView()
-        }
+            val width = maxWidth
+            val height = maxHeight
 
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .offset(-width / 10, 0.dp)
-        ) {
-            WeatherStatusView()
-        }
+            Text(
+                "Farm-us",
+                modifier = Modifier.offset(x = width / 12, y = height / 6),
+                color = Color.White,
+                fontSize = 30.sp,
+                letterSpacing = (-2).sp,
+                fontWeight = FontWeight.Light
+            )
 
+            Icon(
+                Icons.Outlined.WbSunny,
+                "RAINY",
+                tint = Color.White,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .offset(x = width / 10)
+                    .size(72.dp)
+            )
+
+            Column(
+                modifier = Modifier.align(Alignment.BottomCenter)/*modifier = Modifier.offset(x = width * 3 / 10, y = height / 2)*/,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TemperatureView()
+            }
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .offset(-width / 10, 0.dp)
+            ) {
+                WeatherStatusView()
+            }
+
+        }
     }
+
 }
 
 @Composable
 fun TemperatureView() {
-    Text("24°C", fontSize = 36.sp, color = Color.White)
-    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth(0.3f)) {
+    val weatherViewModel: WeatherViewModel = hiltViewModel()
+    val weather by weatherViewModel.weather.collectAsState()
 
-        val styledText = buildAnnotatedString {
+    Text("${weather.tmp}°C", fontSize = 36.sp, color = Color.White)
+    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth(0.35f)) {
+
+        val minTmp = buildAnnotatedString {
             withStyle(style = SpanStyle(fontSize = 10.sp)) {
-                append("최대 ")
+                append("최소 ")
             }
-            withStyle(style = SpanStyle(fontSize = 16.sp)) {
-                append("33°C")
+            withStyle(style = SpanStyle(fontSize = 14.sp)) {
+                append("${weather.minTmp}°C")
             }
         }
 
-        Text(styledText, color = Color.White, fontWeight = FontWeight.Light)
-        Text("|", fontSize = 16.sp, color = Color.White)
-        Text(styledText, color = Color.White, fontWeight = FontWeight.Light)
+        Text(minTmp, color = Color.White, fontWeight = FontWeight.Light)
+        Text(" | ", fontSize = 14.sp, color = Color.White)
+
+        val maxTmp = buildAnnotatedString {
+            withStyle(style = SpanStyle(fontSize = 10.sp)) {
+                append("최대 ")
+            }
+            withStyle(style = SpanStyle(fontSize = 14.sp)) {
+                append("${weather.maxTmp}°C")
+            }
+        }
+
+        Text(maxTmp, color = Color.White, fontWeight = FontWeight.Light)
     }
 }
 
 @Composable
 fun WeatherStatusView() {
-    Text("강수: 3mm", color = Color.White)
-    Text("바람: 2m/s", color = Color.White)
-    Text("습도: 80%", color = Color.White)
+    val weatherViewModel: WeatherViewModel = hiltViewModel()
+    val weather by weatherViewModel.weather.collectAsState()
+
+    Text("강수: ${weather.rain}", color = Color.White)
+    Text("바람: ${weather.wind}m/s", color = Color.White)
+    Text("습도: ${weather.humidity}%", color = Color.White)
 }
 
 @Composable
@@ -183,21 +214,24 @@ fun MenuButton(icon: ImageVector, description: String) {
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun StateView() {
-    Row(
-        verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
-            .fillMaxWidth(0.8f)
-            .fillMaxHeight(0.8f)
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color.White)
-            .padding(24.dp, 4.dp, 24.dp, 24.dp)
-    ) {
-        StateBar(icon = Icons.Outlined.WaterDrop, 90, Color.Cyan)
-        Spacer(modifier = Modifier.width(24.dp))
-        StateBar(icon = Icons.Outlined.WbSunny, ratio = 40, Color.Yellow)
-        Spacer(modifier = Modifier.width(24.dp))
-        StateBar(icon = Icons.Outlined.LocalHospital, ratio = 5, Color.Magenta)
+    Button(onClick = { Log.e("TEST", "Click") }, contentPadding = PaddingValues(0.dp), shape = RoundedCornerShape(8.dp)) {
+        Row(
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .fillMaxHeight(0.8f)
+                //.clip(RoundedCornerShape(8.dp))
+                .background(Color.White)
+                .padding(24.dp, 4.dp, 24.dp, 24.dp)
+        ) {
+            StateBar(icon = Icons.Outlined.WaterDrop, 90, Color.Cyan)
+            Spacer(modifier = Modifier.width(24.dp))
+            StateBar(icon = Icons.Outlined.WbSunny, ratio = 40, Color.Yellow)
+            Spacer(modifier = Modifier.width(24.dp))
+            StateBar(icon = Icons.Outlined.LocalHospital, ratio = 5, Color.Magenta)
+        }
     }
+
 }
 
 @Composable

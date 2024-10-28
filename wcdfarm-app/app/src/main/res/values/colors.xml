@@ -7,5 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="background">#FF3A654E</color>
+    <color name="background">#FFECEDC1</color>
+    <color name="weather_font">#FF204833</color>
+    <color name="bottom_bar">#FF2C651E</color>
 </resources>

@@ -76,6 +76,10 @@ dependencies {
     //remote
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
+
+    implementation("org.locationtech.proj4j:proj4j:1.3.0")
+    implementation("org.locationtech.proj4j:proj4j-epsg:1.3.0")
 
     //kakao login
     implementation("com.kakao.sdk:v2-all:2.20.6")
