@@ -32,7 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wcd.farm.R
 import com.wcd.farm.presentation.view.memorial.MemorialScreen
-import com.wcd.farm.presentation.view.home.MainScreen
+import com.wcd.farm.presentation.view.home.HomeScreen
+import com.wcd.farm.presentation.view.info.InfoScreen
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 
 @Composable
@@ -75,15 +76,14 @@ fun MainLayout() {
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            when (currentScreen) {
-
-                Home -> MainScreen()//HomeView(modifier = Modifier.padding(innerPadding))
-                Info -> Text("Info")//InfoView(modifier = Modifier.padding(innerPadding))
-                Record -> MemorialScreen()//Text("Record")
-                MyPage -> Text("MyPage")//MyPageView(modifier = Modifier.padding(innerPadding))
-
+            Box(modifier = Modifier.padding(36.dp, 18.dp)) {
+                when (currentScreen) {
+                    Home -> HomeScreen()//HomeView(modifier = Modifier.padding(innerPadding))
+                    Info -> InfoScreen()//InfoView(modifier = Modifier.padding(innerPadding))
+                    Record -> MemorialScreen()//Text("Record")
+                    MyPage -> Text("MyPage")//MyPageView(modifier = Modifier.padding(innerPadding))
+                }
             }
-
         }
 
     }

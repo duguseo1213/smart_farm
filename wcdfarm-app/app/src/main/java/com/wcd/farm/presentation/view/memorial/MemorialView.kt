@@ -57,7 +57,6 @@ fun MemorialScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(32.dp, 16.dp)
     ) {
         Row(
             modifier = Modifier

@@ -90,6 +90,9 @@ dependencies {
 
     implementation("androidx.compose.material:material-icons-extended-android")
 
+    // chart
+    implementation ("io.github.ehsannarmani:compose-charts:0.0.14")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -17,7 +17,6 @@ class WeatherViewModel @Inject constructor(private val weatherRepository: Weathe
 
     fun getCrtWeather() {
         val time = LocalDateTime.now(ZoneId.systemDefault())
-        Log.e("TEST", time.toString())
         weatherRepository.getCrtWeather(0, 37.566, 126.978, time)
     }
 }

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -57,11 +56,10 @@ import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 
 @Composable
-fun MainScreen() {
+fun HomeScreen() {
     val weatherViewModel: WeatherViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        // 여기서 원하는 함수를 호출
         weatherViewModel.getCrtWeather()
     }
 
@@ -87,7 +85,6 @@ fun TodayWeatherView() {
 
             Text(
                 "Farm-us",
-                modifier = Modifier.offset(x = width / 12, y = height / 6),
                 color = Color.White,
                 fontSize = 30.sp,
                 letterSpacing = (-2).sp,
@@ -100,7 +97,7 @@ fun TodayWeatherView() {
                 tint = Color.White,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .offset(x = width / 10)
+                    //.offset(x = width / 10)
                     .size(72.dp)
             )
 
@@ -114,7 +111,7 @@ fun TodayWeatherView() {
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .offset(-width / 10, 0.dp)
+                    //.offset(-width / 10, 0.dp)
             ) {
                 WeatherStatusView()
             }
@@ -130,7 +127,7 @@ fun TemperatureView() {
     val weather by weatherViewModel.weather.collectAsState()
 
     Text("${weather.tmp}°C", fontSize = 36.sp, color = Color.White)
-    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth(0.35f)) {
+    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth(0.4f)) {
 
         val minTmp = buildAnnotatedString {
             withStyle(style = SpanStyle(fontSize = 10.sp)) {
@@ -170,8 +167,8 @@ fun WeatherStatusView() {
 @Composable
 fun MenuContainer() {
     Row(
+        Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth(0.8f)
     ) {
         MenuButton(Icons.Outlined.WaterDrop, "물주기")
         MenuButton(Icons.Outlined.PhotoCamera, "사진 촬영")
@@ -218,8 +215,8 @@ fun StateView() {
         Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .fillMaxWidth(0.8f)
                 .fillMaxHeight(0.8f)
+                .fillMaxWidth()
                 //.clip(RoundedCornerShape(8.dp))
                 .background(Color.White)
                 .padding(24.dp, 4.dp, 24.dp, 24.dp)

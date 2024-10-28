@@ -37,7 +37,6 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
         val latitude = 35.2040949 // 위도
 
         val coord = LatLngConverter.convertGRID_GPS(LatLngConverter.TO_GRID, latitude, longitude)
-        Log.e("TEST", "x: ${coord.x} y: ${coord.y}")
 
         options["serviceKey"] =
             "jbpUUy%2FMmr0n5alZ225PBgJL%2FiRcdbJxJ3%2BxyfBpbCCj3Kt0venEiltIO2xP2duLf4BBqytQ7cPYYGaGaNBUPg%3D%3D"
@@ -47,12 +46,17 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
 
         var baseDate = time.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
         lateinit var baseTime: String
+        Log.e("TEST", time.hour.toString())
         if(time.hour % 3 == 2 && time.minute >= 10) {
-            baseTime = time.format(DateTimeFormatter.ofPattern("hh")) + "00"
+            baseTime = String.format("%02d", time.hour) + "00"
+            Log.e("TEST", "Front")
         } else {
-            Log.e("TEST", time.hour.toString())
-            baseTime = String.format("%02d", ((time.hour / 3 * 3)) - 1) + "00"
+            baseTime = String.format("%02d", (time.hour / 3 * 3) - 1) + "00"
+            Log.e("TEST", "Behind")
         }
+        Log.e("TEST", baseDate)
+        Log.e("TEST", baseTime)
+
         options["base_date"] = baseDate
         options["base_time"] = baseTime
         options["nx"] = coord.x.toInt().toString()
