@@ -34,6 +34,7 @@ import com.wcd.farm.R
 import com.wcd.farm.presentation.view.memorial.MemorialScreen
 import com.wcd.farm.presentation.view.home.HomeScreen
 import com.wcd.farm.presentation.view.info.InfoScreen
+import com.wcd.farm.presentation.view.mypage.MyPageScreen
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 
 @Composable
@@ -81,7 +82,7 @@ fun MainLayout() {
                     Home -> HomeScreen()//HomeView(modifier = Modifier.padding(innerPadding))
                     Info -> InfoScreen()//InfoView(modifier = Modifier.padding(innerPadding))
                     Record -> MemorialScreen()//Text("Record")
-                    MyPage -> Text("MyPage")//MyPageView(modifier = Modifier.padding(innerPadding))
+                    MyPage -> MyPageScreen()//MyPageView(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
