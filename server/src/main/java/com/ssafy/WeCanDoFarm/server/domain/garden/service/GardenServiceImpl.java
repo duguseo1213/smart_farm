@@ -2,6 +2,8 @@ package com.ssafy.WeCanDoFarm.server.domain.garden.service;
 
 import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
 import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
+import com.ssafy.WeCanDoFarm.server.domain.garden.constants.PlantDiseaseConst;
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterUserToGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
@@ -11,8 +13,16 @@ import com.ssafy.WeCanDoFarm.server.domain.garden.repository.UserToGardenReposit
 import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
 import com.ssafy.WeCanDoFarm.server.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,9 +31,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GardenServiceImpl implements GardenService {
 
+    private final RestTemplate restTemplate;
     private final GardenRepository gardenRepository;
     private final UserRepository userRepository;
     private final UserToGardenRepository userToGardenRepository;
+
+    public PlantDiseaseDto.PlantDiseaseResponse postBookSpineDetection(MultipartFile file) {
+        ResponseEntity<PlantDiseaseDto.PlantDiseaseResponse> responseEntity;
+        try {
+            // HttpHeaders 설정
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(org.springframework.http.MediaType.MULTIPART_FORM_DATA);
+
+            // MultiValueMap을 사용하여 요청 본문 생성
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("imageFile", new org.springframework.core.io.ByteArrayResource(file.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return file.getOriginalFilename(); // 파일 이름 설정
+                }
+            });
+
+            // 요청 본문 생성
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+            responseEntity = restTemplate.exchange(PlantDiseaseConst.PlantDiseaseDetectionURL, HttpMethod.POST, requestEntity,
+                    PlantDiseaseDto.PlantDiseaseResponse.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(ErrorCode.SERVER_ERROR);
+        }
+        return PlantDiseaseDto.PlantDiseaseResponse.of(responseEntity.getBody().getDiseaseName(),responseEntity.getBody().getDiseaseSolvent());
+    }
+
+
+
+
     @Override
     public List<Garden> getGardens(String username) throws Exception {
         return gardenRepository.getGardens(username);
@@ -46,4 +88,12 @@ public class GardenServiceImpl implements GardenService {
         userToGardenRepository.save(userToGarden);
 
     }
+
+    @Override
+    public PlantDiseaseDto.PlantDiseaseResponse plantDiseaseDetection(PlantDiseaseDto.PlantDiseaseRequest request) throws Exception {
+
+        return postBookSpineDetection(request.getFile());
+    }
+
+
 }
