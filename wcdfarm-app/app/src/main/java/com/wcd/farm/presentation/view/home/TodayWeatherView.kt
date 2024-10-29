@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,25 +33,43 @@ import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 
 @Composable
 fun TodayWeatherView() {
-    Button(
-        onClick = { /*TODO*/ },
-        contentPadding = PaddingValues(0.dp),
-        colors = buttonTransparentTheme(),
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Box(
+    val weatherViewModel: WeatherViewModel = hiltViewModel()
+    val weather by weatherViewModel.weather.collectAsState()
+
+    if (weather.minTmp == weather.maxTmp) {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.2f)
+                .fillMaxHeight(0.2f),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            HomeServiceNameView()
-            TodayWeatherIcon(modifier = Modifier
-                .align(Alignment.BottomStart))
-            TemperatureView(modifier = Modifier.align(Alignment.BottomCenter))
-            WeatherStatusView(modifier = Modifier.align(Alignment.BottomEnd))
+            CircularProgressIndicator()
+        }
+    } else {
+        Button(
+            onClick = { /*TODO*/ },
+            contentPadding = PaddingValues(0.dp),
+            colors = buttonTransparentTheme(),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.2f)
+            ) {
+                HomeServiceNameView()
+                TodayWeatherIcon(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                )
+                TemperatureView(modifier = Modifier.align(Alignment.BottomCenter))
+                WeatherStatusView(modifier = Modifier.align(Alignment.BottomEnd))
+            }
         }
     }
+
+
 }
 
 @Composable

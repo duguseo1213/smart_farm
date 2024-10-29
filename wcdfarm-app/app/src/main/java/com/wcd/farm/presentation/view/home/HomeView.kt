@@ -57,12 +57,6 @@ import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 
 @Composable
 fun HomeScreen() {
-    val weatherViewModel: WeatherViewModel = hiltViewModel()
-
-    LaunchedEffect(Unit) {
-        weatherViewModel.getCrtWeather()
-    }
-
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         TodayWeatherView()
         Spacer(modifier = Modifier.fillMaxHeight(0.4f))

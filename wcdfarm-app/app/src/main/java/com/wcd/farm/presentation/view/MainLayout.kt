@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +35,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.wcd.farm.R
 import com.wcd.farm.presentation.view.memorial.MemorialScreen
 import com.wcd.farm.presentation.view.home.HomeScreen
 import com.wcd.farm.presentation.view.info.InfoScreen
 import com.wcd.farm.presentation.view.mypage.MyPageScreen
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
+import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 
 const val HOME = "Home"
 const val INFO = "Info"
@@ -49,6 +52,12 @@ const val MY_PAGE = "MyPage"
 @Composable
 fun MainLayout() {
     val currentScreen = remember { mutableStateOf(HOME) }
+
+    val weatherViewModel: WeatherViewModel = hiltViewModel()
+
+    LaunchedEffect(Unit) {
+        //weatherViewModel.getCrtWeather()
+    }
 
     Scaffold(
         containerColor = Color(LocalContext.current.getColor(R.color.background)),
