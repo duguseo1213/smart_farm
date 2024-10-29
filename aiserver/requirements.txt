@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pymysql
+pandas
+python-dotenv
+numpy
+python-multipart==0.0.10

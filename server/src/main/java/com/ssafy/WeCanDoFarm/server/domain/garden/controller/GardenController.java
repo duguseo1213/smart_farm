@@ -2,6 +2,7 @@ package com.ssafy.WeCanDoFarm.server.domain.garden.controller;
 
 
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterUserToGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
@@ -41,6 +42,10 @@ public class GardenController {
         return SuccessResponse.empty();
     }
 
+    @PostMapping("/plant-disease-detection")
+    public SuccessResponse<PlantDiseaseDto.PlantDiseaseResponse> plantDiseaseDetection(@ModelAttribute PlantDiseaseDto.PlantDiseaseRequest request) throws Exception {
+        return SuccessResponse.of(PlantDiseaseDto.PlantDiseaseResponse.empty());
+    }
 
 }
 
