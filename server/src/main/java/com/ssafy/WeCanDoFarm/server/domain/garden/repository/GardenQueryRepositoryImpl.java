@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class GardenQueryRepositoryImpl implements GardenQureyRepository{
+public class GardenQueryRepositoryImpl implements GardenQueryRepository{
     private final EntityManager em;
 
     @Override

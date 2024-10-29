@@ -6,6 +6,6 @@ import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface GardenQureyRepository {
+public interface GardenQueryRepository {
     public List<Garden> getGardens(String username) throws SQLException;
 }
