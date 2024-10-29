@@ -93,6 +93,9 @@ dependencies {
     // chart
     implementation ("io.github.ehsannarmani:compose-charts:0.0.14")
 
+    // shadow
+    implementation("com.github.GIGAMOLE:ComposeShadowsPlus:1.0.4")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
