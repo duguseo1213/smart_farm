@@ -15,6 +15,6 @@ public interface GardenService{
     List<Garden> getGardens(String username) throws Exception;
     void registerGarden(RegisterGardenRequest request) throws Exception;
     void registerUserToGarden(RegisterUserToGardenRequest request) throws Exception;
-    List<GetUserFromGardenResponse> getUserFromGarden(GetUserFromGardenRequest request) throws Exception;
+    List<GetUserFromGardenResponse> getUserFromGarden(Long gardenId) throws Exception;
 
 }

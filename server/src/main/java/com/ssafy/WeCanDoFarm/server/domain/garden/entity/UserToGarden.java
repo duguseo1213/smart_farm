@@ -29,10 +29,11 @@ public class UserToGarden {
     @Enumerated(EnumType.STRING)
     private GardenUserType gardenUserType;
 
-    public static UserToGarden create(User user, Garden garden){
+    public static UserToGarden create(User user, Garden garden,GardenUserType gardenUserType){
         UserToGarden userToGarden = new UserToGarden();
         userToGarden.user = user;
         userToGarden.garden = garden;
+        userToGarden.gardenUserType = gardenUserType;
         return userToGarden;
     }
 }
