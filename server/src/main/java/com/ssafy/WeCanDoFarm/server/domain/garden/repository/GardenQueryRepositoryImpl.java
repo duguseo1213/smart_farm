@@ -12,16 +12,18 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class GardenQueryRepositoryImpl implements GardenQureyRepository{
+public class GardenQueryRepositoryImpl implements GardenQueryRepository{
     private final EntityManager em;
 
-    @Override
-    public List<Garden> getGardens(String username) throws SQLException {
-        String jpql = "SELECT g FROM Garden g WHERE g.gardenId IN (SELECT utg.garden.id FROM UserToGarden utg WHERE utg.user.username = :username)";
 
-        Query query = em.createQuery(jpql, Garden.class);
-        query.setParameter("username", username);
-        return query.getResultList();
+    @Override
+    public List<Garden> getGardens(String username){
+//        String jpql = "SELECT g FROM Garden g WHERE g.gardenId IN (SELECT utg.garden.id FROM UserToGarden utg WHERE utg.user.username = :username)";
+//
+//        Query query = em.createQuery(jpql, Garden.class);
+//        query.setParameter("username", username);
+//        List<Garden> response = query.getResultList();
+        return null;
     }
 
 
