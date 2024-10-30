@@ -25,10 +25,15 @@ public class UserToGarden {
     @JoinColumn(name = "garden_id", nullable = false)
     private Garden garden;
 
-    public static UserToGarden create(User user, Garden garden){
+    @Column(name="garden_user_type")
+    @Enumerated(EnumType.STRING)
+    private GardenUserType gardenUserType;
+
+    public static UserToGarden create(User user, Garden garden,GardenUserType gardenUserType){
         UserToGarden userToGarden = new UserToGarden();
         userToGarden.user = user;
         userToGarden.garden = garden;
+        userToGarden.gardenUserType = gardenUserType;
         return userToGarden;
     }
 }
