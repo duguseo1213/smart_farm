@@ -2,6 +2,7 @@ package com.ssafy.WeCanDoFarm.server.domain.garden.service;
 
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenResponse;
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterUserToGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
@@ -16,5 +17,5 @@ public interface GardenService{
     void registerGarden(RegisterGardenRequest request) throws Exception;
     void registerUserToGarden(RegisterUserToGardenRequest request) throws Exception;
     List<GetUserFromGardenResponse> getUserFromGarden(Long gardenId) throws Exception;
-
+    PlantDiseaseDto.PlantDiseaseResponse plantDiseaseDetection(PlantDiseaseDto.PlantDiseaseRequest request) throws Exception;
 }
