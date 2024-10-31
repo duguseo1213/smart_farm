@@ -41,8 +41,18 @@ class HomeViewModel @AssistedInject constructor(
                 when (intent) {
                     HomeViewIntent.ArriveFarm -> setState { copy(isUserOnFarm = true) }
                     HomeViewIntent.LeaveFarm -> setState { copy(isUserOnFarm = false) }
+                    HomeViewIntent.ShowWeekWeather -> setState { copy(showWeekWeather = true) }
+                    HomeViewIntent.HideWeekWeather -> setState { copy(showWeekWeather = false) }
                 }
             }
         }
+    }
+
+    fun requestWatering() {
+
+    }
+
+    fun requestFilm() {
+
     }
 }

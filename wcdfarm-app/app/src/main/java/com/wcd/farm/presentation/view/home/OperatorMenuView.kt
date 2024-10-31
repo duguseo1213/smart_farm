@@ -46,21 +46,20 @@ fun MenuContainer() {
     ) {
 
         if (isUserOnFarm) {
-            MenuButton(Icons.Outlined.WaterDrop, "물주기")
-            MenuButton(Icons.Outlined.PhotoCamera, "사진 촬영")
-            MenuButton(Icons.Outlined.Grass, "질병 확인")
+            MenuButton(Icons.Outlined.WaterDrop, "물주기") { viewModel.requestWatering() }
+            MenuButton(Icons.Outlined.PhotoCamera, "사진 촬영") { viewModel.requestFilm() }
+            MenuButton(Icons.Outlined.Grass, "질병 확인") { }
         } else {
-            MenuLongButton(icon = Icons.Outlined.WaterDrop, description = "물주기")
+            MenuLongButton(icon = Icons.Outlined.WaterDrop, description = "물주기") { viewModel.requestWatering() }
         }
 
     }
 }
 
 @Composable
-fun MenuButton(icon: ImageVector, description: String) {
-    val viewModel: HomeViewModel = mavericksViewModel()
+fun MenuButton(icon: ImageVector, description: String, onClick: () -> Unit) {
     Button(
-        onClick = { viewModel.sendIntent(HomeViewIntent.ArriveFarm)/*TODO*/ },
+        onClick = onClick,
         colors = buttonTransparentTheme(),
         contentPadding = PaddingValues(0.dp),
         shape = RoundedCornerShape(8.dp),
@@ -89,10 +88,10 @@ fun MenuButton(icon: ImageVector, description: String) {
 }
 
 @Composable
-fun MenuLongButton(icon: ImageVector, description: String) {
-    val viewModel: HomeViewModel = mavericksViewModel()
+fun MenuLongButton(icon: ImageVector, description: String, onClick: () -> Unit) {
     Button(
-        onClick = { viewModel.sendIntent(HomeViewIntent.LeaveFarm)/*TODO*/ }, colors = buttonTransparentTheme(),
+        onClick = onClick,
+        colors = buttonTransparentTheme(),
         contentPadding = PaddingValues(0.dp),
         shape = RoundedCornerShape(8.dp),
     ) {

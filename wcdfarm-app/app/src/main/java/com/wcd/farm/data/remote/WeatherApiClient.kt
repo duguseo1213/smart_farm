@@ -55,7 +55,7 @@ object WeatherApiClient {
         .baseUrl(BASE_URL)
         .client(client)
         .addConverterFactory(ScalarsConverterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         .build()
 
     val weatherApi: WeatherApi by lazy {
