@@ -11,6 +11,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.web.filter.ForwardedHeaderFilter;
 
 @Configuration
 public class SwaggerConfig {
@@ -41,7 +42,10 @@ public class SwaggerConfig {
                 .version("1.0.0"); // API의 버전
     }
 
-
+    @Bean
+    ForwardedHeaderFilter forwardedHeaderFilter() {
+        return new ForwardedHeaderFilter();
+    }
 
 
 }
