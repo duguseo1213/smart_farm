@@ -1,3 +1,4 @@
+import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,4 +16,6 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 
 @app.post("/plantDiseaseDetection")
 async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
+    
+    return {"diseaseName":"test1", "diseaseSolvent":"test2"}
     
