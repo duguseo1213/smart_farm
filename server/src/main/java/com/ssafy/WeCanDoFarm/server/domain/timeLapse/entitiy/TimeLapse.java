@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
 
@@ -26,14 +27,16 @@ public class TimeLapse {
     @Column(name = "time_lapse_image")
     private String timeLapseImage;
 
+
     @Column(name = "created_date")
+    @CreatedDate
     private Date createdDate;
 
-    public static TimeLapse create(Garden garden, String timeLapseImage, Date createdDate) {
+    public static TimeLapse create(Garden garden, String timeLapseImage) {
         TimeLapse timeLapse = new TimeLapse();
         timeLapse.garden = garden;
         timeLapse.timeLapseImage = timeLapseImage;
-        timeLapse.createdDate = createdDate;
+        timeLapse.createdDate = new Date();
         return timeLapse;
     }
 }
