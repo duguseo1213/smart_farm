@@ -10,7 +10,7 @@ public class AreaCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="area_id")
-    long areaId;
+    Long areaId;
 
     @Column(name = "area_code")
     String areaCode;
