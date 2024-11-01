@@ -2,8 +2,8 @@
 
 
 ## Folder
-app/__pycache__
-aiserver/.idea
+app/__pycache__/
+.idea/
 
 ## File
 plant.pth
