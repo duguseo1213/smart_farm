@@ -5,6 +5,6 @@ data class WeatherInfo(
     var minTmp: Double = 0.0,
     var maxTmp: Double = 0.0,
     var rain: String = "강수 없음",
-    var wind: Int = 0,
+    var wind: Double = 0.0,
     var humidity: Int = 0
 )

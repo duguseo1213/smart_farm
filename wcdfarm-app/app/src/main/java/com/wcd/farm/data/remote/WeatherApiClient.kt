@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit
 
 
 object WeatherApiClient {
-    private const val BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/"
-
+    private const val BASE_URL = "http://apis.data.go.kr/1360000/"
+    //http://apis.data.go.kr/1360000/MidFcstInfoService/getMidSeaFcst
     private val gson = GsonBuilder().setLenient().create()
 
     private val retryInterceptor: Interceptor = object : Interceptor {
@@ -31,7 +31,9 @@ object WeatherApiClient {
 
             while (!responseOK && retryCount < maxRetry) {
                 try {
+                    response?.close()
                     response = chain.proceed(request)
+
                     responseOK = response.isSuccessful
                 } catch (e: Exception) {
                     retryCount++
@@ -55,7 +57,7 @@ object WeatherApiClient {
         .baseUrl(BASE_URL)
         .client(client)
         .addConverterFactory(ScalarsConverterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     val weatherApi: WeatherApi by lazy {

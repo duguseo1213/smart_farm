@@ -52,11 +52,13 @@ const val MY_PAGE = "MyPage"
 @Composable
 fun MainLayout() {
     val currentScreen = remember { mutableStateOf(HOME) }
-
     val weatherViewModel: WeatherViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        //weatherViewModel.getCrtWeather()
+        val longitude = 126.8071876
+        val latitude = 35.2040949
+        weatherViewModel.getNearForecastWeather(latitude, longitude)
+        weatherViewModel.getForecastWeather()
     }
 
     Scaffold(

@@ -4,9 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowRight
+import androidx.compose.material.icons.outlined.Circle
+import androidx.compose.material.icons.outlined.QuestionMark
+import androidx.compose.material.icons.outlined.Water
 import androidx.compose.material.icons.outlined.WbCloudy
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.AlertDialog
@@ -14,6 +18,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,18 +27,31 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.wcd.farm.data.model.ForecastWeather
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
+import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
 fun ForecastWeatherView(onDismissRequest: () -> Unit) {
+    val weatherViewModel: WeatherViewModel = hiltViewModel()
+    val forecastWeather by weatherViewModel.forecastWeather.collectAsState()
     val time = LocalDateTime.now(ZoneId.systemDefault())
+
+    val codeWeatherMap = mapOf(
+        -1 to Icons.Outlined.QuestionMark,
+        0 to Icons.Outlined.WbSunny,
+        1 to Icons.Outlined.WbCloudy,
+        2 to Icons.Outlined.Water, // rainy
+        3 to Icons.Outlined.Circle // snow
+    )
+
     AlertDialog(onDismissRequest = onDismissRequest, confirmButton = {
         Button(
             onClick = onDismissRequest,
@@ -42,51 +61,50 @@ fun ForecastWeatherView(onDismissRequest: () -> Unit) {
             Text("닫기")
         }
     }, title = { Text("주간 예보") }, text = {
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            for (i in 1..10) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            for (i in 1..7) {
+                val weather = forecastWeather[i - 1]
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Date(time, i)
+                    Date(Modifier.weight(0.35f), time, i)
 
-                    ForecastWeather(0, Icons.Outlined.WbSunny) // 오전
+                    ForecastWeather(Modifier.weight(0.2f), weather.amRainProbability, codeWeatherMap[weather.amWeather]!!) // 오전
                     Arrow()
-                    ForecastWeather(60, Icons.Outlined.WbCloudy) // 오후
+                    ForecastWeather(Modifier.weight(0.2f), weather.pmRainProbability, codeWeatherMap[weather.amWeather]!!) // 오후
 
-                    TemperatureRange(11.0, 23.0)
+                    TemperatureRange(Modifier.weight(0.3f), weather.minTmp, weather.maxTmp)
                 }
             }
 
 
         }
-    })
+    }, modifier = Modifier.fillMaxWidth())
 }
 
 @Composable
-fun Date(time: LocalDateTime, plusDay: Int) {
+fun Date(modifier: Modifier, time: LocalDateTime, plusDay: Int) {
     val nextDate = time.plusDays(plusDay.toLong())
 
     Text(
         nextDate.format(DateTimeFormatter.ofPattern("MM.dd (E)")),
-        textAlign = TextAlign.Center,
-        modifier = Modifier.padding(0.dp, 4.dp, 8.dp, 0.dp),
+        modifier = modifier.padding(0.dp, 4.dp, 8.dp, 0.dp),
         fontSize = 12.sp
     )
 }
 
 @Composable
-fun ForecastWeather(humidity: Int, icon: ImageVector) {
-    Row(verticalAlignment = Alignment.Bottom) {
+fun ForecastWeather(modifier: Modifier, humidity: Int, icon: ImageVector) {
+    Row(verticalAlignment = Alignment.Bottom, modifier = modifier) {
         Text("$humidity%", fontSize = 12.sp)
         Icon(
             imageVector = icon,
-            contentDescription = "sunny",
+            contentDescription = "weather",
             modifier = Modifier.padding(4.dp)
         )
     }
 }
+
 @Composable
 fun Arrow() {
     Icon(
@@ -97,7 +115,7 @@ fun Arrow() {
 }
 
 @Composable
-fun TemperatureRange(minTmp: Double, maxTmp: Double) {
+fun TemperatureRange(modifier: Modifier, minTmp: Int, maxTmp: Int) {
     val tmpText = buildAnnotatedString {
         withStyle(
             style = SpanStyle(
@@ -116,5 +134,5 @@ fun TemperatureRange(minTmp: Double, maxTmp: Double) {
         }
     }
 
-    Text(tmpText, textAlign = TextAlign.Center, modifier = Modifier.padding(8.dp, 0.dp))
+    Text(tmpText, modifier = modifier.padding(8.dp, 0.dp))
 }

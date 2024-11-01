@@ -54,7 +54,7 @@ fun TodayWeatherView() {
     val weatherViewModel: WeatherViewModel = hiltViewModel()
     val weather by weatherViewModel.weather.collectAsState()
 
-    if (weather.minTmp == weather.maxTmp) {
+    if (weather.tmp == 0.0) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
