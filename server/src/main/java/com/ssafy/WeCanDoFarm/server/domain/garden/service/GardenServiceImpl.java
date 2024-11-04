@@ -41,7 +41,7 @@ public class GardenServiceImpl implements GardenService {
     private final UserToGardenRepository userToGardenRepository;
 
 
-    public PlantDiseaseDto.PlantDiseaseResponse postBookSpineDetection(MultipartFile file) {
+    public PlantDiseaseDto.PlantDiseaseResponse doPlantDiseaseDetection(MultipartFile file) {
         ResponseEntity<PlantDiseaseDto.PlantDiseaseResponse> responseEntity;
         try {
             // HttpHeaders 설정
@@ -113,9 +113,9 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public PlantDiseaseDto.PlantDiseaseResponse plantDiseaseDetection(PlantDiseaseDto.PlantDiseaseRequest request) throws Exception {
+    public PlantDiseaseDto.PlantDiseaseResponse plantDiseaseDetection(MultipartFile file) throws Exception {
 
-        return postBookSpineDetection(request.getFile());
+        return doPlantDiseaseDetection(file);
     }
 
 
