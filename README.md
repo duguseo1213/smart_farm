@@ -92,17 +92,17 @@
   <tbody>
     <tr>
       <td align="center">
-        <img src="link" alt="EM 팀장 : 이종하" width="100px"/>
+        <img src="Picture/jongha.png" alt="EM 팀장 : 이종하" width="100px"/>
         <br />
         <sub><b>EM 팀장 : 이종하</b></sub>
       </td>
       <td align="center">
-        <img src="link" alt="BE : 서동인" width="100px"/>
+        <img src="Picture/dongin.png" alt="BE : 서동인" width="100px"/>
         <br />
         <sub><b>BE : 서동인</b></sub>
       </td>
       <td align="center">
-        <img src="link" alt="FE : 오혜성" width="100px"/>
+        <img src="Picture/hyeseong.png" alt="FE : 오혜성" width="100px"/>
         <br />
         <sub><b>FE : 오혜성</b></sub>
       </td>
@@ -132,17 +132,17 @@
     </tr>
     <tr>
       <td align="center">
-        <img src="link" alt="EM : 여현대" width="100px"/>
+        <img src="Picture/hyeondae.jpg" alt="EM : 여현대" width="100px"/>
         <br />
         <sub><b>EM : 여현대</b></sub>
       </td>
       <td align="center">
-        <img src="link" alt="BE : 박범수" width="100px"/>
+        <img src="Picture/beomsu.png" alt="BE : 박범수" width="100px"/>
         <br />
         <sub><b>BE : 박범수</b></sub>
       </td>
       <td align="center">
-        <img src="link" alt="FE : 강효린" width="100px"/>
+        <img src="Picture/hyorin.png" alt="FE : 강효린" width="100px"/>
         <br />
         <sub><b>FE : 강효린</b></sub>
       </td>

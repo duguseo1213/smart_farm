@@ -4,9 +4,12 @@ import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
 import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
 import com.ssafy.WeCanDoFarm.server.domain.garden.constants.PlantDiseaseConst;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenRequest;
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenResponse;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterUserToGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
+import com.ssafy.WeCanDoFarm.server.domain.garden.entity.GardenUserType;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.UserToGarden;
 import com.ssafy.WeCanDoFarm.server.domain.garden.repository.GardenRepository;
 import com.ssafy.WeCanDoFarm.server.domain.garden.repository.UserToGardenRepository;
@@ -24,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,6 +39,7 @@ public class GardenServiceImpl implements GardenService {
     private final GardenRepository gardenRepository;
     private final UserRepository userRepository;
     private final UserToGardenRepository userToGardenRepository;
+
 
     public PlantDiseaseDto.PlantDiseaseResponse postBookSpineDetection(MultipartFile file) {
         ResponseEntity<PlantDiseaseDto.PlantDiseaseResponse> responseEntity;
@@ -73,9 +78,9 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     public void registerGarden(RegisterGardenRequest request) throws Exception {
-        Garden garden = Garden.create(request.getGardenName(),"", request.getGardenAddress(), request.getDeviceSN());
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(()-> new BaseException(ErrorCode.NOT_FOUND_USER));
-        UserToGarden userToGarden = UserToGarden.create(user,garden);
+        Garden garden = Garden.create(request.getGardenName(), "", request.getGardenAddress(), request.getDeviceSN());
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+        UserToGarden userToGarden = UserToGarden.create(user, garden, GardenUserType.LEADER);
         gardenRepository.save(garden);
         userToGardenRepository.save(userToGarden);
     }
@@ -83,10 +88,28 @@ public class GardenServiceImpl implements GardenService {
     @Override
     public void registerUserToGarden(RegisterUserToGardenRequest request) throws Exception {
         Garden garden = gardenRepository.findById(request.getGardenId()).orElseThrow();
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(()-> new BaseException(ErrorCode.NOT_FOUND_USER));
-        UserToGarden userToGarden = UserToGarden.create(user,garden);
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+        UserToGarden userToGarden = UserToGarden.create(user, garden,GardenUserType.MEMBER);
         userToGardenRepository.save(userToGarden);
 
+    }
+
+    @Override
+    public List<GetUserFromGardenResponse> getUserFromGarden(Long gardenId) throws Exception {
+        List<UserToGarden> userToGardens = userToGardenRepository.findByGardenId(gardenId);
+
+        List<GetUserFromGardenResponse> responses = new ArrayList<>();
+        for(int i=0;i<userToGardens.size();i++){
+            GetUserFromGardenResponse response = new GetUserFromGardenResponse();
+            UserToGarden gardenUser = userToGardens.get(i);
+            response.setGardenUserType(gardenUser.getGardenUserType());
+            response.setUserNickname(gardenUser.getUser().getNickname());
+            response.setUserName(gardenUser.getUser().getUsername());
+            responses.add(response);
+        }
+
+
+        return responses;
     }
 
     @Override

@@ -1,3 +1,10 @@
+import torch
+import torch.nn as nn
+
+img_height = 224
+img_width = 224
+
+# 모델 정의
 class MyCnn(nn.Module):
     def __init__(self, num_classes):
         super(MyCnn, self).__init__()

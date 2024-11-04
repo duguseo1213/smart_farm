@@ -7,5 +7,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface GardenQueryRepository {
-    public List<Garden> getGardens(String username) throws SQLException;
+    List<Garden> getGardens(String username) throws SQLException;
 }

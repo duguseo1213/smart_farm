@@ -15,13 +15,15 @@ import java.util.List;
 public class GardenQueryRepositoryImpl implements GardenQueryRepository{
     private final EntityManager em;
 
+
     @Override
-    public List<Garden> getGardens(String username) throws SQLException {
+    public List<Garden> getGardens(String username){
         String jpql = "SELECT g FROM Garden g WHERE g.gardenId IN (SELECT utg.garden.id FROM UserToGarden utg WHERE utg.user.username = :username)";
 
         Query query = em.createQuery(jpql, Garden.class);
         query.setParameter("username", username);
-        return query.getResultList();
+        List<Garden> response = query.getResultList();
+        return response;
     }
 
 
