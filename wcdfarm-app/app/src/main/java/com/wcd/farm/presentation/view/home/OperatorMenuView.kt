@@ -31,28 +31,30 @@ import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import com.wcd.farm.R
+import com.wcd.farm.presentation.intent.DiseaseViewIntent
 import com.wcd.farm.presentation.intent.HomeViewIntent
 import com.wcd.farm.presentation.state.HomeViewState
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
+import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
 import com.wcd.farm.presentation.viewmodel.HomeViewModel
 
 @Composable
 fun MenuContainer() {
     val viewModel: HomeViewModel = mavericksViewModel()
+    val diseaseViewModel: DiseaseViewModel = mavericksViewModel()
     val isUserOnFarm by viewModel.collectAsState(HomeViewState::isUserOnFarm)
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
 
-        if (isUserOnFarm) {
+        if (!isUserOnFarm) {
             MenuButton(Icons.Outlined.WaterDrop, "물주기") { viewModel.requestWatering() }
             MenuButton(Icons.Outlined.PhotoCamera, "사진 촬영") { viewModel.requestFilm() }
-            MenuButton(Icons.Outlined.Grass, "질병 확인") { }
+            MenuButton(Icons.Outlined.Grass, "질병 확인") { diseaseViewModel.sendIntent(DiseaseViewIntent.ShowDiseaseView) }
         } else {
             MenuLongButton(icon = Icons.Outlined.WaterDrop, description = "물주기") { viewModel.requestWatering() }
         }
-
     }
 }
 
