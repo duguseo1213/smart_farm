@@ -96,6 +96,17 @@ dependencies {
     // shadow
     implementation("com.github.GIGAMOLE:ComposeShadowsPlus:1.0.4")
 
+    //camera
+    implementation("androidx.camera:camera-camera2:1.4.0")
+    implementation("androidx.camera:camera-core:1.4.0")
+    implementation("androidx.camera:camera-lifecycle:1.4.0")
+    implementation("androidx.camera:camera-view:1.4.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    //permission
+    implementation("io.github.ParkSangGwon:tedpermission-normal:3.4.2")
+    implementation("io.github.ParkSangGwon:tedpermission-coroutine:3.4.2")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

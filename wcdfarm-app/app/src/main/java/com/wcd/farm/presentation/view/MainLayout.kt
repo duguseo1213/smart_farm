@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.outlined.Archive
-import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.DataExploration
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
@@ -24,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,16 +31,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.mvrx.compose.collectAsState
+import com.airbnb.mvrx.compose.mavericksViewModel
 import com.wcd.farm.R
+import com.wcd.farm.presentation.intent.DiseaseViewIntent
+import com.wcd.farm.presentation.state.DiseaseViewState
+import com.wcd.farm.presentation.view.home.DiseaseScreen
 import com.wcd.farm.presentation.view.memorial.MemorialScreen
 import com.wcd.farm.presentation.view.home.HomeScreen
 import com.wcd.farm.presentation.view.info.InfoScreen
 import com.wcd.farm.presentation.view.mypage.MyPageScreen
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
+import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
 import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 
 const val HOME = "Home"
@@ -51,12 +55,15 @@ const val MY_PAGE = "MyPage"
 
 @Composable
 fun MainLayout() {
-    val currentScreen = remember { mutableStateOf(MEMORIAL) }
-
+    val currentScreen = remember { mutableStateOf(HOME) }
     val weatherViewModel: WeatherViewModel = hiltViewModel()
-
+    val diseaseViewModel: DiseaseViewModel = mavericksViewModel()
+    val showDiseaseView by diseaseViewModel.collectAsState(DiseaseViewState::showDiseaseView)
     LaunchedEffect(Unit) {
-        //weatherViewModel.getCrtWeather()
+        val longitude = 126.8071876
+        val latitude = 35.2040949
+        //weatherViewModel.getNearForecastWeather(latitude, longitude)
+        //weatherViewModel.getForecastWeather()
     }
 
     Scaffold(
@@ -72,6 +79,12 @@ fun MainLayout() {
                     MY_PAGE -> MyPageScreen()
                 }
             }
+        }
+    }
+
+    if(showDiseaseView) {
+        DiseaseScreen {
+            diseaseViewModel.sendIntent(DiseaseViewIntent.HideDiseaseView)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.wcd.farm.di
 import android.content.Context
 import com.wcd.farm.data.remote.WeatherApi
 import com.wcd.farm.data.remote.WeatherApiClient
+import com.wcd.farm.data.repository.DiseaseRepository
 import com.wcd.farm.data.repository.MemorialRepository
 import com.wcd.farm.data.repository.WeatherRepository
 import dagger.Module
@@ -31,11 +32,15 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideDiseaseRepository(): DiseaseRepository {
+        return DiseaseRepository()
+    }
+
+    @Provides
+    @Singleton
     fun provideMemorialRepository(): MemorialRepository {
         return MemorialRepository()
     }
-
-
 
     @Provides
     @Singleton
