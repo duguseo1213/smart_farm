@@ -1,5 +1,6 @@
 import os
 from PlantDisease import MyCnnModel
+from PlantDisease import PlantDiseaseLabel
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -35,8 +36,8 @@ plant_disease_detection_model.eval()
 # 이미지 전처리 plantDiseaseDetection
 
 plant_disease_image_transform = transforms.Compose([
-    transforms.Resize((img_height, img_width))
-    # transforms.ToTensor(),
+    transforms.Resize((img_height, img_width)),
+    transforms.ToTensor()
 ])
 
 @app.post("/plantDiseaseDetection")
@@ -46,13 +47,15 @@ async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
     image = Image.open(io.BytesIO(image_data))  # bytes 데이터를 PIL 이미지로 변환
 
     transformed_image = plant_disease_image_transform(image)
+    transformed_image = transformed_image.unsqueeze(0) 
     # 모델로 값 추측
-    Image._show(transformed_image)
-    
     answer = plant_disease_detection_model(transformed_image)
-    print(answer)
+    probabilities = torch.softmax(answer, dim=1)
+
+    # 가장 높은 확률의 인덱스 찾기
+    predicted_index = torch.argmax(probabilities, dim=1).item()
     # 나온 값 정제 후 리턴
-    return {"diseaseName":"test1", "diseaseSolvent":"test2"}
+    return {"diseaseName":PlantDiseaseLabel.labels[predicted_index], "diseaseSolvent":PlantDiseaseLabel.solutions[predicted_index]}
 
 
     
