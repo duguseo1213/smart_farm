@@ -31,6 +31,7 @@ fun GrowthGraphView(modifier: Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .background(Color(0XFFFFFCEB))
+
     ) {
         LineChart(
             modifier = Modifier
@@ -40,13 +41,14 @@ fun GrowthGraphView(modifier: Modifier) {
                 Line(
                     label = "Windows",
                     values = listOf(12.0, 26.0, 42.0, 66.0, 90.0),
-                    color = SolidColor(Color(0xFF23af92)),
-                    firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
-                    secondGradientFillColor = Color.Transparent,
+                    color = SolidColor(Color(0xFF0F4327)),
+                    firstGradientFillColor = Color(0xFF1A874D).copy(alpha = 1.0f),
+                    secondGradientFillColor = Color(0xFFFFFCEB),
                     strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
                     gradientAnimationDelay = 1000,
                     drawStyle = DrawStyle.Stroke(width = 2.dp),
                     curvedEdges = false
+
                 )
             ),
             indicatorProperties = HorizontalIndicatorProperties(false),
@@ -62,7 +64,7 @@ fun GrowthGraphView(modifier: Modifier) {
             ),
             dotsProperties = DotProperties(
                 enabled = true,
-                color = SolidColor(Color.Red),
+                color = SolidColor(Color(0xFF1A6D40)),
                 radius = 5.dp,
             ),
             maxValue = 100.0,

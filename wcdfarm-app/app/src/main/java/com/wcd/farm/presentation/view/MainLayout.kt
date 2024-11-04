@@ -51,7 +51,7 @@ const val MY_PAGE = "MyPage"
 
 @Composable
 fun MainLayout() {
-    val currentScreen = remember { mutableStateOf(HOME) }
+    val currentScreen = remember { mutableStateOf(MEMORIAL) }
 
     val weatherViewModel: WeatherViewModel = hiltViewModel()
 
