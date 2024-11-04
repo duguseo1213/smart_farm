@@ -14,6 +14,7 @@ public class GeneralExceptionAdvice {
         if (!e.getMessage().contains("No static resource")) {
             log.error("message: {}", e.getMessage(), e);
         }
+        log.info("message: {}", e.getMessage());
         return ErrorResponse.of(ErrorCode.SERVER_ERROR);
     }
 }

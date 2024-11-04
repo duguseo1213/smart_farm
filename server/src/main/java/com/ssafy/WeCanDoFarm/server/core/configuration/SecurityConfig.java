@@ -7,6 +7,7 @@ import com.ssafy.WeCanDoFarm.server.domain.auth.handler.CustomSuccessHandler;
 import com.ssafy.WeCanDoFarm.server.domain.auth.repository.CustomAuthorizationRequestRepository;
 import com.ssafy.WeCanDoFarm.server.domain.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -24,6 +25,7 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
 	private final CustomOAuth2UserService customOAuth2UserService;
@@ -35,6 +37,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+		log.info("httpSecurity = {}", httpSecurity);
 		return httpSecurity
 			.cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
 				CorsConfiguration configuration = new CorsConfiguration();
