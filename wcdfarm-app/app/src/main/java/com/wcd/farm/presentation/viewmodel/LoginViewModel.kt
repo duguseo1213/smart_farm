@@ -5,37 +5,31 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.user.UserApiClient
+import com.wcd.farm.data.remote.LoginApi
+import com.wcd.farm.data.remote.ServerClient
+import com.wcd.farm.data.remote.WeatherApi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor() : ViewModel() {
+
+    private val loginApi = ServerClient.loginApi
+
     fun login(context: Context, onSuccess: () -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
 
-        /*UserApiClient.instance.unlink { error ->
-            if (error != null) {
-                Log.e("TEST", "연결 끊기 실패", error)
+            loginApi.login("https://k11c104.p.ssafy.io/app")
+            /*if(response.isSuccessful) {
+                Log.e("TEST", response.body().toString())
             } else {
-                Log.i("TEST", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
-            }
-        }*/
-
-        /*UserApiClient.instance.loginWithKakaoAccount(context, prompts = listOf(Prompt.LOGIN)) { token, error ->
-            Log.e("TEST", "TEST")
-            if (error != null) {
-                Log.e("TEST", "로그인 실패 $error")
-            } else if (token != null) {
-                Log.e("TEST", "로그인 성공 ${token.accessToken}")
-
-                UserApiClient.instance.me { user, error ->
-                    Log.e("TEST", user.toString())
-                }
-
-                onSuccess()
-            } else {
-                Log.e("TEST", "TEST")
-            }
-        }*/
-
-        UserApiClient.instance.loginWithKakaoTalk(
+                Log.e("TEST", response.errorBody()!!.string())
+            }*/
+        }
+        /*UserApiClient.instance.loginWithKakaoTalk(
             context,
         ) { token, error ->
             if (error != null) {
@@ -48,6 +42,6 @@ class LoginViewModel : ViewModel() {
                 }
                 onSuccess()
             }
-        }
+        }*/
     }
 }

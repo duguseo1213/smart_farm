@@ -1,6 +1,8 @@
 package com.wcd.farm.di
 
 import android.content.Context
+import com.wcd.farm.data.remote.LoginApi
+import com.wcd.farm.data.remote.ServerClient
 import com.wcd.farm.data.remote.WeatherApi
 import com.wcd.farm.data.remote.WeatherApiClient
 import com.wcd.farm.data.repository.DiseaseRepository
@@ -17,6 +19,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideLoginApi(): LoginApi {
+        return ServerClient.loginApi
+    }
 
     @Provides
     @Singleton

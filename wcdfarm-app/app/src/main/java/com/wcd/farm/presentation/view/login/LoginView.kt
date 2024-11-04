@@ -1,5 +1,7 @@
 package com.wcd.farm.presentation.view.login
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,16 +19,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.wcd.farm.R
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.LoginViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
-    val viewModel: LoginViewModel = viewModel()
+    val viewModel: LoginViewModel = hiltViewModel()
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -36,13 +44,22 @@ fun LoginScreen(navController: NavController) {
         LogoImage()
         Spacer(modifier = Modifier.weight(0.25f))
         KakaoLoginButton {
-            viewModel.login(context) {
+            val url = "https://k11c104.p.ssafy.io/oauth2/authorization/kakao?redirect_uri=https://k11c104.p.ssafy.io/app"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.Main) {
+                    context.startActivity(intent)
+                }
+            }
+
+            /*viewModel.login(context) {
                 navController.navigate("main_screen") {
                     popUpTo("login_screen") {
                         inclusive = true
                     }
                 }
-            }
+            }*/
         }
         Spacer(modifier = Modifier.weight(0.5f))
     }

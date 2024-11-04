@@ -10,7 +10,7 @@ import com.wcd.farm.presentation.view.login.LoginScreen
 fun AppNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "main") {
+    NavHost(navController = navController, startDestination = "login") {
         composable("login") {
             LoginScreen(navController)
         }
