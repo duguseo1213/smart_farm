@@ -63,7 +63,11 @@ public class GardenController {
         return SuccessResponse.empty();
     }
 
+    @PostMapping("/plant-disease-detection")
+    public SuccessResponse<PlantDiseaseDto.PlantDiseaseResponse> detectPlantDisease(PlantDiseaseDto.PlantDiseaseRequest request) throws Exception {
 
+        return SuccessResponse.of(gardenService.plantDiseaseDetection(request.getFile()));
+    }
 }
 
 

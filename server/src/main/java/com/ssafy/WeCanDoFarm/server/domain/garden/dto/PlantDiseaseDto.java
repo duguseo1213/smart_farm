@@ -13,7 +13,7 @@ public class PlantDiseaseDto{
 
         public static PlantDiseaseResponse of(String diseaseName, String diseaseSolvent ){
             PlantDiseaseResponse response = new PlantDiseaseResponse();
-            response.setDiseased(!diseaseName.equals("none"));
+            response.setDiseased(!diseaseSolvent.equals("none"));
             response.setDiseaseName(diseaseName);
             response.setDiseaseSolvent(diseaseSolvent);
             return response;
