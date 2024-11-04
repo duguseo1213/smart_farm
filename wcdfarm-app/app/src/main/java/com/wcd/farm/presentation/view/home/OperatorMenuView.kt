@@ -24,9 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
@@ -65,11 +69,12 @@ fun MenuButton(icon: ImageVector, description: String, onClick: () -> Unit) {
         colors = buttonTransparentTheme(),
         contentPadding = PaddingValues(0.dp),
         shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.rsBlurShadow(4.dp, color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))
     ) {
         Box(
             modifier = Modifier
-                .height(80.dp)
-                .width(80.dp), contentAlignment = Alignment.Center
+                .height(90.dp)
+                .width(100.dp), contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = R.drawable.menu_background),
@@ -78,12 +83,20 @@ fun MenuButton(icon: ImageVector, description: String, onClick: () -> Unit) {
                 modifier = Modifier.fillMaxSize()
             )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = "Water",
-                    modifier = Modifier.size(36.dp)
+                Image(
+                    painter = painterResource(id = imageRes),
+                    contentDescription = description,
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(55.dp)
                 )
-                Text(description, modifier = Modifier.padding(4.dp))
+                Text(description,
+                    modifier = Modifier.padding(4.dp),
+                    fontSize = 21.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = customFontFamily_main1,
+                    color = Color(0xFF4B4747)
+                )
             }
         }
     }

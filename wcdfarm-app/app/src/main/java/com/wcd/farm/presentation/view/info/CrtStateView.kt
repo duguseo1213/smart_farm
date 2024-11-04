@@ -20,7 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.wcd.farm.presentation.view.home.StateBar
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CrtStateView(modifier: Modifier) {
@@ -52,8 +56,10 @@ fun CrtWeatherView(modifier: Modifier) {
 @Composable
 fun CrtFarmStateView(modifier: Modifier) {
     Row(verticalAlignment = Alignment.Bottom, modifier = modifier) {
-        StateBar(icon = Icons.Outlined.WaterDrop, ratio = 100, color = Color.Cyan)
+        StateBar(icon = Icons.Outlined.WaterDrop, ratio = 100, color = Color(0xFF86C6C6))
         Spacer(modifier = Modifier.width(36.dp))
-        StateBar(icon = Icons.Outlined.WbSunny, ratio = 80, color = Color.Yellow)
+        StateBar(icon = Icons.Outlined.WbSunny, ratio = 80, color = Color(0xFFFFD000))
     }
 }
+
+

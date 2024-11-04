@@ -36,6 +36,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.compose.collectAsState
@@ -48,7 +50,20 @@ import com.wcd.farm.presentation.viewmodel.MemorialViewModel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.layout.height
 
+val customFontFamily1 = FontFamily(
+    Font(R.font.bookend_semibold)
+)
+val customFontFamily2 = FontFamily(
+    Font(R.font.ef_yoony)
+)
+val customFontFamily3 = FontFamily(
+    Font(R.font.hakgyo)
+)
 @Composable
 fun GalleryView() {
     val viewModel: MemorialViewModel = mavericksViewModel()
@@ -64,11 +79,19 @@ fun GalleryView() {
         ) {
 
             Column {
-                Text("${selectedDate.year}", fontSize = 24.sp, color = Color.White)
+                Text("${selectedDate.year}",
+                    fontSize = 26.sp,
+                    color = Color(0xFF204833),
+                    fontFamily = customFontFamily1
+
+                )
                 Text(
                     "${selectedDate.month.name[0]}${
                         selectedDate.month.name.substring(1).lowercase()
-                    } ${selectedDate.dayOfMonth}", fontSize = 32.sp, color = Color.White
+                    } ${selectedDate.dayOfMonth}",
+                    fontSize = 36.sp,
+                    color = Color(0xFF204833),
+                    fontFamily = customFontFamily1,
                 )
             }
             Button(
@@ -84,7 +107,7 @@ fun GalleryView() {
                     modifier = Modifier
                         .padding(0.dp)
                         .size(36.dp),
-                    tint = Color.White
+                    tint = Color(0xFF204833)
                 )
             }
         }
@@ -130,20 +153,27 @@ fun MemoryView() {
             horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text("12:00 잘 자라라$$")
+            Text(
+                text = "12:00 상추 팜요파묘~",
+                fontSize = 20.sp,
+                color = Color.Black,
+                fontFamily = customFontFamily3 // customFontFamily1 설정
+            )
             Icon(imageVector = Icons.Outlined.EditCalendar, contentDescription = "Edit")
         }
         Button(
             onClick = { /*TODO*/ },
             contentPadding = PaddingValues(0.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(5.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.farm),
                 contentDescription = "Farm",
-                modifier = Modifier.clip(
-                    RoundedCornerShape(16.dp)
-                )
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(5.dp))
             )
         }
 
@@ -190,4 +220,10 @@ fun CalendarModal(onDismissRequest: () -> Unit) {
                 )
             )
         })
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewTest() {
+    MemoryView()
 }

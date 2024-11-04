@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun InfoScreen() {
     Column(Modifier.fillMaxHeight()) {
+        Spacer(modifier = Modifier.weight(0.05f))
         CrtStateView(Modifier.weight(0.2f).clip(RoundedCornerShape(16.dp)).shadow(4.dp, RoundedCornerShape(16.dp))) // 0.25
         Spacer(modifier = Modifier.weight(0.05f))
 
