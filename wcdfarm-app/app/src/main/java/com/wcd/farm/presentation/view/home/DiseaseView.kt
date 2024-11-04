@@ -1,46 +1,86 @@
 package com.wcd.farm.presentation.view.home
 
+import android.content.ContentValues
+import android.provider.MediaStore
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import com.wcd.farm.presentation.state.DiseaseViewState
 import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
+import java.io.File
 
 @Composable
 fun DiseaseScreen(onDismissRequest: () -> Unit) {
-    AlertDialog(onDismissRequest = onDismissRequest, confirmButton = {
-        TextButton(onClick = {}) {
-            Text(text = "촬영")
-        }
-    }, dismissButton = {
+    val viewModel: DiseaseViewModel = mavericksViewModel()
+    val context = LocalContext.current
+    val state by viewModel.collectAsState(DiseaseViewState::viewState)
+    val contentValues = ContentValues().apply {
+        put(MediaStore.Images.Media.DISPLAY_NAME, "image_${System.currentTimeMillis()}.jpg")
+        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+        put(
+            MediaStore.Images.Media.RELATIVE_PATH,
+            "Pictures/CameraX-Image"/*Environment.DIRECTORY_PICTURES*/
+        )
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest, confirmButton = {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                TextButton(onClick = {
+                    viewModel.takePhoto(context, contentValues)
+                })
+                {
+                    Icon(
+                        imageVector = Icons.Outlined.Camera,
+                        contentDescription = "Camera",
+                        tint = Color.Black
+                    )
+                }
+            }
+
+        }, /*dismissButton = {
         TextButton(onClick = onDismissRequest) {
             Text(text = "취소")
         }
-    }, text = {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            CameraPreview()
-        }
-    },
+    },*/ text = {
+
+            Surface(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                when (state) {
+                    0 -> CameraPreview()
+                    1 -> CaptureImage()
+                }
+            }
+        },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     )
 }
@@ -52,13 +92,26 @@ fun CameraPreview() {
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val contentValues = ContentValues().apply {
+        put(MediaStore.Images.Media.DISPLAY_NAME, "image_${System.currentTimeMillis()}.jpg")
+        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+        put(
+            MediaStore.Images.Media.RELATIVE_PATH,
+            "Pictures/CameraX-Image"/*Environment.DIRECTORY_PICTURES*/
+        ) // Android 10 이상에서 사용
+    }
+
+    val uri =
+        context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+    val cacheDir = uri?.path?.let { File(it) }
+
     val previewView by remember {
         mutableStateOf(PreviewView(context))
     }
 
     LaunchedEffect(Unit) {
         viewModel.requestPermission()
-        viewModel.startCamera(previewView, lifecycleOwner)
+        viewModel.startCamera(previewView, lifecycleOwner, cacheDir!!)
     }
 
     Box(modifier = Modifier) {
@@ -68,5 +121,17 @@ fun CameraPreview() {
                 update = { }
             )
         }
+    }
+}
+
+@Composable
+fun CaptureImage() {
+    val viewModel: DiseaseViewModel = mavericksViewModel()
+    val bitmap by viewModel.bitmap.collectAsState()
+    Box(modifier = Modifier) {
+        if(bitmap != null) {
+            Image(bitmap = bitmap!!.asImageBitmap(), contentDescription = "DiseasePhoto", contentScale = ContentScale.FillBounds)
+        }
+
     }
 }

@@ -101,6 +101,7 @@ dependencies {
     implementation("androidx.camera:camera-core:1.4.0")
     implementation("androidx.camera:camera-lifecycle:1.4.0")
     implementation("androidx.camera:camera-view:1.4.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     //permission
     implementation("io.github.ParkSangGwon:tedpermission-normal:3.4.2")
