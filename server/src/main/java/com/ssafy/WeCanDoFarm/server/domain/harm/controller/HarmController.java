@@ -22,12 +22,12 @@ public class HarmController {
     private final HarmService harmService;
     @PostMapping("/add-harm-picture")
     SuccessResponse<String> addHarmPicture(@RequestBody AddHarmPictureRequest request) throws Exception{
-
+        harmService.addHarmPicture(request);
         return SuccessResponse.empty();
     }
     @PostMapping("/add-harm-video")
     SuccessResponse<String> addHarmVideo(@RequestBody AddHarmVideoRequest request) throws Exception {
-
+        harmService.addHarmVideo(request);
         return SuccessResponse.empty();
     }
     @GetMapping("/get-harm-picture")
