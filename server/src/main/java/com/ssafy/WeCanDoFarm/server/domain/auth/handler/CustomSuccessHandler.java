@@ -55,7 +55,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 	private String getRedirectUrl(String targetUrl, JwtToken token) {
 		return UriComponentsBuilder.fromUriString(targetUrl).queryParam("accessToken", token.getAccessToken())
-				.queryParam("refresh-token", token.getRefreshToken())
+				.queryParam("refreshToken", token.getRefreshToken())
 			.build().toUriString();
 	}
 
