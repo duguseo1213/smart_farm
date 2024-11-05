@@ -3,7 +3,6 @@ package com.wcd.farm.presentation.view.memorial
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,21 +27,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import com.wcd.farm.R
 import com.wcd.farm.presentation.intent.MemorialViewIntent
 import com.wcd.farm.presentation.state.MemorialViewState
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.MemorialViewModel
+
+
 
 const val GALLERY_VIEW = 1
 const val GROWTH_VIEW = 2
@@ -54,6 +58,7 @@ fun MemorialScreen() {
     val viewModel: MemorialViewModel = mavericksViewModel()
     val showView by viewModel.collectAsState(MemorialViewState::showMemorialView)
 
+    Spacer(modifier = Modifier.fillMaxHeight(0.07f))
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,6 +67,7 @@ fun MemorialScreen() {
             modifier = Modifier
                 .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
+
             MemorialMenu(showView == GALLERY_VIEW) {
                 viewModel.sendIntent(MemorialViewIntent.ShowGalleryView)
             }
@@ -90,9 +96,12 @@ fun MemorialScreen() {
 @Composable
 fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
     val color =
-        ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color.Green)
+        ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0XFF1A874D))
     val color2 =
-        ButtonDefaults.buttonColors(containerColor = Color(0XFF197142), contentColor = Color.White)
+        ButtonDefaults.buttonColors(
+            containerColor = Color(0XFF197142),
+            contentColor = Color(0XFFECEDC1)
+        )
 
     Button(
         onClick = onClick,
@@ -100,7 +109,14 @@ fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
         shape = RoundedCornerShape(16.dp),
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier
-            .shadow(1.dp, RoundedCornerShape(16.dp), clip = true)
+            .size(70.dp, 72.dp)
+            .rsBlurShadow(
+                4.dp,
+                shape = RoundedCornerShape(16.dp),
+                color = Color.Black.copy(0.25f),
+                offset = DpOffset(x = 0.dp, y = 4.dp)
+            )
+
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
@@ -131,9 +147,10 @@ fun InvasionView() {
     Column {
         Text(
             "2024-09-17",
-            color = Color.White,
+            color = Color(0xFF204833),
             fontSize = 28.sp,
-            modifier = Modifier.padding(8.dp, 24.dp)
+            modifier = Modifier.padding(8.dp, 24.dp),
+            fontFamily = customFontFamily1
         )
         Column(
             modifier = Modifier
@@ -148,7 +165,7 @@ fun InvasionView() {
                     .padding(8.dp)
                     .fillMaxWidth()
             ) {
-                Text("오후 03:30 강아지 방문", fontSize = 20.sp)
+                Text("오후 03:30 강아지 방문", fontSize = 20.sp, fontFamily = customFontFamily3)
                 Button(
                     onClick = { /*TODO*/ },
                     shape = RectangleShape,
@@ -188,5 +205,5 @@ fun InvasionView() {
 @Preview
 @Composable
 fun PreviewInvasionView() {
-    InvasionView()
+    MemorialScreen()
 }

@@ -2,6 +2,7 @@ package com.wcd.farm.presentation.view.home
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,7 +36,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
+import com.wcd.farm.R
+import androidx.compose.ui.tooling.preview.Preview
+
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -43,8 +50,9 @@ fun StateView() {
     Button(
         onClick = { Log.e("TEST", "Click") },
         contentPadding = PaddingValues(0.dp),
-        shape = RoundedCornerShape(8.dp)
-    ) {
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.rsBlurShadow(4.dp, color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp)) // 쉼표 추가
+    ){
         Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
@@ -54,11 +62,18 @@ fun StateView() {
                 .background(Color.White)
                 .padding(24.dp, 4.dp, 24.dp, 24.dp)
         ) {
-            StateBar(icon = Icons.Outlined.WaterDrop, 90, Color.Cyan)
+
+            StateBar(icon = Icons.Outlined.WaterDrop, 90, Color(0xFF86C6C6))
             Spacer(modifier = Modifier.width(24.dp))
-            StateBar(icon = Icons.Outlined.WbSunny, ratio = 40, Color.Yellow)
-            Spacer(modifier = Modifier.width(24.dp))
-            StateBar(icon = Icons.Outlined.LocalHospital, ratio = 5, Color.Magenta)
+            StateBar(icon = Icons.Outlined.WbSunny, ratio = 40, Color(0xFFFFD000))
+            Spacer(modifier = Modifier.width(65.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.happy_character),
+                contentDescription = "Happy Character",
+                modifier = Modifier.size(120.dp)
+            )
+
         }
     }
 
@@ -85,7 +100,7 @@ fun StateBar(icon: ImageVector, ratio: Int, color: Color) {
         }
         Box(
             modifier = Modifier,
-            contentAlignment = if (height > textHeight) Alignment.TopCenter else Alignment.BottomCenter
+            contentAlignment = if (height > textHeight-30) Alignment.TopCenter else Alignment.BottomCenter
         ) {
             BoxWithConstraints(
                 modifier = Modifier
@@ -102,9 +117,17 @@ fun StateBar(icon: ImageVector, ratio: Int, color: Color) {
                     .onGloballyPositioned { layoutCoordinates ->
                         textHeight = layoutCoordinates.size.height
                     },
-                color = if (height > textHeight) Color.White else Color.Red
+                color = if (height > textHeight-30) Color.White else Color.Red
             )
         }
 
     }
+}
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewTest2() {
+    StateView()
 }
