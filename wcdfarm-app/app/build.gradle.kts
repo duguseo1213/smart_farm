@@ -108,6 +108,9 @@ dependencies {
     implementation("io.github.ParkSangGwon:tedpermission-normal:3.4.2")
     implementation("io.github.ParkSangGwon:tedpermission-coroutine:3.4.2")
 
+    //lottie
+    implementation("com.airbnb.android:lottie-compose:5.0.3")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
