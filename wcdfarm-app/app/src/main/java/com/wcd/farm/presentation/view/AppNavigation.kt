@@ -1,7 +1,5 @@
 package com.wcd.farm.presentation.view
 
-import android.util.Log
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,8 +16,8 @@ import com.wcd.farm.presentation.viewmodel.AppViewModel
 fun AppNavigation() {
     val appViewModel: AppViewModel = mavericksViewModel()
     val appViewState by appViewModel.collectAsState(AppViewState::appViewState)
-    val navController = rememberNavController()
 
+    val navController = rememberNavController()
     LaunchedEffect(appViewState) {
         when (appViewState) {
             AppViewState.LOGIN -> navController.navigate(AppViewState.LOGIN)
@@ -29,7 +27,7 @@ fun AppNavigation() {
 
     NavHost(navController = navController, startDestination = AppViewState.LOGIN) {
         composable(AppViewState.LOGIN) {
-            LoginScreen(navController)
+            LoginScreen()
         }
         composable(AppViewState.MAIN) {
             MainLayout()

@@ -1,6 +1,8 @@
 package com.wcd.farm.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import com.wcd.farm.data.remote.AuthApi
 import com.wcd.farm.data.remote.ServerClient
 import com.wcd.farm.data.remote.WeatherApi
 import com.wcd.farm.data.remote.WeatherApiClient
@@ -22,14 +24,26 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideAuthApi(): AuthApi {
+        return ServerClient.authApi
+    }
+
+    @Provides
+    @Singleton
     fun provideWeatherApi(): WeatherApi {
         return WeatherApiClient.weatherApi
     }
 
     @Provides
     @Singleton
-    fun provideServerRepository(): ServerRepository {
-        return ServerRepository()
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    @Singleton
+    fun provideServerRepository(authApi: AuthApi, sharedPreferences: SharedPreferences): ServerRepository {
+        return ServerRepository(authApi, sharedPreferences)
     }
 
     @Provides

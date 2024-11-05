@@ -26,7 +26,7 @@ fun HomeScreen() {
     LaunchedEffect(Unit) {
         val longitude = 126.8071876
         val latitude = 35.2040949
-        //weatherViewModel.getLiveWeather(latitude, longitude)
+        weatherViewModel.getLiveWeather(latitude, longitude)
     }
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -41,7 +41,5 @@ fun HomeScreen() {
                 homeViewModel.sendIntent(HomeViewIntent.HideWeekWeather)
             }
         }
-
-
     }
 }

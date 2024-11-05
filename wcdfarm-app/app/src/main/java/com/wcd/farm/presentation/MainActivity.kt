@@ -2,12 +2,11 @@ package com.wcd.farm.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.wcd.farm.data.repository.ServerRepository
+import com.wcd.farm.data.remote.ServerClient
 import com.wcd.farm.presentation.intent.AppViewIntent
 import com.wcd.farm.presentation.view.AppNavigation
 import com.wcd.farm.presentation.viewmodel.AppViewModel
@@ -22,6 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         Mavericks.initialize(this)
+        ServerClient.init(applicationContext)
         val appViewModel: AppViewModel by viewModel()
         this.appViewModel = appViewModel
 
@@ -44,10 +44,8 @@ class MainActivity : ComponentActivity() {
             val refreshToken = uri.getQueryParameter("refreshToken")
 
             if (accessToken != null && refreshToken != null) {
-                val serverRepository = ServerRepository()
-
-                serverRepository.setAccessToken(accessToken)
-                serverRepository.setRefreshToken(refreshToken)
+                appViewModel.setAccessToken(accessToken)
+                appViewModel.setRefreshToken(refreshToken)
 
                 appViewModel.sendIntent(AppViewIntent.ShowMainView)
             }

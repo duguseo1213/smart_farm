@@ -5,6 +5,7 @@ import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.hilt.AssistedViewModelFactory
 import com.airbnb.mvrx.hilt.hiltMavericksViewModelFactory
+import com.wcd.farm.data.repository.ServerRepository
 import com.wcd.farm.presentation.intent.AppViewIntent
 import com.wcd.farm.presentation.state.AppViewState
 import dagger.assisted.Assisted
@@ -15,7 +16,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
-class AppViewModel @AssistedInject constructor(@Assisted initialState: AppViewState) :
+class AppViewModel @AssistedInject constructor(@Assisted initialState: AppViewState, private val repository: ServerRepository) :
     MavericksViewModel<AppViewState>(initialState) {
     private val appViewIntent = Channel<AppViewIntent>()
 
@@ -44,5 +45,17 @@ class AppViewModel @AssistedInject constructor(@Assisted initialState: AppViewSt
                 }
             }
         }
+    }
+
+    fun requestRefreshToken() {
+        repository.requestRefreshToken()
+    }
+
+    fun setAccessToken(accessToken: String) {
+        repository.setAccessToken(accessToken)
+    }
+
+    fun setRefreshToken(refreshToken: String) {
+        repository.setRefreshToken(refreshToken)
     }
 }

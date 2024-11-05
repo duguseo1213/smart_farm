@@ -2,9 +2,6 @@ package com.wcd.farm.presentation.view.login
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
-import android.webkit.CookieManager
-import android.webkit.WebView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,22 +19,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.wcd.farm.R
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
-import com.wcd.farm.presentation.viewmodel.LoginViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen() {
     val context = LocalContext.current
-    val viewModel: LoginViewModel = hiltViewModel()
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -47,7 +38,8 @@ fun LoginScreen(navController: NavController) {
         LogoImage()
         Spacer(modifier = Modifier.weight(0.25f))
         KakaoLoginButton {
-            val url = "https://k11c104.p.ssafy.io/oauth2/authorization/kakao?redirect_uri=app://wcdfarm"
+            val url =
+                "https://k11c104.p.ssafy.io/oauth2/authorization/kakao?redirect_uri=app://wcdfarm"
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
             CoroutineScope(Dispatchers.Main).launch {

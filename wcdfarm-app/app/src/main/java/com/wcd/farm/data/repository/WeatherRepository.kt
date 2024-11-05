@@ -166,14 +166,14 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
     fun getForecastWeather() {
         val customOptions: MutableMap<String, String> = mutableMapOf()
         customOptions["regId"] = "11F20000"
-        customOptions["tmFc"] = "202411010600"
+        customOptions["tmFc"] = "202411050600"
 
         val options = getOptions(customOptions)
         CoroutineScope(Dispatchers.IO).launch {
             val response = weatherApi.getForecastWeather(options)
             if (response.isSuccessful) {
                 val list = _forecastWeather.value.toMutableList()
-
+                Log.e("TEST", response.body().toString())
                 val item = getItem(response.body()!!)[0].asJsonObject
                 for (i in 3..7) {
                     val amRainPredictField = "rnSt${i}Am"
@@ -202,7 +202,7 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
 
             val customOptions2: MutableMap<String, String> = mutableMapOf()
             customOptions2["regId"] = "11F20501"
-            customOptions2["tmFc"] = "202411010600"
+            customOptions2["tmFc"] = "202411050600"
 
             val options2 = getOptions(customOptions2)
 

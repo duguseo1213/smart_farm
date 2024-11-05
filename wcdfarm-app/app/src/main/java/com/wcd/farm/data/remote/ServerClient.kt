@@ -1,5 +1,7 @@
 package com.wcd.farm.data.remote
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
 import com.wcd.farm.data.repository.ServerRepository
 import okhttp3.Cookie
@@ -16,13 +18,15 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 import java.net.CookieManager
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 object ServerClient {
-    private const val BASE_URL = "https://k11c104.p.ssafy.io/"
-    private lateinit var repository: ServerRepository
+    private const val BASE_URL = "https://k11c104.p.ssafy.io/api/v1/"
 
-    fun init(repository: ServerRepository) {
-        this.repository = repository
+    lateinit var sharedPreferences: SharedPreferences
+
+    fun init(applicationContext: Context) {
+        sharedPreferences = applicationContext.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
     }
 
     private val retryInterceptor: Interceptor = object : Interceptor {
@@ -58,13 +62,12 @@ object ServerClient {
         .writeTimeout(30, TimeUnit.SECONDS)
         .cookieJar(object: CookieJar {
             override fun loadForRequest(url: HttpUrl): List<Cookie> {
-                val refreshToken = repository.refreshToken.value // 실제로 저장된 refreshToken 값 사용
-
+                val refreshToken = sharedPreferences.getString("refreshToken", "")
                 val cookie = Cookie.Builder()
                     .domain(url.host)
                     .path(url.encodedPath)
                     .name("refreshToken")
-                    .value(refreshToken)
+                    .value(refreshToken!!)
                     .httpOnly()
                     .secure()
                     .build()
@@ -75,9 +78,10 @@ object ServerClient {
             override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) { }
         })
         .addInterceptor { chain ->
+            val accessToken = sharedPreferences.getString("accessToken", "")
             val request = chain.request()
                 .newBuilder()
-                .addHeader("Authorization", "Bearer ${repository.accessToken.value}")
+                .addHeader("Authorization", "Bearer $accessToken")
                 .build()
             chain.proceed(request)
         }
@@ -90,4 +94,8 @@ object ServerClient {
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+
+    val authApi: AuthApi by lazy {
+        retrofit.create(AuthApi::class.java)
+    }
 }

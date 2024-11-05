@@ -1,21 +1,39 @@
 package com.wcd.farm.data.repository
 
-import androidx.compose.runtime.mutableStateOf
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import android.content.SharedPreferences
+import android.util.Log
+import com.wcd.farm.data.remote.AuthApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ServerRepository @Inject constructor() {
-    private val _accessToken = MutableStateFlow("")
-    val accessToken = _accessToken.asStateFlow()
-    private val _refreshToken = MutableStateFlow("")
-    val refreshToken = _refreshToken.asStateFlow()
-
+class ServerRepository @Inject constructor(
+    private val authApi: AuthApi,
+    private val sharedPreferences: SharedPreferences
+) {
     fun setAccessToken(accessToken: String) {
-        _accessToken.value = accessToken
+        val editor = sharedPreferences.edit()
+        editor.putString("accessToken", accessToken)
+        editor.apply()
     }
 
     fun setRefreshToken(refreshToken: String) {
-        _refreshToken.value = refreshToken
+        val editor = sharedPreferences.edit()
+        editor.putString("refreshToken", refreshToken)
+        editor.apply()
+    }
+
+    fun requestRefreshToken() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = authApi.refresh()
+            if (response.isSuccessful) {
+                val responseDTO = response.body()!!.data
+                setAccessToken(responseDTO.accessToken)
+                setRefreshToken(responseDTO.refreshToken)
+            } else {
+                Log.e("TEST", response.errorBody()!!.string())
+            }
+        }
     }
 }
