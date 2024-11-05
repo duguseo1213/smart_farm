@@ -51,6 +51,7 @@ public class TimeLapseServiceImpl implements TimeLapseService {
             GetTimeLapsePicturesResponse response = new GetTimeLapsePicturesResponse();
             response.setCreatedDate(tl.getCreatedDate());
             response.setImage(tl.getTimeLapseImage());
+            response.setGardenId(tl.getGarden().getGardenId());
             getTimeLapsePicturesResponses.add(response);
         }
         return getTimeLapsePicturesResponses;
