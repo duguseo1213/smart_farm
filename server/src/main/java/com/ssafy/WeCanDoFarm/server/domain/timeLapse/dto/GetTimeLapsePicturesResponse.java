@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class GetTimeLapsePicturesResponse {
+    Long gardenId;
     String image;
     Date createdDate;
-
 }
