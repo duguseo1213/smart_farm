@@ -46,7 +46,13 @@ import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.Font
 
+import com.wcd.farm.R
+
+val customFontFamily_weather_main1 = FontFamily(Font(R.font.bookend_semibold))
+val customFontFamily_weather_main2 = FontFamily(Font(R.font.ef_yoony))
 @Composable
 fun TodayWeatherView() {
     val homeViewModel: HomeViewModel = mavericksViewModel()
@@ -74,7 +80,7 @@ fun TodayWeatherView() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.2f)
+                    .fillMaxHeight(0.17f)
             ) {
                 HomeServiceNameView()
                 TodayWeatherIcon(
@@ -92,10 +98,11 @@ fun TodayWeatherView() {
 fun HomeServiceNameView() {
     Text(
         "Farm-us",
-        color = Color.White,
-        fontSize = 30.sp,
+        color = Color(0xFF28543D),
+        fontSize = 40.sp,
         letterSpacing = (-2).sp,
-        fontWeight = FontWeight.Light
+        fontWeight = FontWeight.Medium,
+        fontFamily = customFontFamily_weather_main1
     )
 }
 
@@ -104,7 +111,7 @@ fun TodayWeatherIcon(modifier: Modifier) {
     Icon(
         Icons.Outlined.WbSunny,
         "RAINY",
-        tint = Color.White,
+        tint = Color(0xFF28543D),
         modifier = modifier
             .size(72.dp)
     )
@@ -119,14 +126,18 @@ fun TemperatureView(modifier: Modifier) {
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("${weather.tmp}°C", fontSize = 36.sp, color = Color.White)
+        Text(
+            "${weather.tmp}°C",
+            fontSize = 40.sp,
+            color = Color(0xFF28543D),
+            fontFamily = customFontFamily_weather_main1)
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
                 .fillMaxWidth(0.4f)
         ) {
             BuildTmpText(attr = "최소", tmp = weather.minTmp)
-            Text("|", fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Light)
+            Text("|", fontSize = 14.sp, color = Color(0xFF28543D), fontWeight = FontWeight.Light)
             BuildTmpText(attr = "최대", tmp = weather.maxTmp)
         }
     }
@@ -143,7 +154,7 @@ fun BuildTmpText(attr: String, tmp: Double) {
         }
     }
 
-    Text(tmpText, color = Color.White, fontWeight = FontWeight.Light)
+    Text(tmpText, color = Color(0xFF28543D), fontWeight = FontWeight.Light)
 }
 
 @Composable
@@ -152,9 +163,14 @@ fun WeatherStatusView(modifier: Modifier) {
     val weather by weatherViewModel.weather.collectAsState()
 
     Column(modifier = modifier) {
-        Text("강수: ${weather.rain}", color = Color.White)
-        Text("바람: ${weather.wind}m/s", color = Color.White)
-        Text("습도: ${weather.humidity}%", color = Color.White)
+        Text("강수: ${weather.rain}mm", color = Color(0xFF28543D), fontWeight = FontWeight.SemiBold)
+        Text("바람: ${weather.wind}m/s", color = Color(0xFF28543D))
+        Text("습도: ${weather.humidity}%", color = Color(0xFF28543D))
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun PreviewTest() {
+    TodayWeatherView()
+}

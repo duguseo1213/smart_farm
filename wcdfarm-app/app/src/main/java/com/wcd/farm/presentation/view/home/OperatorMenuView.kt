@@ -32,8 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import com.wcd.farm.R
 import com.wcd.farm.presentation.intent.DiseaseViewIntent
 import com.wcd.farm.presentation.intent.HomeViewIntent
@@ -41,6 +43,11 @@ import com.wcd.farm.presentation.state.HomeViewState
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
 import com.wcd.farm.presentation.viewmodel.HomeViewModel
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.Font
+
+
+val customFontFamily_main1 = FontFamily(Font(R.font.juri))
 
 @Composable
 fun MenuContainer() {
@@ -53,9 +60,9 @@ fun MenuContainer() {
     ) {
 
         if (!isUserOnFarm) {
-            MenuButton(Icons.Outlined.WaterDrop, "물주기") { viewModel.requestWatering() }
-            MenuButton(Icons.Outlined.PhotoCamera, "사진 촬영") { viewModel.requestFilm() }
-            MenuButton(Icons.Outlined.Grass, "질병 확인") { diseaseViewModel.sendIntent(DiseaseViewIntent.ShowDiseaseView) }
+            MenuButton(R.drawable.watering_btn, "물주기") { viewModel.requestWatering() }
+            MenuButton(R.drawable.camera_btn, "사진 촬영") { viewModel.requestFilm() }
+            MenuButton(R.drawable.disease_btn, "질병 확인") { diseaseViewModel.sendIntent(DiseaseViewIntent.ShowDiseaseView) }
         } else {
             MenuLongButton(icon = Icons.Outlined.WaterDrop, description = "물주기") { viewModel.requestWatering() }
         }
@@ -63,7 +70,7 @@ fun MenuContainer() {
 }
 
 @Composable
-fun MenuButton(icon: ImageVector, description: String, onClick: () -> Unit) {
+fun MenuButton(imageRes: Int, description: String, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = buttonTransparentTheme(),
