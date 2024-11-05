@@ -98,4 +98,8 @@ object ServerClient {
     val authApi: AuthApi by lazy {
         retrofit.create(AuthApi::class.java)
     }
+
+    val gardenApi: GardenApi by lazy {
+        retrofit.create(GardenApi::class.java)
+    }
 }
