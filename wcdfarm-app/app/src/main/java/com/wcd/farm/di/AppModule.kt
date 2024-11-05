@@ -1,12 +1,12 @@
 package com.wcd.farm.di
 
 import android.content.Context
-import com.wcd.farm.data.remote.LoginApi
 import com.wcd.farm.data.remote.ServerClient
 import com.wcd.farm.data.remote.WeatherApi
 import com.wcd.farm.data.remote.WeatherApiClient
 import com.wcd.farm.data.repository.DiseaseRepository
 import com.wcd.farm.data.repository.MemorialRepository
+import com.wcd.farm.data.repository.ServerRepository
 import com.wcd.farm.data.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
@@ -22,14 +22,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLoginApi(): LoginApi {
-        return ServerClient.loginApi
+    fun provideWeatherApi(): WeatherApi {
+        return WeatherApiClient.weatherApi
     }
 
     @Provides
     @Singleton
-    fun provideWeatherApi(): WeatherApi {
-        return WeatherApiClient.weatherApi
+    fun provideServerRepository(): ServerRepository {
+        return ServerRepository()
     }
 
     @Provides

@@ -2,6 +2,9 @@ package com.wcd.farm.presentation.view.login
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
+import android.webkit.CookieManager
+import android.webkit.WebView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,7 +47,7 @@ fun LoginScreen(navController: NavController) {
         LogoImage()
         Spacer(modifier = Modifier.weight(0.25f))
         KakaoLoginButton {
-            val url = "https://k11c104.p.ssafy.io/oauth2/authorization/kakao?redirect_uri=https://k11c104.p.ssafy.io/app"
+            val url = "https://k11c104.p.ssafy.io/oauth2/authorization/kakao?redirect_uri=app://wcdfarm"
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
             CoroutineScope(Dispatchers.Main).launch {
@@ -52,14 +55,6 @@ fun LoginScreen(navController: NavController) {
                     context.startActivity(intent)
                 }
             }
-
-            /*viewModel.login(context) {
-                navController.navigate("main_screen") {
-                    popUpTo("login_screen") {
-                        inclusive = true
-                    }
-                }
-            }*/
         }
         Spacer(modifier = Modifier.weight(0.5f))
     }

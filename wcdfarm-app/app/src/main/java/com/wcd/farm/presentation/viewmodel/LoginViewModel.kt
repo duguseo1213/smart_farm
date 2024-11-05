@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.user.UserApiClient
-import com.wcd.farm.data.remote.LoginApi
 import com.wcd.farm.data.remote.ServerClient
 import com.wcd.farm.data.remote.WeatherApi
 import dagger.hilt.android.lifecycle.HiltViewModel

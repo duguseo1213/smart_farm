@@ -1,18 +1,29 @@
 package com.wcd.farm.data.remote
 
 import com.google.gson.GsonBuilder
+import com.wcd.farm.data.repository.ServerRepository
+import okhttp3.Cookie
+import okhttp3.CookieJar
+import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
+import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
+import java.net.CookieManager
 import java.util.concurrent.TimeUnit
 
 object ServerClient {
     private const val BASE_URL = "https://k11c104.p.ssafy.io/"
+    private lateinit var repository: ServerRepository
+
+    fun init(repository: ServerRepository) {
+        this.repository = repository
+    }
 
     private val retryInterceptor: Interceptor = object : Interceptor {
         private val maxRetry = 3
@@ -45,6 +56,31 @@ object ServerClient {
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
+        .cookieJar(object: CookieJar {
+            override fun loadForRequest(url: HttpUrl): List<Cookie> {
+                val refreshToken = repository.refreshToken.value // 실제로 저장된 refreshToken 값 사용
+
+                val cookie = Cookie.Builder()
+                    .domain(url.host)
+                    .path(url.encodedPath)
+                    .name("refreshToken")
+                    .value(refreshToken)
+                    .httpOnly()
+                    .secure()
+                    .build()
+
+                return listOf(cookie)
+            }
+
+            override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) { }
+        })
+        .addInterceptor { chain ->
+            val request = chain.request()
+                .newBuilder()
+                .addHeader("Authorization", "Bearer ${repository.accessToken.value}")
+                .build()
+            chain.proceed(request)
+        }
         .addInterceptor(retryInterceptor)
         .build()
 
@@ -54,8 +90,4 @@ object ServerClient {
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
-    val loginApi: LoginApi by lazy {
-        retrofit.create(LoginApi::class.java)
-    }
 }

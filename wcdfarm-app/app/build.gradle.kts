@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:4.12.0")
 
     implementation("org.locationtech.proj4j:proj4j:1.3.0")
     implementation("org.locationtech.proj4j:proj4j-epsg:1.3.0")
