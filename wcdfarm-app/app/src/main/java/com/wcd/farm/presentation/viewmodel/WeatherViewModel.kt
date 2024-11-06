@@ -15,17 +15,17 @@ class WeatherViewModel @Inject constructor(private val weatherRepository: Weathe
     val forecastWeather = weatherRepository.forecastWeather
 
     fun getLiveWeather(latitude: Double, longitude: Double) {
-        val time = LocalDateTime.now(ZoneId.systemDefault())
+        val time = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         weatherRepository.getLiveWeather(latitude, longitude, time)
     }
 
     fun getNearForecastWeather(latitude: Double, longitude: Double) {
-        val time = LocalDateTime.now(ZoneId.systemDefault())
+        val time = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         weatherRepository.getNearForecastWeather(latitude, longitude, time)
     }
 
     fun getForecastWeather() {
-        val time = LocalDateTime.now(ZoneId.systemDefault())
+        val time = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         weatherRepository.getForecastWeather(time)
     }
 }

@@ -3,9 +3,9 @@ package com.wcd.farm.data.repository
 import android.util.Log
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
-import com.wcd.farm.data.model.ForecastWeather
 import com.wcd.farm.data.LatLngConverter
 import com.wcd.farm.data.LatXLngY
+import com.wcd.farm.data.model.ForecastWeather
 import com.wcd.farm.data.model.WeatherDTO
 import com.wcd.farm.data.model.WeatherInfo
 import com.wcd.farm.data.remote.WeatherApi
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) {
@@ -38,7 +39,12 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
         if (time.minute < 10) {
             time.minusHours(1)
         }
-        val baseTime = String.format("%02d", time.hour) + "00"
+        val baseTime = String.format(
+            Locale.KOREA,
+            "%02d",
+            if (time.minute < 10) time.minusHours(1).hour
+            else time.hour
+        ) + "00"
         val baseDate = time.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
 
         val customOptions: MutableMap<String, String> = mutableMapOf()
@@ -92,12 +98,12 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
         CoroutineScope(Dispatchers.IO).launch {
             val response = weatherApi.getNearWeather(options)
 
-            if(response.isSuccessful) {
+            if (response.isSuccessful) {
                 val itemArray = getItem(response.body()!!)
                 val weatherList = itemArray.asList()
 
                 val list = _forecastWeather.value.toMutableList()
-                for(weather in weatherList) {
+                for (weather in weatherList) {
                     val weatherObject = weather.asJsonObject
                     val category = weatherObject["category"].asString
                     val fcstDate = weatherObject["fcstDate"].asString
@@ -108,49 +114,55 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
                     when (category) {
                         "TMN" -> {
                             val minTmp = fcstValue.toDouble()
-                            if(baseDate == fcstDate) {
+                            if (baseDate == fcstDate) {
                                 _weather.value = _weather.value.copy(minTmp = minTmp)
                             } else {
                                 list[index] = list[index].copy(minTmp = minTmp.toInt())
                             }
                         }
+
                         "TMX" -> {
                             val maxTmp = fcstValue.toDouble()
-                            if(baseDate == fcstDate) {
+                            if (baseDate == fcstDate) {
                                 _weather.value = _weather.value.copy(maxTmp = maxTmp)
                             } else {
                                 list[index] = list[index].copy(maxTmp = maxTmp.toInt())
                             }
                         }
+
                         "POP" -> {
-                            if(baseDate != fcstDate) {
+                            if (baseDate != fcstDate) {
                                 val rainProbability = fcstValue.toInt()
-                                if(fcstTime == "0900") {
-                                    list[index] = list[index].copy(amRainProbability = rainProbability)
-                                } else if(fcstTime == "1800") {
-                                    list[index] = list[index].copy(pmRainProbability = rainProbability)
+                                if (fcstTime == "0900") {
+                                    list[index] =
+                                        list[index].copy(amRainProbability = rainProbability)
+                                } else if (fcstTime == "1800") {
+                                    list[index] =
+                                        list[index].copy(pmRainProbability = rainProbability)
                                 }
                             }
 
                         }
+
                         "SKY" -> {
                             val skyType = fcstValue.toInt()
-                            if(baseDate != fcstDate) {
-                                val weatherType = if(skyType == 1) 1 else 2
-                                if(fcstTime == "0900") {
+                            if (baseDate != fcstDate) {
+                                val weatherType = if (skyType == 1) 1 else 2
+                                if (fcstTime == "0900") {
                                     list[index] = list[index].copy(amWeather = weatherType)
-                                } else if(fcstTime == "1800") {
+                                } else if (fcstTime == "1800") {
                                     list[index] = list[index].copy(pmWeather = weatherType)
                                 }
                             }
                         }
+
                         "PTY" -> {
                             val rainType = fcstValue.toInt()
-                            if(baseDate != fcstDate && rainType != 0) {
-                                val weatherType: Int = if(rainType != 3) 2 else 3
-                                if(fcstTime == "0900") {
+                            if (baseDate != fcstDate && rainType != 0) {
+                                val weatherType: Int = if (rainType != 3) 2 else 3
+                                if (fcstTime == "0900") {
                                     list[index] = list[index].copy(amWeather = weatherType)
-                                } else if(fcstTime == "1800") {
+                                } else if (fcstTime == "1800") {
                                     list[index] = list[index].copy(pmWeather = weatherType)
                                 }
                             }
@@ -254,7 +266,8 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
         return if (weather == "맑음") 0
         else if (weather == "구름많음" || weather == "흐림") 1
         else if (weather.endsWith("비")
-            || weather.endsWith("소나기")) 2
+            || weather.endsWith("소나기")
+        ) 2
         else if (weather.endsWith("눈")) 3
         else -1
     }
