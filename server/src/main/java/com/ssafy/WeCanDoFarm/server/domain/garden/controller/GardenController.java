@@ -1,6 +1,7 @@
 package com.ssafy.WeCanDoFarm.server.domain.garden.controller;
 
 
+import com.ssafy.WeCanDoFarm.server.core.annotation.CurrentUser;
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.*;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
@@ -23,8 +24,8 @@ public class GardenController {
     private final GardenService gardenService;
 
     @GetMapping("/get-gardens/{username}")
-    public SuccessResponse<List<GetGardenResponse>> getGarden(@PathVariable String username) throws Exception {
-        List<Garden> gardenList = gardenService.getGardens(username);
+    public SuccessResponse<List<GetGardenResponse>> getGarden(@CurrentUser User user) throws Exception {
+        List<Garden> gardenList = gardenService.getGardens(user.getUsername());
         List<GetGardenResponse> gardenResponseList = new ArrayList<>();
 
         for(int i=0;i<gardenList.size();i++){
