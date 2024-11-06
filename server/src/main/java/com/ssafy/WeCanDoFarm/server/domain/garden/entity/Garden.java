@@ -1,5 +1,6 @@
 package com.ssafy.WeCanDoFarm.server.domain.garden.entity;
 
+import com.ssafy.WeCanDoFarm.server.domain.device.entity.Device;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,18 +33,27 @@ public class Garden {
     @CreatedDate
     private Date createdDate;
 
-    @Column(name = "device_sn")
-    private Long deviceSN;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "device_id")
+    private Device device;
+
+    @Column(name = "crop")
+    private String crop;
 
 
 
-    public static Garden create(String gardenName, String gardenImage, String gardenAddress, Long deviceSN) {
+    public static Garden create(String gardenName, String gardenImage, String gardenAddress, String crop,Device device) {
         Garden garden = new Garden();
         garden.gardenName = gardenName;
         garden.gardenImage = gardenImage;
         garden.gardenAddress = gardenAddress;
-        garden.deviceSN = deviceSN;
+        garden.crop = crop;
+        garden.device = device;
         return garden;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
     }
 
 }

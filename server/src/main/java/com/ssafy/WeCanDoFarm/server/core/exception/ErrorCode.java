@@ -27,8 +27,10 @@ public enum ErrorCode {
     EMPTY_FILE(8000, HttpStatus.BAD_REQUEST, "파일이 비어있습니다."),
     FAIL_TO_DELETE_FILE(8001, HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제에 실패하였습니다."),
     NOT_SUPPORTED_EXTENSION(8002, HttpStatus.BAD_REQUEST, "지원하지 않는 확장자입니다."),
-    FAIL_TO_CREATE_FILE(8003, HttpStatus.INTERNAL_SERVER_ERROR, "파일 생성에 실패하였습니다.");
+    FAIL_TO_CREATE_FILE(8003, HttpStatus.INTERNAL_SERVER_ERROR, "파일 생성에 실패하였습니다."),
 
+    //Device
+    NO_AVAILABLE_DEVICE(9000,HttpStatus.BAD_REQUEST,"사용가능한 기기가 없습니다.");
 
     private final int code;
     private final HttpStatus status;
