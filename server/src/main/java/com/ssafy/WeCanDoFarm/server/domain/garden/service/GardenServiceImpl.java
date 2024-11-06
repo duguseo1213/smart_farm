@@ -2,6 +2,9 @@ package com.ssafy.WeCanDoFarm.server.domain.garden.service;
 
 import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
 import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
+import com.ssafy.WeCanDoFarm.server.domain.device.entity.Device;
+import com.ssafy.WeCanDoFarm.server.domain.device.entity.DeviceStatus;
+import com.ssafy.WeCanDoFarm.server.domain.device.repository.DeviceRepository;
 import com.ssafy.WeCanDoFarm.server.domain.garden.constants.PlantDiseaseConst;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenRequest;
@@ -39,7 +42,7 @@ public class GardenServiceImpl implements GardenService {
     private final GardenRepository gardenRepository;
     private final UserRepository userRepository;
     private final UserToGardenRepository userToGardenRepository;
-
+    private final DeviceRepository deviceRepository;
 
     public PlantDiseaseDto.PlantDiseaseResponse doPlantDiseaseDetection(MultipartFile file) {
         ResponseEntity<PlantDiseaseDto.PlantDiseaseResponse> responseEntity;
@@ -78,7 +81,10 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     public void registerGarden(RegisterGardenRequest request) throws Exception {
-        Garden garden = Garden.create(request.getGardenName(), "", request.getGardenAddress(), request.getDeviceSN());
+        Device device =  deviceRepository.findByDeviceStatus(DeviceStatus.AVAILABLE);
+        if(device == null) throw new BaseException(ErrorCode.NO_AVAILABLE_DEVICE);
+        Garden garden = Garden.create(request.getGardenName(), "", request.getGardenAddress(),request.getCrop(),device);
+        deviceRepository.updateDeviceStatusById(device.getDeviceId(), DeviceStatus.UNAVAILABLE);
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
         UserToGarden userToGarden = UserToGarden.create(user, garden, GardenUserType.LEADER);
         gardenRepository.save(garden);

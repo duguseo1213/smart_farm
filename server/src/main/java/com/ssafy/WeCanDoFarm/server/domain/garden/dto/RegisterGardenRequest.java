@@ -7,6 +7,6 @@ public class RegisterGardenRequest {
     String gardenName;
     String username;
     String gardenAddress;
-    long deviceSN;
+    String crop;
 
 }
