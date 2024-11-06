@@ -19,14 +19,10 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/harm")
-@Controller
+@RestController
 public class HarmController {
     private final HarmService harmService;
-    @PostMapping("/add-harm-picture")
-    SuccessResponse<String> addHarmPicture(@RequestBody AddHarmPictureRequest request) throws Exception{
-        harmService.addHarmPicture(request);
-        return SuccessResponse.empty();
-    }
+
     @PostMapping("/add-harm-video")
     SuccessResponse<String> addHarmVideo(@RequestBody AddHarmVideoRequest request) throws Exception {
         harmService.addHarmVideo(request);
@@ -45,8 +41,12 @@ public class HarmController {
     }
 
     @PostMapping("/detection-harm-animal")
-    SuccessResponse<HarmPictureDto.HarmDetectionResponse> detectionHarmAnimal(@RequestBody HarmPictureDto.HarmDetectionRequest request) throws Exception
-    {
-        return SuccessResponse.of(harmService.detectionHarmAnimal(request.getFile()));
+    SuccessResponse<HarmPictureDto.HarmDetectionResponse> detectionHarmAnimal(HarmPictureDto.HarmDetectionRequest request) throws Exception
+    {   String animalType = harmService.detectionHarmAnimal(request.getFile());
+        Long id = 0L;
+        if(!animalType.equals("none")){
+            id = harmService.addHarmPicture(request.getDeviceId(),request.getFile());
+        }
+        return SuccessResponse.of(HarmPictureDto.HarmDetectionResponse.of(animalType,id));
     }
 }

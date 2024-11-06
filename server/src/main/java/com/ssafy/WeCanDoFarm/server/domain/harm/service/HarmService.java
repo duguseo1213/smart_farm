@@ -9,9 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface HarmService {
-    void addHarmPicture(AddHarmPictureRequest request) throws Exception;
+    Long addHarmPicture(Long deviceId, MultipartFile file) throws Exception;
     void addHarmVideo(AddHarmVideoRequest request) throws Exception;
     List<HarmPicture> getHarmPictures(Long gardenId) throws Exception;
     String getHarmVideo(Long harmPictureId) throws Exception;
-    HarmPictureDto.HarmDetectionResponse detectionHarmAnimal(MultipartFile file);
+    String detectionHarmAnimal(MultipartFile file);
 }

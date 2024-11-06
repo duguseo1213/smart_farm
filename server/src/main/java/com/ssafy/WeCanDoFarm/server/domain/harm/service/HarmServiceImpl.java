@@ -17,6 +17,7 @@ import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmVideo;
 import com.ssafy.WeCanDoFarm.server.domain.harm.repository.HarmPictureRepository;
 import com.ssafy.WeCanDoFarm.server.domain.harm.repository.HarmVideoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -34,6 +35,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 @Service
+@Slf4j
 public class HarmServiceImpl implements HarmService {
 
     private final RestTemplate restTemplate;
@@ -42,8 +44,8 @@ public class HarmServiceImpl implements HarmService {
     private final GardenRepository gardenRepository;
     private final S3UploadService s3UploadService;
 
-    public HarmPictureDto.HarmDetectionResponse doHarmAnimalDetection(MultipartFile file) {
-        ResponseEntity<HarmPictureDto.HarmDetectionResponse> responseEntity;
+    public String doHarmAnimalDetection(MultipartFile file) {
+        ResponseEntity<String> responseEntity;
         try {
             // HttpHeaders 설정
             HttpHeaders headers = new HttpHeaders();
@@ -61,20 +63,20 @@ public class HarmServiceImpl implements HarmService {
             // 요청 본문 생성
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
             responseEntity = restTemplate.exchange(HarmConst.HarmDetectionURL, HttpMethod.POST, requestEntity,
-                    HarmPictureDto.HarmDetectionResponse.class);
+                    String.class);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BaseException(ErrorCode.SERVER_ERROR);
         }
-        return HarmPictureDto.HarmDetectionResponse.of(responseEntity.getBody().getHarmAnimalType());
+        log.info(String.valueOf(responseEntity.getBody()));
+        return responseEntity.getBody();
     }
 
     @Override
-    public void addHarmPicture(AddHarmPictureRequest request) throws Exception {
-        String filePath = s3UploadService.upload(request.getFile());
-        HarmPicture harmPicture = HarmPicture.crate(gardenRepository.findById(request.getGardenId()).orElseThrow(),filePath,null);
-        HarmPictureRepository.save(harmPicture);
-
+    public Long addHarmPicture(Long deviceId, MultipartFile file) throws Exception {
+        String filePath = s3UploadService.upload(file);
+        HarmPicture harmPicture = HarmPicture.crate(gardenRepository.getGarden(deviceId),filePath,null);
+        return HarmPictureRepository.save(harmPicture).getHarmPictureId();
     }
 
     @Override
@@ -96,13 +98,7 @@ public class HarmServiceImpl implements HarmService {
     }
 
     @Override
-    public HarmPictureDto.HarmDetectionResponse detectionHarmAnimal(MultipartFile file) {
-        HarmPictureDto.HarmDetectionResponse response = doHarmAnimalDetection(file);
-        if(response.getIsHarm()){
-            String filePath = s3UploadService.upload(request.getFile());
-            HarmPicture harmPicture = HarmPicture.crate(gardenRepository.findById(request.getGardenId()).orElseThrow(),filePath,null);
-            HarmPictureRepository.save(harmPicture);
-        }
-        return response;
+    public String detectionHarmAnimal(MultipartFile file) {
+        return doHarmAnimalDetection(file);
     }
 }

@@ -86,10 +86,12 @@ async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
             class_id = int(detection.cls[0])  # 클래스 ID
             best_class_name = animalDetectionLabel.class_names.get(class_id, "Unknown")  # 클래스 이름 가져오기
 
+    print(best_class_name)
     # 클래스 이름 출력
     if best_class_name is not None:
-        return {"animalClass": best_class_name}
-        
-    return {"animalClass":"none"}
+        # print({"isHarm": True, "HarmAnimalType": best_class_name, "HarmPictureId":1})
+        return {best_class_name}
+    # print({"isHarm": False, "HarmAnimalType": "none", "HarmPictureId":1})
+    return {"none"}
 
     
