@@ -163,10 +163,11 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
         }
     }
 
-    fun getForecastWeather() {
+    fun getForecastWeather(time: LocalDateTime) {
+        val baseTime = time.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "0600"
         val customOptions: MutableMap<String, String> = mutableMapOf()
         customOptions["regId"] = "11F20000"
-        customOptions["tmFc"] = "202411050600"
+        customOptions["tmFc"] = baseTime
 
         val options = getOptions(customOptions)
         CoroutineScope(Dispatchers.IO).launch {
@@ -202,7 +203,7 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
 
             val customOptions2: MutableMap<String, String> = mutableMapOf()
             customOptions2["regId"] = "11F20501"
-            customOptions2["tmFc"] = "202411050600"
+            customOptions2["tmFc"] = baseTime
 
             val options2 = getOptions(customOptions2)
 

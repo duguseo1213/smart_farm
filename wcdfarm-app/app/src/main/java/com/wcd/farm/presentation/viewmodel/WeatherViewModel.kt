@@ -25,6 +25,7 @@ class WeatherViewModel @Inject constructor(private val weatherRepository: Weathe
     }
 
     fun getForecastWeather() {
-        weatherRepository.getForecastWeather()
+        val time = LocalDateTime.now(ZoneId.systemDefault())
+        weatherRepository.getForecastWeather(time)
     }
 }
