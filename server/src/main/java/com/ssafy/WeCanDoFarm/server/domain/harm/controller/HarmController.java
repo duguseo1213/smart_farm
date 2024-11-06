@@ -3,6 +3,7 @@ package com.ssafy.WeCanDoFarm.server.domain.harm.controller;
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
 import com.ssafy.WeCanDoFarm.server.domain.harm.dto.AddHarmPictureRequest;
 import com.ssafy.WeCanDoFarm.server.domain.harm.dto.AddHarmVideoRequest;
+import com.ssafy.WeCanDoFarm.server.domain.harm.dto.HarmPictureDto;
 import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmPicture;
 import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmVideo;
 import com.ssafy.WeCanDoFarm.server.domain.harm.service.HarmService;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,5 +44,9 @@ public class HarmController {
         return SuccessResponse.of(harmService.getHarmVideo(harmPictureId));
     }
 
-
+    @PostMapping("/detection-harm-animal")
+    SuccessResponse<HarmPictureDto.HarmDetectionResponse> detectionHarmAnimal(@RequestBody HarmPictureDto.HarmDetectionRequest request) throws Exception
+    {
+        return SuccessResponse.of(harmService.detectionHarmAnimal(request.getFile()));
+    }
 }
