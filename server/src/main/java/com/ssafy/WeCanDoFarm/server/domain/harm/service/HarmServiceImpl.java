@@ -69,7 +69,8 @@ public class HarmServiceImpl implements HarmService {
             throw new BaseException(ErrorCode.SERVER_ERROR);
         }
         log.info(String.valueOf(responseEntity.getBody()));
-        return responseEntity.getBody();
+
+        return responseEntity.getBody().replaceAll("[\\[\\]\"]", "").trim();
     }
 
     @Override
