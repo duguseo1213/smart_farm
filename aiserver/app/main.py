@@ -1,12 +1,14 @@
 import os
 from PlantDisease import MyCnnModel
 from PlantDisease import PlantDiseaseLabel
+from AnimalDetection import animalDetectionLabel
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
 import torch
 from torchvision import transforms
 from PIL import Image
+from ultralytics import YOLO
 import io
 
 load_dotenv() 
@@ -24,10 +26,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 img_height = 224
 img_width = 224
 
-# plantDiseaseDetection의 상수
+# 상수
 Plant_Disease_Detection_Labels = 45
 Plant_Disease_Detection_State_Dict_PATH = os.path.join(script_dir,"PlantDisease/plant.pth")
-
+Animal_Detection_Model_PATH = os.path.join(script_dir,"AnimalDetection/best.pt")
 # plantDiseaseDetection
 plant_disease_detection_model = MyCnnModel.MyCnn(Plant_Disease_Detection_Labels)
 plant_disease_detection_model.load_state_dict(torch.load(Plant_Disease_Detection_State_Dict_PATH, weights_only=True))
@@ -39,6 +41,9 @@ plant_disease_image_transform = transforms.Compose([
     transforms.Resize((img_height, img_width)),
     transforms.ToTensor()
 ])
+
+# animal Detection Model
+animal_detection_model = YOLO(Animal_Detection_Model_PATH)
 
 @app.post("/plantDiseaseDetection")
 async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
@@ -57,5 +62,36 @@ async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
     # 나온 값 정제 후 리턴
     return {"diseaseName":PlantDiseaseLabel.labels[predicted_index], "diseaseSolvent":PlantDiseaseLabel.solutions[predicted_index]}
 
+@app.post("/animalDetection")
+async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
+
+    image_data = await imageFile.read()  # UploadFile에서 데이터 읽기
+    image = Image.open(io.BytesIO(image_data))  # bytes 데이터를 PIL 이미지로 변환
+
+    result = animal_detection_model(image)
+    detections = result[0]  # 첫 번째 이미지의 결과 가져오기
+
+    # 가장 신뢰도가 높은 탐지 결과 초기화
+    detections = result[0]  # 첫 번째 이미지의 결과 가져오기
+
+    # 가장 신뢰도가 높은 탐지 결과 초기화
+    highest_confidence = 0
+    best_class_name = None
+
+    # 탐지된 객체를 반복하며 신뢰도가 가장 높은 객체 찾기
+    for detection in detections.boxes:
+        confidence = detection.conf[0].item()  # 신뢰도
+        if confidence > highest_confidence and confidence >= 0.5:  # 신뢰도가 50% 이상인지 확인
+            highest_confidence = confidence
+            class_id = int(detection.cls[0])  # 클래스 ID
+            best_class_name = animalDetectionLabel.class_names.get(class_id, "Unknown")  # 클래스 이름 가져오기
+
+    print(best_class_name)
+    # 클래스 이름 출력
+    if best_class_name is not None:
+        # print({"isHarm": True, "HarmAnimalType": best_class_name, "HarmPictureId":1})
+        return {best_class_name}
+    # print({"isHarm": False, "HarmAnimalType": "none", "HarmPictureId":1})
+    return {"none"}
 
     

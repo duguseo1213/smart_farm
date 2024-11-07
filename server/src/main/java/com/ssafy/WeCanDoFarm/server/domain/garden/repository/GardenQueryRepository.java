@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface GardenQueryRepository {
     List<Garden> getGardens(String username) throws SQLException;
+
+    Garden getGarden(Long deviceId) throws SQLException;
 }
