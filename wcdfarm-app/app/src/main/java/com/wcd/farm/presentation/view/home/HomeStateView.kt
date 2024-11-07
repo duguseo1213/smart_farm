@@ -42,6 +42,9 @@ import androidx.compose.ui.unit.dp
 import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import com.wcd.farm.R
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.*
+import com.airbnb.lottie.compose.*
+import androidx.compose.foundation.clickable
 
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
@@ -63,15 +66,26 @@ fun StateView() {
                 .padding(24.dp, 4.dp, 24.dp, 24.dp)
         ) {
 
+            Spacer(modifier = Modifier.width(10.dp))
             StateBar(icon = Icons.Outlined.WaterDrop, 90, Color(0xFF86C6C6))
             Spacer(modifier = Modifier.width(24.dp))
             StateBar(icon = Icons.Outlined.WbSunny, ratio = 40, Color(0xFFFFD000))
-            Spacer(modifier = Modifier.width(65.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.happy_character),
-                contentDescription = "Happy Character",
-                modifier = Modifier.size(120.dp)
+
+            var isPlaying by remember { mutableStateOf(false) }
+            val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.happy_farmcharacter))
+            val progress by animateLottieCompositionAsState(
+                composition = composition,
+                isPlaying = isPlaying,
+                iterations = 1 // 한 번만 실행
+            )
+
+            LottieAnimation(
+                composition = composition,
+                progress = progress,
+                modifier = Modifier
+                    .size(200.dp)
+                    .clickable { isPlaying = !isPlaying }
             )
 
         }
