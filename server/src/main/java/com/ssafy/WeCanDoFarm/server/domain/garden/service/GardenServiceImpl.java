@@ -7,15 +7,17 @@ import com.ssafy.WeCanDoFarm.server.domain.device.entity.DeviceStatus;
 import com.ssafy.WeCanDoFarm.server.domain.device.repository.DeviceRepository;
 import com.ssafy.WeCanDoFarm.server.domain.garden.constants.PlantDiseaseConst;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenResponse;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterUserToGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
+import com.ssafy.WeCanDoFarm.server.domain.garden.entity.GardenStatus;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.GardenUserType;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.UserToGarden;
 import com.ssafy.WeCanDoFarm.server.domain.garden.repository.GardenRepository;
+import com.ssafy.WeCanDoFarm.server.domain.garden.repository.GardenStatusRepository;
 import com.ssafy.WeCanDoFarm.server.domain.garden.repository.UserToGardenRepository;
+import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessage;
 import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
 import com.ssafy.WeCanDoFarm.server.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -43,6 +46,7 @@ public class GardenServiceImpl implements GardenService {
     private final UserRepository userRepository;
     private final UserToGardenRepository userToGardenRepository;
     private final DeviceRepository deviceRepository;
+    private final GardenStatusRepository gardenStatusRepository;
 
     public PlantDiseaseDto.PlantDiseaseResponse doPlantDiseaseDetection(MultipartFile file) {
         ResponseEntity<PlantDiseaseDto.PlantDiseaseResponse> responseEntity;
@@ -122,6 +126,13 @@ public class GardenServiceImpl implements GardenService {
     public PlantDiseaseDto.PlantDiseaseResponse plantDiseaseDetection(MultipartFile file) throws Exception {
 
         return doPlantDiseaseDetection(file);
+    }
+
+    @Override
+    public void addGardenData(Long deviceId, GardenDataMessage message) throws Exception {
+        Garden garden = gardenRepository.getGarden(deviceId);
+        GardenStatus gardenStatus = GardenStatus.create(garden,message.getHumidity(),message.getIlluminance(),message.getSoil_moisture(),message.getTemperature(),new Date());
+        gardenStatusRepository.save(gardenStatus);
     }
 
 
