@@ -30,7 +30,10 @@ public enum ErrorCode {
     FAIL_TO_CREATE_FILE(8003, HttpStatus.INTERNAL_SERVER_ERROR, "파일 생성에 실패하였습니다."),
 
     //Device
-    NO_AVAILABLE_DEVICE(9000,HttpStatus.BAD_REQUEST,"사용가능한 기기가 없습니다.");
+    NO_AVAILABLE_DEVICE(9000,HttpStatus.BAD_REQUEST,"사용가능한 기기가 없습니다."),
+
+    //Alarm
+    NOT_SENDED_ALARM(4004,HttpStatus.INTERNAL_SERVER_ERROR, "알람 송신에 실패하였습니다" );
 
     private final int code;
     private final HttpStatus status;
