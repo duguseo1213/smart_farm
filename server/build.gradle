@@ -64,6 +64,9 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 	implementation 'com.querydsl:querydsl-spatial'
+
+	//FCM
+	implementation 'com.google.firebase:firebase-admin:7.1.1'
 }
 
 tasks.named('test') {

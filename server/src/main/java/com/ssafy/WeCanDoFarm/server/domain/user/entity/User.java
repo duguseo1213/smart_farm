@@ -68,6 +68,9 @@ public class User extends BaseEntity {
         return user;
     }
 
+    public void pushToken(String Token) {
+        this.fcmToken = Token;
+    }
     public void delete() {
         this.isDeleted = true;
     }

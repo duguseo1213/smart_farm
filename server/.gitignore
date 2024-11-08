@@ -40,3 +40,4 @@ out/*
 ### Auth data ###
 application-auth.properties
 anda
+farmyo-notice.json
