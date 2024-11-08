@@ -2,6 +2,8 @@ package com.ssafy.WeCanDoFarm.server.core.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.WeCanDoFarm.server.core.properties.MqttProperties;
+import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessage;
+import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessageHandler;
 import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.SampleMessage;
 import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.SampleMessageHandler;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
@@ -19,6 +21,7 @@ import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.integration.mqtt.support.MqttHeaders;
@@ -27,12 +30,14 @@ import org.springframework.integration.mqtt.support.MqttHeaders;
 @EnableConfigurationProperties(MqttProperties.class)
 public class MqttConfig {
 
-    private final SampleMessageHandler sampleMessageHandler;
+    //private final SampleMessageHandler sampleMessageHandler;
+    private final GardenDataMessageHandler gardenDataMessageHandler;
     private final MqttProperties mqttProperties;
     private final ObjectMapper objectMapper;
 
-    public MqttConfig(SampleMessageHandler sampleMessageHandler, MqttProperties mqttProperties, ObjectMapper objectMapper) {
-        this.sampleMessageHandler = sampleMessageHandler;
+    public MqttConfig(SampleMessageHandler sampleMessageHandler, GardenDataMessageHandler gardenDataMessageHandler, MqttProperties mqttProperties, ObjectMapper objectMapper) {
+        //this.sampleMessageHandler = sampleMessageHandler;
+        this.gardenDataMessageHandler = gardenDataMessageHandler;
         this.mqttProperties = mqttProperties;
         this.objectMapper = objectMapper;
     }
@@ -53,8 +58,8 @@ public class MqttConfig {
     @Bean
     public IntegrationFlow mqttInboundFlow() {
         return IntegrationFlow.from(mqttChannelAdapter())
-                .transform(Transformers.fromJson(SampleMessage.class))
-                .handle(message -> sampleMessageHandler.handle((SampleMessage) message.getPayload()))
+                .transform(Transformers.fromJson(GardenDataMessage.class))
+                .handle(message -> gardenDataMessageHandler.handle((Message<GardenDataMessage>) message))
                 .get();
     }
 
@@ -75,7 +80,7 @@ public class MqttConfig {
         return IntegrationFlow.from(MQTT_OUTBOUND_CHANNEL)
                 .transform((Object payload) -> {
                     try {
-                        if (payload instanceof SampleMessage) {
+                        if (payload instanceof GardenDataMessage) {
                             return objectMapper.writeValueAsString(payload);
                         } else {
                             return payload;
@@ -103,7 +108,7 @@ public class MqttConfig {
         void publish(@Header(MqttHeaders.TOPIC) String topic, String data);
 
         @Gateway
-        void publish(SampleMessage data);
+        void publish(GardenDataMessage data);
     }
 
     public static final String MQTT_OUTBOUND_CHANNEL = "outboundChannel";

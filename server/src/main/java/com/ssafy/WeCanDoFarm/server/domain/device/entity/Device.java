@@ -1,5 +1,6 @@
 package com.ssafy.WeCanDoFarm.server.domain.device.entity;
 
+import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

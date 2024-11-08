@@ -23,6 +23,9 @@ public class GardenStatus {
     @JoinColumn(name = "garden_id")
     private Garden garden;
 
+    @Column(name="temperature")
+    private Double temperature;
+
     @Column(name = "humidity")
     private Double humidity;
 
@@ -36,12 +39,13 @@ public class GardenStatus {
     @CreatedDate
     private Date createdDate;
 
-    public static GardenStatus create(Garden garden,Double humidity, Double illuminance, Double soil_moisture, Date createdDate){
+    public static GardenStatus create(Garden garden,Double humidity, Double illuminance, Double soil_moisture, Double temperature, Date createdDate){
         GardenStatus gardenStatus = new GardenStatus();
         gardenStatus.garden = garden;
         gardenStatus.humidity = humidity;
         gardenStatus.illuminance = illuminance;
         gardenStatus.soil_moisture = soil_moisture;
+        gardenStatus.temperature = temperature;
         gardenStatus.createdDate = createdDate;
         return gardenStatus;
     }

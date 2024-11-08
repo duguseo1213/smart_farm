@@ -12,5 +12,6 @@ public class SampleMessageHandler {
     public void handle(SampleMessage message) {
         log.info("message arrived : {}", message);
     }
+
 }
 
