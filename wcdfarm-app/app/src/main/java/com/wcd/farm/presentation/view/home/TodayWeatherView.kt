@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,7 +56,7 @@ import com.wcd.farm.R
 val customFontFamily_weather_main1 = FontFamily(Font(R.font.bookend_semibold))
 val customFontFamily_weather_main2 = FontFamily(Font(R.font.ef_yoony))
 @Composable
-fun TodayWeatherView() {
+fun TodayWeatherView(modifier: Modifier) {
     val homeViewModel: HomeViewModel = mavericksViewModel()
 
     val weatherViewModel: WeatherViewModel = hiltViewModel()
@@ -62,25 +64,24 @@ fun TodayWeatherView() {
 
     if (weather.tmp == 0.0) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.2f),
+            modifier = modifier
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CircularProgressIndicator()
         }
     } else {
-        Button(
+        TextButton(
             onClick = { homeViewModel.sendIntent(HomeViewIntent.ShowWeekWeather) },
             contentPadding = PaddingValues(0.dp),
             colors = buttonTransparentTheme(),
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(8.dp),
+            modifier = modifier.padding(0.dp)
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.17f)
+                    .fillMaxSize()
             ) {
                 HomeServiceNameView()
                 TodayWeatherIcon(
@@ -167,10 +168,4 @@ fun WeatherStatusView(modifier: Modifier) {
         Text("바람: ${weather.wind}m/s", color = Color(0xFF28543D))
         Text("습도: ${weather.humidity}%", color = Color(0xFF28543D))
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewTest() {
-    TodayWeatherView()
 }

@@ -30,11 +30,13 @@ fun HomeScreen() {
     }
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        TodayWeatherView()
-        Spacer(modifier = Modifier.fillMaxHeight(0.4f))
-        MenuContainer()
-        Spacer(modifier = Modifier.fillMaxHeight(0.1f))
-        StateView()
+        TodayWeatherView(Modifier.weight(0.16f))
+        Spacer(Modifier.weight(0.01f))
+        MyFarmView(modifier = Modifier.weight(0.35f))
+        Spacer(Modifier.weight(0.03f))
+        MenuContainer(modifier = Modifier.weight(0.1f))
+        Spacer(modifier = Modifier.weight(0.03f))
+        StateView(modifier = Modifier.weight(0.22f))
 
         if (showWeekWeather) {
             ForecastWeatherView {
