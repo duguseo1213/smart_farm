@@ -32,11 +32,9 @@ Plant_Disease_Detection_State_Dict_PATH = os.path.join(script_dir,"PlantDisease/
 Animal_Detection_Model_PATH = os.path.join(script_dir,"AnimalDetection/best.pt")
 # plantDiseaseDetection
 plant_disease_detection_model = MyCnnModel.MyCnn(Plant_Disease_Detection_Labels)
-plant_disease_detection_model.load_state_dict(torch.load(Plant_Disease_Detection_State_Dict_PATH, weights_only=True))
+plant_disease_detection_model.load_state_dict(torch.load(Plant_Disease_Detection_State_Dict_PATH, map_location=torch.device('cpu')))
 plant_disease_detection_model.eval()
-
 # 이미지 전처리 plantDiseaseDetection
-
 plant_disease_image_transform = transforms.Compose([
     transforms.Resize((img_height, img_width)),
     transforms.ToTensor()
@@ -63,7 +61,7 @@ async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
     return {"diseaseName":PlantDiseaseLabel.labels[predicted_index], "diseaseSolvent":PlantDiseaseLabel.solutions[predicted_index]}
 
 @app.post("/animalDetection")
-async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
+async def animalDetection(imageFile: UploadFile = File(...)):
 
     image_data = await imageFile.read()  # UploadFile에서 데이터 읽기
     image = Image.open(io.BytesIO(image_data))  # bytes 데이터를 PIL 이미지로 변환
