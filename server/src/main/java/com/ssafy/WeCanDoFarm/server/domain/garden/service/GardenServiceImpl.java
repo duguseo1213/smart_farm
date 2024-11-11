@@ -88,7 +88,7 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     public void registerGarden(RegisterGardenRequest request) throws Exception {
-        Device device =  deviceRepository.findByDeviceStatus(DeviceStatus.AVAILABLE);
+        Device device =  deviceRepository.findFirstByDeviceStatus(DeviceStatus.AVAILABLE);
         if(device == null) throw new BaseException(ErrorCode.NO_AVAILABLE_DEVICE);
         Garden garden = Garden.create(request.getGardenName(), "", request.getGardenAddress(),request.getCrop(),device);
         deviceRepository.updateDeviceStatusById(device.getDeviceId(), DeviceStatus.UNAVAILABLE);
@@ -155,6 +155,11 @@ public class GardenServiceImpl implements GardenService {
         FunctionMessage fm = new FunctionMessage(2,"사진 찍기");
         Object FunctionMessage;
         mqttOutboundGateway.publish("device/"+ DeviceId,fm);
+    }
+
+    @Override
+    public List<GardenStatus> getGardenStatus(Long gardenId) throws Exception {
+        return gardenRepository.findGardenStatusFromLastWeek(gardenId);
     }
 
 
