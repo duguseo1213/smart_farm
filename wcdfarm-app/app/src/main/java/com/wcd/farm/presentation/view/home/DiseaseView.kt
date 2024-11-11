@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TextButton
@@ -53,18 +52,26 @@ fun DiseaseScreen(onDismissRequest: () -> Unit) {
 
     AlertDialog(
         onDismissRequest = onDismissRequest, confirmButton = {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                TextButton(onClick = {
-                    viewModel.takePhoto(context, contentValues)
-                })
-                {
-                    Icon(
-                        imageVector = Icons.Outlined.Camera,
-                        contentDescription = "Camera",
-                        tint = Color.Black
-                    )
+            when (state) {
+                0 -> Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TextButton(onClick = { viewModel.takePhoto(context, contentValues) })
+                    {
+                        Icon(
+                            imageVector = Icons.Outlined.Camera,
+                            contentDescription = "Camera",
+                            tint = Color.Black
+                        )
+                    }
+                }
+
+                1 -> TextButton(onClick = { /*viewModel.*/ }) {
+
                 }
             }
+
 
         }, /*dismissButton = {
         TextButton(onClick = onDismissRequest) {
@@ -129,9 +136,12 @@ fun CaptureImage() {
     val viewModel: DiseaseViewModel = mavericksViewModel()
     val bitmap by viewModel.bitmap.collectAsState()
     Box(modifier = Modifier) {
-        if(bitmap != null) {
-            Image(bitmap = bitmap!!.asImageBitmap(), contentDescription = "DiseasePhoto", contentScale = ContentScale.FillBounds)
+        if (bitmap != null) {
+            Image(
+                bitmap = bitmap!!.asImageBitmap(),
+                contentDescription = "DiseasePhoto",
+                contentScale = ContentScale.FillBounds
+            )
         }
-
     }
 }
