@@ -17,9 +17,10 @@ public class UserService {
     private final UserRepository userRepository;
 
     public void setFcmToken(User user, String fcmToken) {
+        log.info("UserName {}",user.getUsername());
         log.info("Setting FCM token to {}", fcmToken);
         user.pushToken(fcmToken);
         userRepository.save(user);
-        return;
+        log.info("2 Setting FCM token to {}", user.getFcmToken());
     }
 }
