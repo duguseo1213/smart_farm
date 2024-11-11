@@ -5,6 +5,7 @@ plugins {
     kotlin("kapt")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -50,9 +51,11 @@ android {
 
 dependencies {
 
+    implementation(libs.firebase.messaging)
     val composeBom = platform("androidx.compose:compose-bom:2024.09.03")
     implementation(composeBom)
     androidTestImplementation(composeBom)
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
 
     //ui
     implementation(libs.androidx.ui)
