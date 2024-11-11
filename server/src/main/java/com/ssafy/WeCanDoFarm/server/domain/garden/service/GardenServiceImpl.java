@@ -1,5 +1,6 @@
 package com.ssafy.WeCanDoFarm.server.domain.garden.service;
 
+import com.ssafy.WeCanDoFarm.server.core.configuration.MqttConfig;
 import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
 import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
 import com.ssafy.WeCanDoFarm.server.domain.device.entity.Device;
@@ -17,6 +18,7 @@ import com.ssafy.WeCanDoFarm.server.domain.garden.entity.UserToGarden;
 import com.ssafy.WeCanDoFarm.server.domain.garden.repository.GardenRepository;
 import com.ssafy.WeCanDoFarm.server.domain.garden.repository.GardenStatusRepository;
 import com.ssafy.WeCanDoFarm.server.domain.garden.repository.UserToGardenRepository;
+import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.FunctionMessage;
 import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessage;
 import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
 import com.ssafy.WeCanDoFarm.server.domain.user.repository.UserRepository;
@@ -47,6 +49,7 @@ public class GardenServiceImpl implements GardenService {
     private final UserToGardenRepository userToGardenRepository;
     private final DeviceRepository deviceRepository;
     private final GardenStatusRepository gardenStatusRepository;
+    private final MqttConfig.MqttOutboundGateway mqttOutboundGateway;
 
     public PlantDiseaseDto.PlantDiseaseResponse doPlantDiseaseDetection(MultipartFile file) {
         ResponseEntity<PlantDiseaseDto.PlantDiseaseResponse> responseEntity;
@@ -133,6 +136,25 @@ public class GardenServiceImpl implements GardenService {
         Garden garden = gardenRepository.getGarden(deviceId);
         GardenStatus gardenStatus = GardenStatus.create(garden,message.getHumidity(),message.getIlluminance(),message.getSoil_moisture(),message.getTemperature(),new Date());
         gardenStatusRepository.save(gardenStatus);
+    }
+
+    @Override
+    public void remoteWater(Long gardenId) throws Exception {
+        Garden garden = gardenRepository.findById(gardenId).orElseThrow();
+        Long DeviceId = garden.getDevice().getDeviceId();
+        FunctionMessage fm = new FunctionMessage(1,"물 주기");
+        Object FunctionMessage;
+        mqttOutboundGateway.publish("device/"+ DeviceId,fm);
+    }
+
+    @Override
+    public void takePicture(Long gardenId) throws Exception {
+
+        Garden garden = gardenRepository.findById(gardenId).orElseThrow();
+        Long DeviceId = garden.getDevice().getDeviceId();
+        FunctionMessage fm = new FunctionMessage(2,"사진 찍기");
+        Object FunctionMessage;
+        mqttOutboundGateway.publish("device/"+ DeviceId,fm);
     }
 
 
