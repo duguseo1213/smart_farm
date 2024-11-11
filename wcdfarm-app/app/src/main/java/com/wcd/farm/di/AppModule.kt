@@ -3,6 +3,7 @@ package com.wcd.farm.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.wcd.farm.data.remote.AuthApi
+import com.wcd.farm.data.remote.DeviceApi
 import com.wcd.farm.data.remote.GardenApi
 import com.wcd.farm.data.remote.HarmApi
 import com.wcd.farm.data.remote.ServerClient
@@ -46,6 +47,12 @@ object AppModule {
     @Singleton
     fun provideHarmApi(): HarmApi {
         return ServerClient.HarmApi
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeviceApi(): DeviceApi {
+        return ServerClient.deviceApi
     }
 
     @Provides
