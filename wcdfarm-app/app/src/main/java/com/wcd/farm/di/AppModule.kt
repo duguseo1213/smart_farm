@@ -7,6 +7,7 @@ import com.wcd.farm.data.remote.DeviceApi
 import com.wcd.farm.data.remote.GardenApi
 import com.wcd.farm.data.remote.HarmApi
 import com.wcd.farm.data.remote.ServerClient
+import com.wcd.farm.data.remote.UserApi
 import com.wcd.farm.data.remote.WeatherApi
 import com.wcd.farm.data.remote.WeatherApiClient
 import com.wcd.farm.data.repository.DiseaseRepository
@@ -47,6 +48,12 @@ object AppModule {
     @Singleton
     fun provideHarmApi(): HarmApi {
         return ServerClient.HarmApi
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserApi(): UserApi {
+        return ServerClient.userApi
     }
 
     @Provides

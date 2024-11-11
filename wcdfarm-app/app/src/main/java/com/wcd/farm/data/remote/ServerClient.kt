@@ -110,4 +110,8 @@ object ServerClient {
     val deviceApi: DeviceApi by lazy {
         retrofit.create(DeviceApi::class.java)
     }
+
+    val userApi: UserApi by lazy {
+        retrofit.create(UserApi::class.java)
+    }
 }
