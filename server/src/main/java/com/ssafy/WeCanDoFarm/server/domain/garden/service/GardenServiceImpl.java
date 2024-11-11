@@ -34,6 +34,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -159,7 +160,7 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     public List<GardenStatus> getGardenStatus(Long gardenId) throws Exception {
-        return gardenRepository.findGardenStatusFromLastWeek(gardenId);
+        return gardenRepository.findGardenStatusFromLastWeek(gardenId, LocalDate.now().minusDays(7));
     }
 
 
