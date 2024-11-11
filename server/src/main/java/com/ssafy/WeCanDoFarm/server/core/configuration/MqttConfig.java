@@ -2,10 +2,7 @@ package com.ssafy.WeCanDoFarm.server.core.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.WeCanDoFarm.server.core.properties.MqttProperties;
-import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessage;
-import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessageHandler;
-import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.SampleMessage;
-import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.SampleMessageHandler;
+import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.*;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -31,12 +28,14 @@ import org.springframework.integration.mqtt.support.MqttHeaders;
 public class MqttConfig {
 
     //private final SampleMessageHandler sampleMessageHandler;
+    private final FunctionMessageHandler functionMessageHandler;
     private final GardenDataMessageHandler gardenDataMessageHandler;
     private final MqttProperties mqttProperties;
     private final ObjectMapper objectMapper;
 
-    public MqttConfig(SampleMessageHandler sampleMessageHandler, GardenDataMessageHandler gardenDataMessageHandler, MqttProperties mqttProperties, ObjectMapper objectMapper) {
+    public MqttConfig(FunctionMessageHandler functionMessageHandler, GardenDataMessageHandler gardenDataMessageHandler, MqttProperties mqttProperties, ObjectMapper objectMapper) {
         //this.sampleMessageHandler = sampleMessageHandler;
+        this.functionMessageHandler = functionMessageHandler;
         this.gardenDataMessageHandler = gardenDataMessageHandler;
         this.mqttProperties = mqttProperties;
         this.objectMapper = objectMapper;
@@ -58,9 +57,34 @@ public class MqttConfig {
     @Bean
     public IntegrationFlow mqttInboundFlow() {
         return IntegrationFlow.from(mqttChannelAdapter())
-                .transform(Transformers.fromJson(GardenDataMessage.class))
-                .handle(message -> gardenDataMessageHandler.handle((Message<GardenDataMessage>) message))
+                .route(Object.class, this::getMessageType, mapping -> mapping
+                        .subFlowMapping(GardenDataMessage.class, sf -> sf
+                                .transform(Transformers.fromJson(GardenDataMessage.class))
+                                .handle(message -> {
+                                    gardenDataMessageHandler.handle((Message<GardenDataMessage>) message);
+                                }))
+                        .subFlowMapping(FunctionMessage.class, sf -> sf
+                                .transform(Transformers.fromJson(FunctionMessage.class))
+                                .handle(message -> {
+                                    functionMessageHandler.handle((Message<FunctionMessage>) message);
+                                }))
+                        .subFlowMapping(Object.class, sf -> sf // Object.class에 대한 기본 처리
+                                .handle(message -> {
+                                            // 기본 처리를 위해 로깅 또는 다른 로직을 수행합니다.
+                                    System.out.println("Unhandled message type: " + message);
+                                })
+                        ))
+
                 .get();
+    }
+    // 메시지 타입을 결정하는 메소드
+    private Class getMessageType(Object payload) {
+        if (payload.toString().contains("temperature")) {
+            return GardenDataMessage.class;
+        } else if (payload.toString().contains("functionId")) {
+            return FunctionMessage.class;
+        }
+        return Object.class; // 기본 핸들링
     }
 
     private MqttPahoMessageDrivenChannelAdapter mqttChannelAdapter() {
@@ -80,7 +104,7 @@ public class MqttConfig {
         return IntegrationFlow.from(MQTT_OUTBOUND_CHANNEL)
                 .transform((Object payload) -> {
                     try {
-                        if (payload instanceof GardenDataMessage) {
+                        if (payload instanceof GardenDataMessage ||payload instanceof FunctionMessage) {
                             return objectMapper.writeValueAsString(payload);
                         } else {
                             return payload;
@@ -106,6 +130,9 @@ public class MqttConfig {
 
         @Gateway
         void publish(@Header(MqttHeaders.TOPIC) String topic, String data);
+
+        @Gateway
+        void publish(@Header(MqttHeaders.TOPIC) String topic, FunctionMessage data);
 
         @Gateway
         void publish(GardenDataMessage data);

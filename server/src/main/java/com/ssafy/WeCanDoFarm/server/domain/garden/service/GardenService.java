@@ -22,5 +22,7 @@ public interface GardenService{
     List<GetUserFromGardenResponse> getUserFromGarden(Long gardenId) throws Exception;
     PlantDiseaseDto.PlantDiseaseResponse plantDiseaseDetection(MultipartFile file) throws Exception;
     void addGardenData(Long deviceId, GardenDataMessage message) throws Exception;
+    void remoteWater(Long gardenId) throws Exception;
+    void takePicture(Long gardenId) throws Exception;
 
 }
