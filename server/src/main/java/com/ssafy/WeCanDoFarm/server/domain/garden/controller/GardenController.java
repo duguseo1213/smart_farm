@@ -80,6 +80,11 @@ public class GardenController {
         gardenService.takePicture(gardenId);
         return SuccessResponse.empty();
     }
+
+    @GetMapping("/get-garden-data")
+    public SuccessResponse<List<GardenStatus>> getGardenData(@RequestParam Long gardenId) throws Exception {
+        return SuccessResponse.of(gardenService.getGardenStatus(gardenId));
+    }
 }
 
 

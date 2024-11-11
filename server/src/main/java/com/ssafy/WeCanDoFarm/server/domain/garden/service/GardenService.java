@@ -6,6 +6,7 @@ import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterUserToGardenRequest;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
+import com.ssafy.WeCanDoFarm.server.domain.garden.entity.GardenStatus;
 import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,5 +25,6 @@ public interface GardenService{
     void addGardenData(Long deviceId, GardenDataMessage message) throws Exception;
     void remoteWater(Long gardenId) throws Exception;
     void takePicture(Long gardenId) throws Exception;
+    List<GardenStatus> getGardenStatus(Long gardenId) throws Exception;
 
 }

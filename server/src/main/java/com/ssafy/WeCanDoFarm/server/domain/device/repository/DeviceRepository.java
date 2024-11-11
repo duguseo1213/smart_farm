@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Long> {
 
-    public Device findByDeviceStatus(DeviceStatus deviceStatus);
+    public Device findFirstByDeviceStatus(DeviceStatus deviceStatus);
 
     @Modifying
     @Query("UPDATE Device d SET d.deviceStatus = :deviceStatus WHERE d.deviceId = :deviceId")
