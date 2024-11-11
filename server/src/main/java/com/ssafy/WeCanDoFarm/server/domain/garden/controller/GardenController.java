@@ -69,15 +69,15 @@ public class GardenController {
 
         return SuccessResponse.of(gardenService.plantDiseaseDetection(request.getFile()));
     }
-    @GetMapping("/remote-water")
-    public SuccessResponse<String> remoteWater(@RequestParam Long gardenId) throws Exception {
-        gardenService.remoteWater(gardenId);
+    @PostMapping("/remote-water")
+    public SuccessResponse<String> remoteWater(@RequestBody FunctionRequest request) throws Exception {
+        gardenService.remoteWater(request.getGardenId());
         return SuccessResponse.empty();
     }
 
-    @GetMapping("/take-picture")
-    public SuccessResponse<String> takePicture(@RequestParam Long gardenId) throws Exception {
-        gardenService.takePicture(gardenId);
+    @PostMapping("/take-picture")
+    public SuccessResponse<String> takePicture(@RequestBody FunctionRequest request) throws Exception {
+        gardenService.takePicture(request.getGardenId());
         return SuccessResponse.empty();
     }
 
