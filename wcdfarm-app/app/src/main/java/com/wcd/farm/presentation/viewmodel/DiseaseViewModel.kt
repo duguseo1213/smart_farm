@@ -163,7 +163,6 @@ class DiseaseViewModel @AssistedInject constructor(
                     ContextCompat.getMainExecutor(context),
                     object : ImageCapture.OnImageSavedCallback {
                         override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                            Log.e("TEST", "onImageSaved")
                             stopCamera()
                             try {
                                 CoroutineScope(Dispatchers.Default).launch {
@@ -179,8 +178,6 @@ class DiseaseViewModel @AssistedInject constructor(
                                     val bitmap = drawableToBitmap(drawable)
                                     //val base64 = bitmapToBase64(bitmap)
 
-                                    //Log.e("TEST", base64)
-
                                     repository.setPreviewImage(bitmap)
                                     sendIntent(DiseaseViewIntent.ShowCaptureImageView)
                                 }
@@ -188,13 +185,10 @@ class DiseaseViewModel @AssistedInject constructor(
                             } catch (exception: Exception) {
                                 Log.e("TEST", exception.message!!)
                             }
-
-                            Log.e("TEST", "저장")
                         }
 
                         override fun onError(exception: ImageCaptureException) {
                             Log.e("TEST", "사진 촬영 실패 ${exception.message}")
-                            //Toast.makeText(applicationContext, "사진 촬영에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
                 )
@@ -226,5 +220,9 @@ class DiseaseViewModel @AssistedInject constructor(
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
+    fun requestDiseaseDetection() {
+        repository.requestPlantDiseaseDetection()
     }
 }

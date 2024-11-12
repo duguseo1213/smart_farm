@@ -15,6 +15,7 @@ import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,6 +33,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import com.wcd.farm.presentation.intent.DiseaseViewIntent
 import com.wcd.farm.presentation.state.DiseaseViewState
 import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
 import java.io.File
@@ -67,8 +69,13 @@ fun DiseaseScreen(onDismissRequest: () -> Unit) {
                     }
                 }
 
-                1 -> TextButton(onClick = { /*viewModel.*/ }) {
-
+                1 -> Row(modifier = Modifier.fillMaxWidth()) {
+                    TextButton(onClick = { viewModel.sendIntent(DiseaseViewIntent.ShowPreviewCaptureView) }) {
+                        Text(
+                            "재촬영"
+                        )
+                    }
+                    TextButton(onClick = { viewModel.requestDiseaseDetection() }) { Text("질병 확인") }
                 }
             }
 
