@@ -61,7 +61,11 @@ public class MqttConfig {
                         .subFlowMapping(GardenDataMessage.class, sf -> sf
                                 .transform(Transformers.fromJson(GardenDataMessage.class))
                                 .handle(message -> {
-                                    gardenDataMessageHandler.handle((Message<GardenDataMessage>) message);
+                                    try {
+                                        gardenDataMessageHandler.handle((Message<GardenDataMessage>) message);
+                                    } catch (Exception e) {
+                                        throw new RuntimeException(e);
+                                    }
                                 }))
                         .subFlowMapping(FunctionMessage.class, sf -> sf
                                 .transform(Transformers.fromJson(FunctionMessage.class))
