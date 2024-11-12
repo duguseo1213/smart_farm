@@ -7,10 +7,7 @@ import com.ssafy.WeCanDoFarm.server.domain.device.entity.Device;
 import com.ssafy.WeCanDoFarm.server.domain.device.entity.DeviceStatus;
 import com.ssafy.WeCanDoFarm.server.domain.device.repository.DeviceRepository;
 import com.ssafy.WeCanDoFarm.server.domain.garden.constants.PlantDiseaseConst;
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenResponse;
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterUserToGardenRequest;
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.*;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.GardenStatus;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.GardenUserType;
@@ -159,9 +156,21 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public List<GardenStatus> getGardenStatus(Long gardenId) throws Exception {
-        return gardenRepository.findGardenStatusFromLastWeek(gardenId, LocalDate.now().minusDays(7));
+    public List<GetGardenDataResponse> getGardenStatus(Long gardenId) throws Exception {
+        List<GardenStatus> list =gardenRepository.findGardenStatusFromLastWeek(gardenId, LocalDate.now().minusDays(7));
+        List<GetGardenDataResponse> responses = new ArrayList<>();
+        for(GardenStatus gardenStatus : list){
+            GetGardenDataResponse response = new GetGardenDataResponse();
+            response.setIlluminance(gardenStatus.getIlluminance());
+            response.setSoil_moisture(gardenStatus.getSoil_moisture());
+            response.setTemperature(gardenStatus.getTemperature());
+            response.setCreatedDate(gardenStatus.getCreatedDate());
+            response.setHumidity(gardenStatus.getHumidity());
+            responses.add(response);
+        }
+        return responses;
     }
+
 
 
 }

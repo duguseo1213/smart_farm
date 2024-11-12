@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FunctionMessageHandler {
-    private static final Logger log = LoggerFactory.getLogger(SampleMessageHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(FunctionMessage.class);
 
     public void handle(Message<FunctionMessage> message) {
         log.info("message arrived : {}", message);
