@@ -38,14 +38,14 @@ public class S3UploadService {
     }
 
 
-    public String uploadFile(MultipartFile file) throws Exception {
+    private String uploadFile(MultipartFile file) throws Exception {
         this.validateFileExtension(file.getOriginalFilename());
         return this.uploadFileToS3(file);
 
     }
 
 
-    public void validateFileExtension(String filename) throws Exception {
+    private void validateFileExtension(String filename) throws Exception {
         int lastDotIndex = filename.lastIndexOf(".");
         if (lastDotIndex == -1) {
             throw new BaseException(ErrorCode.NOT_SUPPORTED_EXTENSION);
@@ -60,7 +60,7 @@ public class S3UploadService {
     }
 
 
-    public String uploadFileToS3(MultipartFile file) throws Exception {
+    private String uploadFileToS3(MultipartFile file) throws Exception {
         String originalFilename = file.getOriginalFilename(); //원본 파일 명
         String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
 
