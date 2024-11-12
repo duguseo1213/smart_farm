@@ -84,7 +84,8 @@ fun StateView(modifier: Modifier) {
                 progress = progress,
                 modifier = Modifier
                     .size(200.dp)
-                    .clickable { isPlaying = !isPlaying }
+                    .clickable() { isPlaying = !isPlaying }
+                    //.clickable(indication = null) { isPlaying = !isPlaying }
             )
 
             LottieAnimation(
