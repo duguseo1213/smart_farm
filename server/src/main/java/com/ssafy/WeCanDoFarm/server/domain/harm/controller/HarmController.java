@@ -40,13 +40,4 @@ public class HarmController {
         return SuccessResponse.of(harmService.getHarmVideo(harmPictureId));
     }
 
-    @PostMapping("/detection-harm-animal")
-    SuccessResponse<HarmPictureDto.HarmDetectionResponse> detectionHarmAnimal(HarmPictureDto.HarmDetectionRequest request) throws Exception
-    {   String animalType = harmService.detectionHarmAnimal(request.getFile());
-        Long id = 0L;
-        if(!animalType.equals("none")){
-            id = harmService.addHarmPicture(request.getDeviceId(),request.getFile());
-        }
-        return SuccessResponse.of(HarmPictureDto.HarmDetectionResponse.of(animalType,id));
-    }
 }
