@@ -1,22 +1,19 @@
 package com.wcd.farm.data.repository
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.camera.core.ImageCapture
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import com.wcd.farm.data.model.PlantDiseaseDTO
 import com.wcd.farm.data.remote.GardenApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.util.Base64
 import javax.inject.Inject
 
 class DiseaseRepository @Inject constructor(private val gardenApi: GardenApi) {
@@ -58,17 +55,19 @@ class DiseaseRepository @Inject constructor(private val gardenApi: GardenApi) {
         _bitmap.value = bitmap
     }
 
-    fun requestPlantDiseaseDetection() {
+    fun requestPlantDiseaseDetection(isDone: () -> Unit, diseaseDetected: (diseaseDetected: Boolean) -> Unit) {
 
         val imageString = _bitmap.value?.let { getBase64String(it) }
         if (imageString != null) {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = gardenApi.postDiseaseDetection(imageString)
-
+                isDone()
                 if(response.isSuccessful) {
                     Log.e("TEST", response.body()?.data.toString())
                     val result = response.body()?.data
+
                     if (result != null) {
+                        diseaseDetected(result.diseased)
                         _diseaseDetect.value = result
                     }
                 }

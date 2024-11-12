@@ -63,6 +63,7 @@ class DiseaseViewModel @AssistedInject constructor(
     private val imageCapture = repository.imageCapture
 
     val bitmap = repository.bitmap
+    val diseaseDetect = repository.diseaseDetect
 
     init {
         handleIntent()
@@ -82,13 +83,30 @@ class DiseaseViewModel @AssistedInject constructor(
                         setState { DiseaseViewState() }
                         stopCamera()
                     }
-                    DiseaseViewIntent.ShowPreviewCaptureView -> { setState { copy(viewState = 0) }}
-                    DiseaseViewIntent.ShowCaptureImageView -> { setState { copy(viewState = 1) }}
 
-                    DiseaseViewIntent.ShowDiseaseDetectionResult -> { setState { copy(showDiseaseDetectResult = true) }}
-                    DiseaseViewIntent.ShowOnDiseaseDetection -> { setState { copy(onDiseaseDetect = true) } }
-                    DiseaseViewIntent.ShowDiseaseDetected -> { setState { copy(onDiseaseDetect = false, isPlantDisease = true) } }
-                    DiseaseViewIntent.ShowDiseaseNotDetected -> { setState { copy(isPlantDisease = false) } }
+                    DiseaseViewIntent.ShowPreviewCaptureView -> {
+                        setState { copy(viewState = 0) }
+                    }
+
+                    DiseaseViewIntent.ShowCaptureImageView -> {
+                        setState { copy(viewState = 1) }
+                    }
+
+                    DiseaseViewIntent.ShowDiseaseDetectionResult -> {
+                        setState { copy(showDiseaseDetectResult = true) }
+                    }
+
+                    DiseaseViewIntent.ShowOnDiseaseDetection -> {
+                        setState { copy(onDiseaseDetect = true) }
+                    }
+
+                    DiseaseViewIntent.ShowDiseaseDetected -> {
+                        setState { copy(onDiseaseDetect = false, isPlantDisease = true) }
+                    }
+
+                    DiseaseViewIntent.ShowDiseaseNotDetected -> {
+                        setState { copy(isPlantDisease = false) }
+                    }
                 }
             }
         }
@@ -137,22 +155,34 @@ class DiseaseViewModel @AssistedInject constructor(
 
         try {
             cameraProvider.value?.unbindAll()
-            cameraProvider.value?.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageAnalysis, imageCapture.value)
+            cameraProvider.value?.bindToLifecycle(
+                lifecycleOwner,
+                cameraSelector,
+                preview,
+                imageAnalysis,
+                imageCapture.value
+            )
         } catch (exc: Exception) {
             Log.e("QRCodeScanner", "Use case binding failed", exc)
         }
     }
 
+    fun showPreviewCaptureView() {
+        sendIntent(DiseaseViewIntent.ShowPreviewCaptureView)
+    }
+
     fun takePhoto(context: Context, contentValues: ContentValues) {
         val mImageCapture = imageCapture.value ?: return
-        repository.setPhotoFile(File(
-            cacheDir.value,
-            "newImage.jpg"
-        ))
+        repository.setPhotoFile(
+            File(
+                cacheDir.value,
+                "newImage.jpg"
+            )
+        )
 
         if (cacheDir.value != null) {
             Log.e("TEST", cacheDir.value!!.path)
-            if(photoFile.value != null) {
+            if (photoFile.value != null) {
                 val outputOptions = ImageCapture.OutputFileOptions.Builder(
                     context.contentResolver,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -208,7 +238,11 @@ class DiseaseViewModel @AssistedInject constructor(
             return drawable.bitmap
         }
 
-        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth,
+            drawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
         val canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
@@ -224,7 +258,15 @@ class DiseaseViewModel @AssistedInject constructor(
     }
 
     fun requestDiseaseDetection() {
-        repository.requestPlantDiseaseDetection()
+        repository.requestPlantDiseaseDetection(
+            isDone = { sendIntent(DiseaseViewIntent.ShowOnDiseaseDetection) },
+            diseaseDetected = { isDetected ->
+                if (isDetected) {
+                    sendIntent(DiseaseViewIntent.ShowDiseaseDetected)
+                } else {
+                    sendIntent(DiseaseViewIntent.ShowDiseaseNotDetected)
+                }
+            })
     }
 
     fun closeDiseaseView() {

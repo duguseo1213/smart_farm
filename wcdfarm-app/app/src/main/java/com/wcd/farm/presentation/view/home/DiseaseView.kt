@@ -36,7 +36,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
-import com.wcd.farm.presentation.intent.DiseaseViewIntent
 import com.wcd.farm.presentation.state.DiseaseViewState
 import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
 import java.io.File
@@ -76,7 +75,7 @@ fun DiseaseScreen(onDismissRequest: () -> Unit) {
 
                 1 -> Row(modifier = Modifier.fillMaxWidth()) {
                     if (!showDiseaseDetectResult) {
-                        TextButton(onClick = { viewModel.sendIntent(DiseaseViewIntent.ShowPreviewCaptureView) }) {
+                        TextButton(onClick = { viewModel.showPreviewCaptureView() }) {
                             Text(
                                 "재촬영"
                             )
@@ -119,8 +118,8 @@ fun CameraPreview() {
         put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
         put(
             MediaStore.Images.Media.RELATIVE_PATH,
-            "Pictures/CameraX-Image"/*Environment.DIRECTORY_PICTURES*/
-        ) // Android 10 이상에서 사용
+            "Pictures/CameraX-Image"
+        )
     }
 
     val uri =
@@ -153,6 +152,7 @@ fun CaptureImage() {
     val showDiseaseDetectResult by viewModel.collectAsState(DiseaseViewState::showDiseaseDetectResult)
     val onDiseaseDetectState by viewModel.collectAsState(DiseaseViewState::onDiseaseDetect)
     val isPlantDisease by viewModel.collectAsState(DiseaseViewState::isPlantDisease)
+    val diseaseDetect by viewModel.diseaseDetect.collectAsState()
 
     Box(modifier = Modifier) {
         if (bitmap != null) {
@@ -180,8 +180,8 @@ fun CaptureImage() {
                             contentDescription = "",
                             modifier = Modifier.fillMaxSize(0.4f)
                         )
-                        Text("상추 노균병 검출", color = Color.White)
-                        Text("대처법", color = Color.White)
+                        Text("${diseaseDetect?.diseaseName} 검출", color = Color.White)
+                        Text("${diseaseDetect?.diseaseSolvent}", color = Color.White)
                     } else {
                         Text("검출되지 않았습니다.")
                     }
