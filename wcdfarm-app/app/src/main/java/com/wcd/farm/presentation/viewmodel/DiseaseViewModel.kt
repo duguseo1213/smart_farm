@@ -1,7 +1,6 @@
 package com.wcd.farm.presentation.viewmodel
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
@@ -11,14 +10,11 @@ import android.graphics.drawable.Drawable
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
-import android.util.Size
-import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
-import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -83,11 +79,16 @@ class DiseaseViewModel @AssistedInject constructor(
                 when (intent) {
                     DiseaseViewIntent.ShowDiseaseView -> setState { copy(showDiseaseView = true) }
                     DiseaseViewIntent.HideDiseaseView -> {
-                        setState { copy(showDiseaseView = false) }
+                        setState { DiseaseViewState() }
                         stopCamera()
                     }
                     DiseaseViewIntent.ShowPreviewCaptureView -> { setState { copy(viewState = 0) }}
                     DiseaseViewIntent.ShowCaptureImageView -> { setState { copy(viewState = 1) }}
+
+                    DiseaseViewIntent.ShowDiseaseDetectionResult -> { setState { copy(showDiseaseDetectResult = true) }}
+                    DiseaseViewIntent.ShowOnDiseaseDetection -> { setState { copy(onDiseaseDetect = true) } }
+                    DiseaseViewIntent.ShowDiseaseDetected -> { setState { copy(onDiseaseDetect = false, isPlantDisease = true) } }
+                    DiseaseViewIntent.ShowDiseaseNotDetected -> { setState { copy(isPlantDisease = false) } }
                 }
             }
         }
@@ -224,5 +225,9 @@ class DiseaseViewModel @AssistedInject constructor(
 
     fun requestDiseaseDetection() {
         repository.requestPlantDiseaseDetection()
+    }
+
+    fun closeDiseaseView() {
+        sendIntent(DiseaseViewIntent.HideDiseaseView)
     }
 }

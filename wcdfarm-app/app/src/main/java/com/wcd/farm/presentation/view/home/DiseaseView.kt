@@ -23,8 +23,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -43,6 +46,8 @@ fun DiseaseScreen(onDismissRequest: () -> Unit) {
     val viewModel: DiseaseViewModel = mavericksViewModel()
     val context = LocalContext.current
     val state by viewModel.collectAsState(DiseaseViewState::viewState)
+    val showDiseaseDetectResult by viewModel.collectAsState(DiseaseViewState::showDiseaseDetectResult)
+
     val contentValues = ContentValues().apply {
         put(MediaStore.Images.Media.DISPLAY_NAME, "image_${System.currentTimeMillis()}.jpg")
         put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -70,21 +75,24 @@ fun DiseaseScreen(onDismissRequest: () -> Unit) {
                 }
 
                 1 -> Row(modifier = Modifier.fillMaxWidth()) {
-                    TextButton(onClick = { viewModel.sendIntent(DiseaseViewIntent.ShowPreviewCaptureView) }) {
-                        Text(
-                            "재촬영"
-                        )
+                    if (!showDiseaseDetectResult) {
+                        TextButton(onClick = { viewModel.sendIntent(DiseaseViewIntent.ShowPreviewCaptureView) }) {
+                            Text(
+                                "재촬영"
+                            )
+                        }
+                        TextButton(onClick = { viewModel.requestDiseaseDetection() }) { Text("질병 확인") }
+                    } else {
+                        TextButton(onClick = { viewModel.closeDiseaseView() }) {
+                            Text("닫기")
+                        }
                     }
-                    TextButton(onClick = { viewModel.requestDiseaseDetection() }) { Text("질병 확인") }
+
                 }
             }
 
 
-        }, /*dismissButton = {
-        TextButton(onClick = onDismissRequest) {
-            Text(text = "취소")
-        }
-    },*/ text = {
+        }, text = {
 
             Surface(
                 modifier = Modifier.fillMaxSize()
@@ -142,13 +150,43 @@ fun CameraPreview() {
 fun CaptureImage() {
     val viewModel: DiseaseViewModel = mavericksViewModel()
     val bitmap by viewModel.bitmap.collectAsState()
+    val showDiseaseDetectResult by viewModel.collectAsState(DiseaseViewState::showDiseaseDetectResult)
+    val onDiseaseDetectState by viewModel.collectAsState(DiseaseViewState::onDiseaseDetect)
+    val isPlantDisease by viewModel.collectAsState(DiseaseViewState::isPlantDisease)
+
     Box(modifier = Modifier) {
         if (bitmap != null) {
             Image(
                 bitmap = bitmap!!.asImageBitmap(),
                 contentDescription = "DiseasePhoto",
-                contentScale = ContentScale.FillBounds
+                contentScale = ContentScale.FillBounds,
+                colorFilter = if (showDiseaseDetectResult) ColorFilter.tint(
+                    Color.DarkGray,
+                    BlendMode.Multiply
+                ) else null
             )
+
+            if (showDiseaseDetectResult) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    if (onDiseaseDetectState) {
+                        Text("검출중입니다")
+                    } else if (isPlantDisease) {
+                        Image(
+                            bitmap = bitmap!!.asImageBitmap(),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize(0.4f)
+                        )
+                        Text("상추 노균병 검출", color = Color.White)
+                        Text("대처법", color = Color.White)
+                    } else {
+                        Text("검출되지 않았습니다.")
+                    }
+                }
+            }
         }
     }
 }
