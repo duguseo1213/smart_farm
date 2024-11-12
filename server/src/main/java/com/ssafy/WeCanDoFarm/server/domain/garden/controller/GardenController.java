@@ -85,6 +85,8 @@ public class GardenController {
     public SuccessResponse<List<GardenStatus>> getGardenData(@RequestParam Long gardenId) throws Exception {
         return SuccessResponse.of(gardenService.getGardenStatus(gardenId));
     }
+
+    
 }
 
 
