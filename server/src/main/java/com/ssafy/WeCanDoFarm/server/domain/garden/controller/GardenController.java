@@ -83,7 +83,7 @@ public class GardenController {
     }
 
     @GetMapping("/get-garden-data")
-    public SuccessResponse<List<GardenStatus>> getGardenData(@RequestParam Long gardenId) throws Exception {
+    public SuccessResponse<List<GetGardenDataResponse>> getGardenData(@RequestParam Long gardenId) throws Exception {
         return SuccessResponse.of(gardenService.getGardenStatus(gardenId));
     }
 

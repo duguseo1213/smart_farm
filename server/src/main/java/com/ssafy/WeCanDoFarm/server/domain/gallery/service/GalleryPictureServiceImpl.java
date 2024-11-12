@@ -25,7 +25,7 @@ public class GalleryPictureServiceImpl implements GalleryPictureService{
 
     @Override
     public void addPicture(AddPictureRequest request) throws Exception {
-        Garden garden = gardenRepository.findById(request.getGardenId()).orElseThrow();
+        Garden garden = gardenRepository.findById(request.getGardenId()).orElseThrow(() -> new BaseException(ErrorCode.SERVER_ERROR));
         GalleryPicture galleryPicture = GalleryPicture.create(garden,request.getImage(), request.getDescription());
         galleryPictureRepository.save(galleryPicture);
     }

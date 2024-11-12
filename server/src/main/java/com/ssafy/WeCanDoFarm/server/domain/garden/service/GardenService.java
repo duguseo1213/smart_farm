@@ -1,10 +1,6 @@
 package com.ssafy.WeCanDoFarm.server.domain.garden.service;
 
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenRequest;
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.GetUserFromGardenResponse;
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterGardenRequest;
-import com.ssafy.WeCanDoFarm.server.domain.garden.dto.RegisterUserToGardenRequest;
+import com.ssafy.WeCanDoFarm.server.domain.garden.dto.*;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.GardenStatus;
 import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessage;
@@ -25,6 +21,6 @@ public interface GardenService{
     void addGardenData(Long deviceId, GardenDataMessage message) throws Exception;
     void remoteWater(Long gardenId, Long userId) throws Exception;
     void takePicture(Long gardenId, Long userId) throws Exception;
-    List<GardenStatus> getGardenStatus(Long gardenId) throws Exception;
+    List<GetGardenDataResponse> getGardenStatus(Long gardenId) throws Exception;
 
 }

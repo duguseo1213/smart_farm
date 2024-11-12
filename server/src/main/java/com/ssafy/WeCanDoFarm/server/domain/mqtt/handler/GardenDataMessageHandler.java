@@ -12,14 +12,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class GardenDataMessageHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(SampleMessageHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GardenDataMessage.class);
     private final GardenService gardenService;
-    public void handle(Message<GardenDataMessage> message) {
+    public void handle(Message<GardenDataMessage> message) throws Exception{
         MessageHeaders headers = message.getHeaders();
         String topic = (String) headers.get("mqtt_receivedTopic"); // 토픽 정보 추출
         log.info("Message arrived on topic '{}': {}", topic, message.getPayload());
         try {
             Long deviceId = Long.parseLong(topic.split("/")[1]);
+            gardenService.addGardenData(deviceId,message.getPayload());
             log.info("Device ID: {}", deviceId);
         }catch (NullPointerException e){
             log.info("mqtt device id is invalid: {}", topic);
