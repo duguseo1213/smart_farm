@@ -70,14 +70,15 @@ public class GardenController {
         return SuccessResponse.of(gardenService.plantDiseaseDetection(request.getFile()));
     }
     @PostMapping("/remote-water")
-    public SuccessResponse<String> remoteWater(@RequestBody FunctionRequest request) throws Exception {
-        gardenService.remoteWater(request.getGardenId());
+    public SuccessResponse<String> remoteWater(@CurrentUser User user, @RequestBody FunctionRequest request) throws Exception {
+        gardenService.remoteWater(request.getGardenId(), user.getId());
         return SuccessResponse.empty();
     }
 
     @PostMapping("/take-picture")
-    public SuccessResponse<String> takePicture(@RequestBody FunctionRequest request) throws Exception {
-        gardenService.takePicture(request.getGardenId());
+    public SuccessResponse<String> takePicture(@CurrentUser User user, @RequestBody FunctionRequest request) throws Exception {
+
+        gardenService.takePicture(request.getGardenId(),user.getId());
         return SuccessResponse.empty();
     }
 

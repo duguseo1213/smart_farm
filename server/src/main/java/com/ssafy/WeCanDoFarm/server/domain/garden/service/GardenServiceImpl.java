@@ -140,20 +140,20 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public void remoteWater(Long gardenId) throws Exception {
+    public void remoteWater(Long gardenId, Long userId) throws Exception {
         Garden garden = gardenRepository.findById(gardenId).orElseThrow();
         Long DeviceId = garden.getDevice().getDeviceId();
-        FunctionMessage fm = new FunctionMessage(1,"물 주기");
+        FunctionMessage fm = new FunctionMessage(1,"물 주기",userId);
         Object FunctionMessage;
         mqttOutboundGateway.publish("device/"+ DeviceId,fm);
     }
 
     @Override
-    public void takePicture(Long gardenId) throws Exception {
+    public void takePicture(Long gardenId, Long userId) throws Exception {
 
         Garden garden = gardenRepository.findById(gardenId).orElseThrow();
         Long DeviceId = garden.getDevice().getDeviceId();
-        FunctionMessage fm = new FunctionMessage(2,"사진 찍기");
+        FunctionMessage fm = new FunctionMessage(2,"사진 찍기",userId);
         Object FunctionMessage;
         mqttOutboundGateway.publish("device/"+ DeviceId,fm);
     }
