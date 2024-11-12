@@ -13,6 +13,8 @@ appcompat = "1.7.0"
 material = "1.12.0"
 mavericks = "3.0.9"
 retrofit = "2.11.0"
+googleGmsGoogleServices = "4.4.2"
+firebaseMessaging = "24.0.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose" }
@@ -34,8 +36,10 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mavericks = { module = "com.airbnb.android:mavericks", version.ref = "mavericks" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }

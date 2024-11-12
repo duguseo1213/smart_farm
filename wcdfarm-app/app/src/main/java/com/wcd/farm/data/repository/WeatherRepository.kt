@@ -45,6 +45,7 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
             if (time.minute < 10) time.minusHours(1).hour
             else time.hour
         ) + "00"
+        Log.e("TEST", baseTime)
         val baseDate = time.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
 
         val customOptions: MutableMap<String, String> = mutableMapOf()

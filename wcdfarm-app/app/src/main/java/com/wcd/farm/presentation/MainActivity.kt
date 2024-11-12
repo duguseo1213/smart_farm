@@ -2,11 +2,15 @@ package com.wcd.farm.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.wcd.farm.data.remote.ServerClient
+import com.wcd.farm.fcm.MyFirebaseMessagingService
 import com.wcd.farm.presentation.intent.AppViewIntent
 import com.wcd.farm.presentation.view.AppNavigation
 import com.wcd.farm.presentation.viewmodel.AppViewModel

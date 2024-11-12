@@ -102,4 +102,16 @@ object ServerClient {
     val gardenApi: GardenApi by lazy {
         retrofit.create(GardenApi::class.java)
     }
+
+    val HarmApi: HarmApi by lazy {
+        retrofit.create(HarmApi::class.java)
+    }
+
+    val deviceApi: DeviceApi by lazy {
+        retrofit.create(DeviceApi::class.java)
+    }
+
+    val userApi: UserApi by lazy {
+        retrofit.create(UserApi::class.java)
+    }
 }

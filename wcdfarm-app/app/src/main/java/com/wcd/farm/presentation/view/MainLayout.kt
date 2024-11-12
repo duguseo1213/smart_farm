@@ -1,5 +1,6 @@
 package com.wcd.farm.presentation.view
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import com.google.firebase.messaging.FirebaseMessaging
 import com.wcd.farm.R
+import com.wcd.farm.data.remote.ServerClient
 import com.wcd.farm.presentation.intent.DiseaseViewIntent
 import com.wcd.farm.presentation.state.DiseaseViewState
 import com.wcd.farm.presentation.view.home.DiseaseScreen
@@ -47,6 +50,9 @@ import com.wcd.farm.presentation.view.mypage.MyPageScreen
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
 import com.wcd.farm.presentation.viewmodel.WeatherViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 const val HOME = "Home"
 const val INFO = "Info"
@@ -62,7 +68,17 @@ fun MainLayout() {
     LaunchedEffect(Unit) {
         val longitude = 126.8071876
         val latitude = 35.2040949
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { token ->
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = ServerClient.userApi.setFcmToken(token.result)
 
+                if(response.isSuccessful) {
+                    Log.e("TEST", response.body().toString())
+                } else {
+                    Log.e("TEST", response.errorBody()!!.string())
+                }
+            }
+        }
         //weatherViewModel.getNearForecastWeather(latitude, longitude)
         //weatherViewModel.getForecastWeather()
     }

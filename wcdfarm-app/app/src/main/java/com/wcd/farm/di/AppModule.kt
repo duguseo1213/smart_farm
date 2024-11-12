@@ -3,11 +3,15 @@ package com.wcd.farm.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.wcd.farm.data.remote.AuthApi
+import com.wcd.farm.data.remote.DeviceApi
 import com.wcd.farm.data.remote.GardenApi
+import com.wcd.farm.data.remote.HarmApi
 import com.wcd.farm.data.remote.ServerClient
+import com.wcd.farm.data.remote.UserApi
 import com.wcd.farm.data.remote.WeatherApi
 import com.wcd.farm.data.remote.WeatherApiClient
 import com.wcd.farm.data.repository.DiseaseRepository
+import com.wcd.farm.data.repository.GardenRepository
 import com.wcd.farm.data.repository.MemorialRepository
 import com.wcd.farm.data.repository.ServerRepository
 import com.wcd.farm.data.repository.WeatherRepository
@@ -43,6 +47,24 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideHarmApi(): HarmApi {
+        return ServerClient.HarmApi
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserApi(): UserApi {
+        return ServerClient.userApi
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeviceApi(): DeviceApi {
+        return ServerClient.deviceApi
+    }
+
+    @Provides
+    @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
     }
@@ -61,8 +83,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDiseaseRepository(): DiseaseRepository {
-        return DiseaseRepository()
+    fun provideGardenRepository(gardenApi: GardenApi): GardenRepository {
+        return GardenRepository(gardenApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDiseaseRepository(gardenApi: GardenApi): DiseaseRepository {
+        return DiseaseRepository(gardenApi)
     }
 
     @Provides

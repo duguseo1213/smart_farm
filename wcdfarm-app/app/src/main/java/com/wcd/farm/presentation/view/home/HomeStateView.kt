@@ -23,34 +23,42 @@ import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.*
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import com.wcd.farm.R
 
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun StateView() {
-    Button(
+fun StateView(modifier: Modifier) {
+    TextButton(
         onClick = { Log.e("TEST", "Click") },
         contentPadding = PaddingValues(0.dp),
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.rsBlurShadow(4.dp, color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp)) // 쉼표 추가
+        modifier = modifier.rsBlurShadow(4.dp, color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp)) // 쉼표 추가
     ){
         Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .fillMaxHeight(0.8f)
                 .fillMaxWidth()
                 //.clip(RoundedCornerShape(8.dp))
                 .background(Color.White)
@@ -80,6 +88,25 @@ fun StateView() {
                     //.clickable(indication = null) { isPlaying = !isPlaying }
             )
 
+            LottieAnimation(
+                composition = composition,
+                progress = progress,
+                modifier = Modifier
+                    .size(200.dp)
+                    .clickable { isPlaying = !isPlaying }
+            )
+
+            LottieAnimation(
+                composition = composition,
+                progress = progress,
+                modifier = Modifier
+                    .size(200.dp)
+                    .clickable { isPlaying = !isPlaying }
+            )
+            
+            Button(onClick = { /*TODO*/ }) {
+                
+            }
         }
     }
 
@@ -128,12 +155,4 @@ fun StateBar(icon: ImageVector, ratio: Int, color: Color) {
         }
 
     }
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewTest2() {
-    StateView()
 }

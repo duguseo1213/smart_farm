@@ -50,15 +50,14 @@ import androidx.compose.ui.text.font.Font
 val customFontFamily_main1 = FontFamily(Font(R.font.juri))
 
 @Composable
-fun MenuContainer() {
+fun MenuContainer(modifier: Modifier) {
     val viewModel: HomeViewModel = mavericksViewModel()
     val diseaseViewModel: DiseaseViewModel = mavericksViewModel()
     val isUserOnFarm by viewModel.collectAsState(HomeViewState::isUserOnFarm)
     Row(
-        Modifier.fillMaxWidth(),
+        modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-
         if (!isUserOnFarm) {
             MenuButton(R.drawable.watering_btn, "물주기") { viewModel.requestWatering() }
             MenuButton(R.drawable.camera_btn, "사진 촬영") { viewModel.requestFilm() }
