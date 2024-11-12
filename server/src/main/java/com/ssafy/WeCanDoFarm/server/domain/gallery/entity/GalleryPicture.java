@@ -42,4 +42,8 @@ public class GalleryPicture {
         fp.createdDate = new Date();
         return fp;
     }
+
+    public void setGalleryImageDescription(String galleryImageDescription) {
+        this.galleryImageDescription = galleryImageDescription;
+    }
 }

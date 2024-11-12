@@ -33,6 +33,8 @@ public class GalleryPictureServiceImpl implements GalleryPictureService{
     @Override
     public void updateDescription(UpdateDescriptionRequest request) throws Exception {
         GalleryPicture galleryPicture = galleryPictureRepository.findById(request.getPictureId()).orElseThrow(() -> new BaseException(ErrorCode.SERVER_ERROR));
+        galleryPicture.setGalleryImageDescription(request.getDescription());
+        galleryPictureRepository.save(galleryPicture);
 
     }
 
