@@ -63,8 +63,8 @@ fun MainLayout() {
         val longitude = 126.8071876
         val latitude = 35.2040949
 
-        weatherViewModel.getNearForecastWeather(latitude, longitude)
-        weatherViewModel.getForecastWeather()
+        //weatherViewModel.getNearForecastWeather(latitude, longitude)
+        //weatherViewModel.getForecastWeather()
     }
 
     Scaffold(
