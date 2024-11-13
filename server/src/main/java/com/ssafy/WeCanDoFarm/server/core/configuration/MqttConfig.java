@@ -74,7 +74,6 @@ public class MqttConfig {
                                 }))
                         .subFlowMapping(Object.class, sf -> sf // Object.class에 대한 기본 처리
                                 .handle(message -> {
-                                            // 기본 처리를 위해 로깅 또는 다른 로직을 수행합니다.
                                     System.out.println("Unhandled message type: " + message);
                                 })
                         ))
