@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -68,16 +69,16 @@ fun MemorialScreen() {
                 .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            MemorialMenu(showView == GALLERY_VIEW) {
+            MemorialMenu(showView == GALLERY_VIEW, "갤러리", R.drawable.gallery_icon) {
                 viewModel.sendIntent(MemorialViewIntent.ShowGalleryView)
             }
-            MemorialMenu(showView == GROWTH_VIEW) {
+            MemorialMenu(showView == GROWTH_VIEW, "성장과정", R.drawable.growth_icon) {
                 viewModel.sendIntent(MemorialViewIntent.ShowGrowthView)
             }
-            MemorialMenu(showView == ANIMAL_VIEW) {
+            MemorialMenu(showView == ANIMAL_VIEW, "방문동물", R.drawable.animal_icon) {
                 viewModel.sendIntent(MemorialViewIntent.ShowAnimalView)
             }
-            MemorialMenu(showView == THEFT_VIEW) {
+            MemorialMenu(showView == THEFT_VIEW, "도난관리", R.drawable.theft_icon) {
                 viewModel.sendIntent(MemorialViewIntent.ShowTheftView)
             }
         }
@@ -94,12 +95,12 @@ fun MemorialScreen() {
 
 
 @Composable
-fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
+fun MemorialMenu(crtMenu: Boolean, menuTitle: String, iconResId: Int, onClick: () -> Unit) {
     val color =
-        ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0XFF1A874D))
+        ButtonDefaults.buttonColors(containerColor = Color(0XFF2F6348), contentColor = Color(0XFFECEDC1))
     val color2 =
         ButtonDefaults.buttonColors(
-            containerColor = Color(0XFF197142),
+            containerColor = Color(0XFF1A874D),
             contentColor = Color(0XFFECEDC1)
         )
 
@@ -109,7 +110,7 @@ fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
         shape = RoundedCornerShape(16.dp),
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier
-            .size(70.dp, 72.dp)
+            .size(75.dp, 77.dp)
             .rsBlurShadow(
                 4.dp,
                 shape = RoundedCornerShape(16.dp),
@@ -120,10 +121,11 @@ fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
-                imageVector = Icons.Outlined.CollectionsBookmark,
-                contentDescription = "Gallery"
+                painter = painterResource(id = iconResId),
+                contentDescription = menuTitle,
+                modifier = Modifier.size(40.dp)
             )
-            Text("갤러리")
+            Text(menuTitle)
         }
     }
 }
@@ -171,12 +173,12 @@ fun InvasionView() {
                     shape = RectangleShape,
                     modifier = Modifier
                         .padding(0.dp)
-                        .size(32.dp),
+                        .size(30.dp),
                     colors = buttonTransparentTheme(),
                     contentPadding = PaddingValues(0.dp)
                 ) {
                     Icon(
-                        Icons.Outlined.DeleteForever,
+                        Icons.Outlined.DeleteOutline,
                         contentDescription = "Delete",
                         modifier = Modifier.size(36.dp)
                     )

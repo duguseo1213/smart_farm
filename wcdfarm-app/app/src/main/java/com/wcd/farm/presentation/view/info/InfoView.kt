@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun InfoScreen() {
     Column(Modifier.fillMaxHeight()) {
-        Spacer(modifier = Modifier.weight(0.05f))
+        Spacer(modifier = Modifier.weight(0.01f))
         CrtStateView(
             Modifier
                 .rsBlurShadow(4.dp, shape = RoundedCornerShape(16.dp), color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))

@@ -159,7 +159,9 @@ fun MemoryView() {
                 color = Color.Black,
                 fontFamily = customFontFamily3 // customFontFamily1 설정
             )
-            Icon(imageVector = Icons.Outlined.EditCalendar, contentDescription = "Edit")
+            Icon(imageVector = Icons.Outlined.EditCalendar,
+                contentDescription = "Edit",
+                    modifier = Modifier.size(20.dp))
         }
         Button(
             onClick = { /*TODO*/ },
