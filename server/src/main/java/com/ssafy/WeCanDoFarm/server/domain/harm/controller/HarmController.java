@@ -1,9 +1,7 @@
 package com.ssafy.WeCanDoFarm.server.domain.harm.controller;
 
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
-import com.ssafy.WeCanDoFarm.server.domain.harm.dto.AddHarmPictureRequest;
-import com.ssafy.WeCanDoFarm.server.domain.harm.dto.AddHarmVideoRequest;
-import com.ssafy.WeCanDoFarm.server.domain.harm.dto.HarmPictureDto;
+import com.ssafy.WeCanDoFarm.server.domain.harm.dto.*;
 import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmPicture;
 import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmVideo;
 import com.ssafy.WeCanDoFarm.server.domain.harm.service.HarmService;
@@ -33,6 +31,18 @@ public class HarmController {
     {
 
         return SuccessResponse.of(harmService.getHarmPictures(gardenId));
+    }
+
+    @GetMapping("/get-harm-animal")
+    SuccessResponse<List<GetHarmAnimalPictureResponse>> getHarmAnimalPictures(@RequestParam Long gardenId) throws Exception
+    {
+
+        return SuccessResponse.of(harmService.getHarmAnimalPictures(gardenId));
+    }
+    @GetMapping("/get-harm-human")
+    SuccessResponse<List<GetHarmHumanPictureResponse>> getHarmHumanPictures(@RequestParam Long gardenId) throws Exception
+    {
+        return SuccessResponse.of(harmService.getHarmHumanPictures(gardenId));
     }
     @GetMapping("/get-harm-Video")
     SuccessResponse<String> getHarmVideo(@RequestParam Long harmPictureId) throws Exception

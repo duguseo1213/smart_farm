@@ -22,7 +22,7 @@ public class HarmIoTController {
     {   String animalType = harmService.detectionHarmAnimal(request.getFile());
         Long id = 0L;
         if(!animalType.equals("none")){
-            id = harmService.addHarmPicture(request.getDeviceId(),request.getFile());
+            id = harmService.addHarmPicture(request.getDeviceId(),request.getFile(),animalType);
         }
         return SuccessResponse.of(HarmPictureDto.HarmDetectionResponse.of(animalType,id));
     }

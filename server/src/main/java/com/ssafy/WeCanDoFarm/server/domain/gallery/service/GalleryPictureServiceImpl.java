@@ -3,6 +3,7 @@ package com.ssafy.WeCanDoFarm.server.domain.gallery.service;
 import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
 import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
 import com.ssafy.WeCanDoFarm.server.domain.gallery.dto.AddPictureRequest;
+import com.ssafy.WeCanDoFarm.server.domain.gallery.dto.GetPictureOnDateRequest;
 import com.ssafy.WeCanDoFarm.server.domain.gallery.dto.GetPicturesResponse;
 import com.ssafy.WeCanDoFarm.server.domain.gallery.dto.UpdateDescriptionRequest;
 import com.ssafy.WeCanDoFarm.server.domain.gallery.entity.GalleryPicture;
@@ -42,6 +43,21 @@ public class GalleryPictureServiceImpl implements GalleryPictureService{
     public List<GetPicturesResponse> getPictures(Long gardenId) throws Exception {
         List<GetPicturesResponse> pictures = new ArrayList<>();
         List<GalleryPicture> gallery = galleryPictureRepository.findByGardenId(gardenId);
+        for(GalleryPicture galleryPicture : gallery){
+            GetPicturesResponse getPicturesResponse = new GetPicturesResponse();
+            getPicturesResponse.setPictureId(galleryPicture.getGalleryPictureId());
+            getPicturesResponse.setPictureUrl(galleryPicture.getGalleryImage());
+            getPicturesResponse.setPictureDescription(galleryPicture.getGalleryImageDescription());
+            getPicturesResponse.setPictureDate(galleryPicture.getCreatedDate());
+            pictures.add(getPicturesResponse);
+        }
+        return pictures;
+    }
+
+    @Override
+    public List<GetPicturesResponse> getPicturesOnDate(GetPictureOnDateRequest request) throws Exception {
+        List<GetPicturesResponse> pictures = new ArrayList<>();
+        List<GalleryPicture> gallery = galleryPictureRepository.findByGardenIdOnDate(request.getGardenId(),request.getCreatedDate());
         for(GalleryPicture galleryPicture : gallery){
             GetPicturesResponse getPicturesResponse = new GetPicturesResponse();
             getPicturesResponse.setPictureId(galleryPicture.getGalleryPictureId());

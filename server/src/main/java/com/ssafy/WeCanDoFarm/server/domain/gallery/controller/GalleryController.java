@@ -2,10 +2,7 @@ package com.ssafy.WeCanDoFarm.server.domain.gallery.controller;
 
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
 import com.ssafy.WeCanDoFarm.server.domain.S3.service.S3UploadService;
-import com.ssafy.WeCanDoFarm.server.domain.gallery.dto.AddPictureRequest;
-import com.ssafy.WeCanDoFarm.server.domain.gallery.dto.GetPicturesResponse;
-import com.ssafy.WeCanDoFarm.server.domain.gallery.dto.TransferPictureRequest;
-import com.ssafy.WeCanDoFarm.server.domain.gallery.dto.UpdateDescriptionRequest;
+import com.ssafy.WeCanDoFarm.server.domain.gallery.dto.*;
 import com.ssafy.WeCanDoFarm.server.domain.gallery.service.GalleryPictureService;
 import com.ssafy.WeCanDoFarm.server.domain.notification.event.NotificationEvent;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +47,11 @@ public class GalleryController {
     public SuccessResponse<List<GetPicturesResponse>> getPictures(@RequestParam Long gardenId) throws Exception
     {
         return SuccessResponse.of(galleryPictureService.getPictures(gardenId));
+    }
+    @GetMapping("/get-pictures-on-date")
+    public SuccessResponse<List<GetPicturesResponse>> getPictures(@RequestBody GetPictureOnDateRequest request) throws Exception
+    {
+        return SuccessResponse.of(galleryPictureService.getPicturesOnDate(request));
     }
 
 

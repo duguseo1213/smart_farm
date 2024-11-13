@@ -9,9 +9,7 @@ import com.ssafy.WeCanDoFarm.server.domain.garden.dto.PlantDiseaseDto;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
 import com.ssafy.WeCanDoFarm.server.domain.garden.repository.GardenRepository;
 import com.ssafy.WeCanDoFarm.server.domain.harm.constants.HarmConst;
-import com.ssafy.WeCanDoFarm.server.domain.harm.dto.AddHarmPictureRequest;
-import com.ssafy.WeCanDoFarm.server.domain.harm.dto.AddHarmVideoRequest;
-import com.ssafy.WeCanDoFarm.server.domain.harm.dto.HarmPictureDto;
+import com.ssafy.WeCanDoFarm.server.domain.harm.dto.*;
 import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmPicture;
 import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmVideo;
 import com.ssafy.WeCanDoFarm.server.domain.harm.repository.HarmPictureRepository;
@@ -74,9 +72,9 @@ public class HarmServiceImpl implements HarmService {
     }
 
     @Override
-    public Long addHarmPicture(Long deviceId, MultipartFile file) throws Exception {
+    public Long addHarmPicture(Long deviceId, MultipartFile file,String animalType) throws Exception {
         String filePath = s3UploadService.upload(file);
-        HarmPicture harmPicture = HarmPicture.crate(gardenRepository.getGarden(deviceId),filePath,null);
+        HarmPicture harmPicture = HarmPicture.crate(gardenRepository.getGarden(deviceId),filePath,animalType);
         return HarmPictureRepository.save(harmPicture).getHarmPictureId();
     }
 
@@ -102,4 +100,34 @@ public class HarmServiceImpl implements HarmService {
     public String detectionHarmAnimal(MultipartFile file) {
         return doHarmAnimalDetection(file);
     }
+
+    @Override
+    public List<GetHarmAnimalPictureResponse> getHarmAnimalPictures(Long gardenId) throws Exception {
+        List<HarmPicture> list = HarmPictureRepository.findByNotType(gardenId,"human");
+        List<GetHarmAnimalPictureResponse> responses = new ArrayList<>();
+        for(HarmPicture hp : list){
+            GetHarmAnimalPictureResponse response = new GetHarmAnimalPictureResponse();
+            response.setHarmPictureId(hp.getHarmPictureId());
+            response.setAnimalType(hp.getHarmTarget());
+            response.setImage(hp.getHarmPicture());
+            response.setCreatedDate(hp.getCreatedDate());
+            responses.add(response);
+        }
+        return responses;
+    }
+
+    @Override
+    public List<GetHarmHumanPictureResponse> getHarmHumanPictures(Long gardenId) throws Exception {
+        List<HarmPicture> list = HarmPictureRepository.findByType(gardenId,"human");
+        List<GetHarmHumanPictureResponse> responses = new ArrayList<>();
+        for(HarmPicture hp : list){
+            GetHarmHumanPictureResponse response = new GetHarmHumanPictureResponse();
+            response.setHarmPictureId(hp.getHarmPictureId());
+            response.setImage(hp.getHarmPicture());
+            response.setCreatedDate(hp.getCreatedDate());
+            responses.add(response);
+        }
+        return responses;
+    }
+
 }
