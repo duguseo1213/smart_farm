@@ -1,6 +1,7 @@
 package com.wcd.farm.data.repository
 
 import android.util.Log
+import com.wcd.farm.data.model.HarmDTO
 import com.wcd.farm.data.model.PictureDTO
 import com.wcd.farm.data.remote.GalleryApi
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +22,9 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi)
 
     private val _pictureList = MutableStateFlow<List<PictureDTO>>(emptyList())
     val pictureList = _pictureList.asStateFlow()
+
+    private val _harmList = MutableStateFlow<List<HarmDTO>>(emptyList())
+    val harmList = _harmList.asStateFlow()
 
     fun setSelectedDate(date: LocalDate) {
         _selectedDate.value = date

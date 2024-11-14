@@ -42,11 +42,12 @@ import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import com.wcd.farm.R
+import com.wcd.farm.data.model.HarmDTO
 import com.wcd.farm.presentation.intent.MemorialViewIntent
 import com.wcd.farm.presentation.state.MemorialViewState
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.MemorialViewModel
-
+import java.time.format.DateTimeFormatter
 
 
 const val GALLERY_VIEW = 1
@@ -145,10 +146,12 @@ fun EmptyListView(notify: String) {
 }
 
 @Composable
-fun InvasionView() {
+fun InvasionView(harm: HarmDTO, harmType: String) {
+    val invasionDate = harm.createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    val invasionTime = harm.createdDate.format(DateTimeFormatter.ofPattern("a hh:mm"))
     Column {
         Text(
-            "2024-09-17",
+            invasionDate,
             color = Color(0xFF204833),
             fontSize = 28.sp,
             modifier = Modifier.padding(8.dp, 24.dp),
@@ -167,7 +170,7 @@ fun InvasionView() {
                     .padding(8.dp)
                     .fillMaxWidth()
             ) {
-                Text("오후 03:30 강아지 방문", fontSize = 20.sp, fontFamily = customFontFamily3)
+                Text("$invasionTime ${harm.harmTarget} $harmType", fontSize = 20.sp, fontFamily = customFontFamily3)
                 Button(
                     onClick = { /*TODO*/ },
                     shape = RectangleShape,
@@ -183,8 +186,8 @@ fun InvasionView() {
                         modifier = Modifier.size(36.dp)
                     )
                 }
-
             }
+
             Button(
                 onClick = { /*TODO*/ },
                 shape = RectangleShape,
