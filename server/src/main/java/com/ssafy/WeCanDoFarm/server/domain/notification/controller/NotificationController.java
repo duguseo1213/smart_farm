@@ -25,7 +25,7 @@ public class NotificationController {
         Long targetUserId = user.getId();
         String title = "test1";
         String body = "test2";
-        notificationService.sendNotificationEvent(new NotificationEvent(targetUserId, title, body));
+        notificationService.sendNotificationEvent(new NotificationEvent(targetUserId, title, body,""));
     }
 
 }
