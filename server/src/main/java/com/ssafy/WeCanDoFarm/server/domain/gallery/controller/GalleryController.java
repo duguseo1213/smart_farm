@@ -22,12 +22,6 @@ public class GalleryController {
     private final ApplicationEventPublisher eventPublisher;
     private final GalleryPictureService galleryPictureService;
 
-    @PostMapping("/transfer-picture")
-    public SuccessResponse<String> transferPicture(@RequestBody TransferPictureRequest transferPictureRequest) throws Exception{
-        String image = s3UploadService.upload(transferPictureRequest.getImage());
-        eventPublisher.publishEvent(new NotificationEvent(transferPictureRequest.getUserId(),"",image));
-        return SuccessResponse.of("Taking picture");
-    }
 
     @PostMapping("/add-picture")
     public SuccessResponse<String> addPicture(@RequestBody AddPictureRequest request) throws Exception
