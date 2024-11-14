@@ -12,4 +12,5 @@ public class GetGardenResponse {
     String gardenName;
     String gardenAddress;
     Date gardenCreated;
+    String gardenImage;
 }

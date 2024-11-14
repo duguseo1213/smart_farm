@@ -20,22 +20,13 @@ public class Crop {
     @JoinColumn(name = "garden_id")
     private Garden garden;
 
-    @Column(name = "crop_nickname")
-    private String cropNickname;
-
     @Column(name="crop_name")
     private String cropName;
 
-    @Column(name = "growth_stage")
-    @Enumerated(EnumType.STRING)
-    private Growth growthStage;
-
-    public static Crop create(Garden garden, String cropNickname, String cropName) {
+    public static Crop create(Garden garden, String cropName) {
         Crop crop = new Crop();
         crop.garden = garden;
-        crop.cropNickname = cropNickname;
         crop.cropName = cropName;
-        crop.growthStage = Growth.Seed;
         return crop;
     }
 }
