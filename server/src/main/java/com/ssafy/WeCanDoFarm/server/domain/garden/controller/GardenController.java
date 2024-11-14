@@ -37,6 +37,7 @@ public class GardenController {
             getGardenResponse.setGardenName(garden.getGardenName());
             getGardenResponse.setGardenCreated(garden.getCreatedDate());
             getGardenResponse.setGardenId(garden.getGardenId());
+            getGardenResponse.setGardenImage(garden.getGardenImage());
             gardenResponseList.add(getGardenResponse);
 
         }

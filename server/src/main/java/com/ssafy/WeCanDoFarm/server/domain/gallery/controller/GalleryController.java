@@ -46,6 +46,7 @@ public class GalleryController {
     @GetMapping("/get-pictures")
     public SuccessResponse<List<GetPicturesResponse>> getPictures(@RequestParam Long gardenId) throws Exception
     {
+
         return SuccessResponse.of(galleryPictureService.getPictures(gardenId));
     }
     @GetMapping("/get-pictures-on-date")
