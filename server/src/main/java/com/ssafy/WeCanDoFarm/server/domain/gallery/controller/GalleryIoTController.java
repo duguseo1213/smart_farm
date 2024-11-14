@@ -24,7 +24,7 @@ public class GalleryIoTController {
     private final GalleryPictureService galleryPictureService;
 
     @PostMapping("/transfer-picture")
-    public SuccessResponse<String> transferPicture(@RequestBody TransferPictureRequest transferPictureRequest) throws Exception{
+    public SuccessResponse<String> transferPicture(TransferPictureRequest transferPictureRequest) throws Exception{
         String image = s3UploadService.upload(transferPictureRequest.getImage());
         eventPublisher.publishEvent(new NotificationEvent(transferPictureRequest.getUserId(),"",image));
         return SuccessResponse.of("Taking picture");
