@@ -9,4 +9,5 @@ public class NotificationEvent {
     private Long targetUserId;
     private String title;
     private String body;
+    private String imageURL;
 }

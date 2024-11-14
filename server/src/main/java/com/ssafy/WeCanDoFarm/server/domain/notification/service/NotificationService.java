@@ -39,6 +39,7 @@ public class NotificationService {
         Notification notification = Notification.builder()
                 .setTitle(notificationEvent.getTitle())
                 .setBody(notificationEvent.getBody())
+                .setImage(notificationEvent.getImageURL())
                 .build();
         Message message = Message.builder()
                 .setToken(user.getFcmToken())
