@@ -4,6 +4,7 @@ import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.hilt.AssistedViewModelFactory
 import com.airbnb.mvrx.hilt.hiltMavericksViewModelFactory
+import com.wcd.farm.data.repository.GardenRepository
 import com.wcd.farm.data.repository.MemorialRepository
 import com.wcd.farm.presentation.intent.MemorialViewIntent
 import com.wcd.farm.presentation.state.MemorialViewState
@@ -19,11 +20,11 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import javax.inject.Inject
 
 class MemorialViewModel @AssistedInject constructor(
     @Assisted initialState: MemorialViewState,
-    private val repository: MemorialRepository
+    private val repository: MemorialRepository,
+    private val gardenRepository: GardenRepository
 ) :
     MavericksViewModel<MemorialViewState>(initialState) {
 
@@ -37,7 +38,7 @@ class MemorialViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<MemorialViewModel, MemorialViewState> by hiltMavericksViewModelFactory()
 
     val selectedDate = repository.selectedDate
-
+    val pictureList = repository.pictureList
     init {
         handleIntent()
     }
@@ -64,5 +65,9 @@ class MemorialViewModel @AssistedInject constructor(
 
     fun setSelectedDate(date: LocalDate) {
         repository.setSelectedDate(date)
+    }
+
+    fun getAllPictures(gardenId: Long) {
+        repository.getAllPictures(gardenId)
     }
 }

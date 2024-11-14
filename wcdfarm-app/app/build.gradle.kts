@@ -114,6 +114,9 @@ dependencies {
     //lottie
     implementation ("com.airbnb.android:lottie-compose:6.0.0")
 
+    //image loading
+    implementation("io.coil-kt.coil3:coil-compose:3.0.2")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.wcd.farm.data.remote.AuthApi
 import com.wcd.farm.data.remote.DeviceApi
+import com.wcd.farm.data.remote.GalleryApi
 import com.wcd.farm.data.remote.GardenApi
 import com.wcd.farm.data.remote.HarmApi
 import com.wcd.farm.data.remote.ServerClient
@@ -65,6 +66,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideGalleryApi(): GalleryApi {
+        return ServerClient.galleryApi
+    }
+
+    @Provides
+    @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
     }
@@ -95,8 +102,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMemorialRepository(): MemorialRepository {
-        return MemorialRepository()
+    fun provideMemorialRepository(galleryApi: GalleryApi): MemorialRepository {
+        return MemorialRepository(galleryApi)
     }
 
     @Provides

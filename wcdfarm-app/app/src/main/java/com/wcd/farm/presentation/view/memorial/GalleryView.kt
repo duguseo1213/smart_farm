@@ -54,6 +54,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.layout.height
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil3.compose.AsyncImage
+import com.wcd.farm.data.model.PictureDTO
+import java.time.format.DateTimeFormatter
 
 val customFontFamily1 = FontFamily(
     Font(R.font.bookend_semibold)
@@ -125,7 +129,8 @@ fun GalleryView() {
 
 @Composable
 fun MemoryList() {
-    val memoryList = listOf(1, 2, 3)
+    val viewModel: MemorialViewModel = mavericksViewModel()
+    val picturesList by viewModel.pictureList.collectAsState()
     val listState = rememberLazyListState()
 
     LazyColumn(
@@ -134,14 +139,14 @@ fun MemoryList() {
             .fillMaxHeight(),
         state = listState
     ) {
-        items(memoryList) { memory ->
-            MemoryView()
+        items(picturesList) { picture ->
+            MemoryView(picture)
         }
     }
 }
 
 @Composable
-fun MemoryView() {
+fun MemoryView(picture: PictureDTO) {
     Column(
         Modifier
             .fillMaxSize()
@@ -154,7 +159,7 @@ fun MemoryView() {
                 .fillMaxWidth()
         ) {
             Text(
-                text = "12:00 상추 팜요파묘~",
+                text = "${picture.pictureDate.format(DateTimeFormatter.ofPattern("HH:mm"))} ${picture.pictureDescription}",
                 fontSize = 20.sp,
                 color = Color.Black,
                 fontFamily = customFontFamily3 // customFontFamily1 설정
@@ -168,8 +173,8 @@ fun MemoryView() {
             contentPadding = PaddingValues(0.dp),
             shape = RoundedCornerShape(5.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.farm),
+            AsyncImage(
+                model = picture.pictureUrl,
                 contentDescription = "Farm",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -188,9 +193,6 @@ fun CalendarModal(onDismissRequest: () -> Unit) {
     val viewModel: MemorialViewModel = mavericksViewModel()
 
     val crtYear = LocalDate.now().year
-
-// TODO demo how to read the selected date from the state.
-
     val datePickerState = rememberDatePickerState(yearRange = IntRange(crtYear - 5, crtYear))
 
     DatePickerDialog(
@@ -222,10 +224,4 @@ fun CalendarModal(onDismissRequest: () -> Unit) {
                 )
             )
         })
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewTest() {
-    MemoryView()
 }

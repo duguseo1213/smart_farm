@@ -114,4 +114,8 @@ object ServerClient {
     val userApi: UserApi by lazy {
         retrofit.create(UserApi::class.java)
     }
+
+    val galleryApi: GalleryApi by lazy {
+        retrofit.create(GalleryApi::class.java)
+    }
 }
