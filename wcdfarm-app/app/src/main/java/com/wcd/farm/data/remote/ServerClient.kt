@@ -118,4 +118,8 @@ object ServerClient {
     val galleryApi: GalleryApi by lazy {
         retrofit.create(GalleryApi::class.java)
     }
+
+    val timeLapseApi: TimeLapseApi by lazy {
+        retrofit.create(TimeLapseApi::class.java)
+    }
 }

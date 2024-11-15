@@ -12,6 +12,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
@@ -57,11 +62,13 @@ class DiseaseRepository @Inject constructor(private val gardenApi: GardenApi) {
 
     fun requestPlantDiseaseDetection(isDone: () -> Unit, diseaseDetected: (diseaseDetected: Boolean) -> Unit) {
 
-        val imageString = _bitmap.value?.let { getBase64String(it) }
-        if (imageString != null) {
             CoroutineScope(Dispatchers.IO).launch {
-                val response = gardenApi.postDiseaseDetection(imageString)
+                val requestFile = photoFile.value!!.asRequestBody("image/*".toMediaTypeOrNull())
+                val body = MultipartBody.Part.createFormData("file", photoFile.value!!.name, requestFile)
+
+                val response = gardenApi.postDiseaseDetection(body)
                 isDone()
+                Log.e("TEST", response.toString())
                 if(response.isSuccessful) {
                     Log.e("TEST", response.body()?.data.toString())
                     val result = response.body()?.data
@@ -70,10 +77,12 @@ class DiseaseRepository @Inject constructor(private val gardenApi: GardenApi) {
                         diseaseDetected(result.diseased)
                         _diseaseDetect.value = result
                     }
+                } else {
+                    Log.e("TEST", response.errorBody()!!.string())
                 }
             }
 
-        }
+        //}
     }
 
     private fun getBase64String(bitmap: Bitmap): String {

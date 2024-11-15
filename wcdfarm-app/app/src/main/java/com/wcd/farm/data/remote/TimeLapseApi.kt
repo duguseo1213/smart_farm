@@ -1,7 +1,7 @@
 package com.wcd.farm.data.remote
 
 import com.wcd.farm.data.model.ResponseDTO
-import com.wcd.farm.data.model.TimeLapseDTO
+import com.wcd.farm.data.model.TimeLapseImageDTO
 import retrofit2.Response
 import retrofit2.http.GET
 
@@ -11,5 +11,5 @@ interface TimeLapseApi {
     }
 
     @GET("$TIMELAPSE_BASE/get-list")
-    suspend fun getTimeLapseList(): Response<ResponseDTO<List<TimeLapseDTO>>>
+    suspend fun getTimeLapseList(): Response<ResponseDTO<List<TimeLapseImageDTO>>>
 }

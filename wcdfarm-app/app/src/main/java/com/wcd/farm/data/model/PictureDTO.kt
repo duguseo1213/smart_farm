@@ -6,5 +6,5 @@ data class PictureDTO(
     val pictureId: Long,
     val pictureUrl: String,
     val pictureDescription: String,
-    val pictureDate: LocalDateTime
+    val pictureDate: String
 )

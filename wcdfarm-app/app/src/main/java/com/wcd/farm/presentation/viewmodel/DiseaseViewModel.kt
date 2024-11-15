@@ -7,14 +7,17 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
+import android.util.Size
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -41,6 +44,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
 
 class DiseaseViewModel @AssistedInject constructor(
     @Assisted initialState: DiseaseViewState,
@@ -67,7 +71,7 @@ class DiseaseViewModel @AssistedInject constructor(
 
     init {
         handleIntent()
-        repository.setImageCapture(ImageCapture.Builder().build())
+        repository.setImageCapture(ImageCapture.Builder().setTargetResolution(Size(1280, 720)).build())
     }
 
     fun sendIntent(intent: DiseaseViewIntent) = viewModelScope.launch(Dispatchers.Main) {
@@ -171,59 +175,57 @@ class DiseaseViewModel @AssistedInject constructor(
         sendIntent(DiseaseViewIntent.ShowPreviewCaptureView)
     }
 
-    fun takePhoto(context: Context, contentValues: ContentValues) {
+    fun takePhoto(context: Context) {
         val mImageCapture = imageCapture.value ?: return
-        repository.setPhotoFile(
-            File(
-                cacheDir.value,
-                "newImage.jpg"
-            )
-        )
-
+        Log.e("TEST", "cacheDir: " + cacheDir.value!!.path)
+        val externalDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         if (cacheDir.value != null) {
-            Log.e("TEST", cacheDir.value!!.path)
-            if (photoFile.value != null) {
-                val outputOptions = ImageCapture.OutputFileOptions.Builder(
-                    context.contentResolver,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    contentValues
-                ).build()
+            val newPhotoFile = File(externalDir, "newImage.jpg")
 
-                mImageCapture.takePicture(
-                    outputOptions,
-                    ContextCompat.getMainExecutor(context),
-                    object : ImageCapture.OnImageSavedCallback {
-                        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                            stopCamera()
-                            try {
-                                CoroutineScope(Dispatchers.Default).launch {
-                                    val drawable = Glide.with(context)
-                                        .load(outputFileResults.savedUri)
-                                        .apply(
-                                            RequestOptions()
-                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                                .skipMemoryCache(false)
-                                                .format(DecodeFormat.PREFER_RGB_565)
-                                        ).submit().get()
+            repository.setPhotoFile(newPhotoFile)
+            val outputOptions = ImageCapture.OutputFileOptions.Builder(
+                newPhotoFile
+                /*context.contentResolver,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                contentValues*/
+            ).build()
 
-                                    val bitmap = drawableToBitmap(drawable)
-                                    //val base64 = bitmapToBase64(bitmap)
+            mImageCapture.takePicture(
+                outputOptions,
+                ContextCompat.getMainExecutor(context),
+                object : ImageCapture.OnImageSavedCallback {
+                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                        stopCamera()
+                        try {
+                            CoroutineScope(Dispatchers.Default).launch {
+                                Log.e("TEST", "savedUri: " + outputFileResults.savedUri.toString())
 
-                                    repository.setPreviewImage(bitmap)
-                                    sendIntent(DiseaseViewIntent.ShowCaptureImageView)
-                                }
+                                val drawable = Glide.with(context)
+                                    .load(outputFileResults.savedUri)
+                                    .apply(
+                                        RequestOptions()
+                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                            .skipMemoryCache(false)
+                                            .format(DecodeFormat.PREFER_RGB_565)
+                                    ).submit().get()
 
-                            } catch (exception: Exception) {
-                                Log.e("TEST", exception.message!!)
+                                val bitmap = drawableToBitmap(drawable)
+                                //val base64 = bitmapToBase64(bitmap)
+
+                                repository.setPreviewImage(bitmap)
+                                sendIntent(DiseaseViewIntent.ShowCaptureImageView)
                             }
-                        }
 
-                        override fun onError(exception: ImageCaptureException) {
-                            Log.e("TEST", "사진 촬영 실패 ${exception.message}")
+                        } catch (exception: Exception) {
+                            Log.e("TEST", exception.message!!)
                         }
                     }
-                )
-            }
+
+                    override fun onError(exception: ImageCaptureException) {
+                        Log.e("TEST", "사진 촬영 실패 ${exception.message}")
+                    }
+                }
+            )
 
         }
 

@@ -63,7 +63,7 @@ fun DiseaseScreen(onDismissRequest: () -> Unit) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    TextButton(onClick = { viewModel.takePhoto(context, contentValues) })
+                    TextButton(onClick = { viewModel.takePhoto(context/*, contentValues*/) })
                     {
                         Icon(
                             imageVector = Icons.Outlined.Camera,
