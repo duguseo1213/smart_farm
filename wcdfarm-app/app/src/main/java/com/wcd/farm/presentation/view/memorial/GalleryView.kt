@@ -54,9 +54,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.wcd.farm.data.model.PictureDTO
+import java.sql.Date
 import java.time.format.DateTimeFormatter
 
 val customFontFamily1 = FontFamily(
@@ -74,6 +76,11 @@ fun GalleryView() {
 
     val calendarState by viewModel.collectAsState(MemorialViewState::showDialog)
     val selectedDate by viewModel.selectedDate.collectAsState()
+    val crtGarden by viewModel.crtGarden.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getAllPictures(crtGarden)
+    }
 
     Column {
         Row(

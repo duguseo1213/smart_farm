@@ -13,7 +13,7 @@ class GardenRepository @Inject constructor(private val gardenApi: GardenApi) {
     private val _gardenList = MutableStateFlow<List<Long>>(emptyList())
     val gardenList = _gardenList.asStateFlow()
 
-    private val _crtGarden = MutableStateFlow(1L)
+    private val _crtGarden = MutableStateFlow(2L)
     val crtGarden = _crtGarden.asStateFlow()
 
     fun requestRemoteWater() {

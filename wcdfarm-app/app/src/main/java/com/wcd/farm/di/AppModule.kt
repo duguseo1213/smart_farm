@@ -8,6 +8,7 @@ import com.wcd.farm.data.remote.GalleryApi
 import com.wcd.farm.data.remote.GardenApi
 import com.wcd.farm.data.remote.HarmApi
 import com.wcd.farm.data.remote.ServerClient
+import com.wcd.farm.data.remote.TimeLapseApi
 import com.wcd.farm.data.remote.UserApi
 import com.wcd.farm.data.remote.WeatherApi
 import com.wcd.farm.data.remote.WeatherApiClient
@@ -72,6 +73,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideTimeLapseApi(): TimeLapseApi {
+        return ServerClient.timeLapseApi
+    }
+
+    @Provides
+    @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
     }
@@ -102,8 +109,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMemorialRepository(galleryApi: GalleryApi): MemorialRepository {
-        return MemorialRepository(galleryApi)
+    fun provideMemorialRepository(galleryApi: GalleryApi, timeLapseApi: TimeLapseApi): MemorialRepository {
+        return MemorialRepository(galleryApi, timeLapseApi)
     }
 
     @Provides

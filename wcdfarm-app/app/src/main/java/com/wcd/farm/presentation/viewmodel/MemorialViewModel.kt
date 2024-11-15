@@ -40,6 +40,7 @@ class MemorialViewModel @AssistedInject constructor(
     val selectedDate = repository.selectedDate
     val pictureList = repository.pictureList
     val harmList = repository.harmList
+    val crtGarden = gardenRepository.crtGarden
 
     init {
         handleIntent()

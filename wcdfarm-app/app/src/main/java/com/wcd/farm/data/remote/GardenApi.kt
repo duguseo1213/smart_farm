@@ -4,12 +4,16 @@ import com.wcd.farm.data.model.GardenDTO
 import com.wcd.farm.data.model.GardenUserDTO
 import com.wcd.farm.data.model.PlantDiseaseDTO
 import com.wcd.farm.data.model.ResponseDTO
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.io.File
 
 interface GardenApi {
     companion object {
@@ -28,8 +32,9 @@ interface GardenApi {
     @POST("$GARDEN_BASE/remote-water")
     suspend fun postRemoteWater(@Body body: Map<String, String>): Response<ResponseDTO<String>>
 
+    @Multipart
     @POST("$GARDEN_BASE/plant-disease-detection")
-    suspend fun postDiseaseDetection(@Query("file") image: String): Response<ResponseDTO<PlantDiseaseDTO>>
+    suspend fun postDiseaseDetection(@Part file: MultipartBody.Part): Response<ResponseDTO<PlantDiseaseDTO>>
 
     @POST("$GARDEN_BASE/add-user-to-garden")
     suspend fun postAddUserToGarden(@Body body: Map<String, String>): Response<ResponseDTO<String>>
