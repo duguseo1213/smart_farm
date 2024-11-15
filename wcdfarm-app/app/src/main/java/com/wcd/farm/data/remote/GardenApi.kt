@@ -14,6 +14,7 @@ import retrofit2.http.Query
 interface GardenApi {
     companion object {
         private const val GARDEN_BASE = "garden"
+        private const val DEVICE_BASE = "device"
     }
 
     @GET("$GARDEN_BASE/get-gardens/{username}")
@@ -36,4 +37,7 @@ interface GardenApi {
 
     @POST("$GARDEN_BASE/add-garden")
     suspend fun postAddGarden(@Body body: Map<String, String>): Response<ResponseDTO<String>>
+
+    @GET("$DEVICE_BASE/get-stream-key")
+    suspend fun getStreamKey(@Query("gardenId") gardenId: Long): Response<ResponseDTO<String>>
 }

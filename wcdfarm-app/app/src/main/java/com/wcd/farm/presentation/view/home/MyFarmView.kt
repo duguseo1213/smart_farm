@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,6 +39,10 @@ fun MyFarmView(modifier: Modifier) {
     val interactionSource = remember {
         MutableInteractionSource()
     }
+
+    val crtGarden by viewModel.crtGarden.collectAsState()
+    val gardenStreamKeyMap by viewModel.gardenStreamKeyMap.collectAsState()
+
     BoxWithConstraints(modifier = modifier.noRippleClickable {
         when (farmDisplayType) {
             HomeViewState.IMAGE -> viewModel.sendIntent(HomeViewIntent.ShowFarmLive)
@@ -62,12 +67,14 @@ fun MyFarmView(modifier: Modifier) {
             }
 
             HomeViewState.LIVE -> {
-                VLCPlayer(
-                    modifier = Modifier
-                        .fillMaxHeight(0.7f)
-                        .fillMaxWidth(0.8f)
-                        .align(Alignment.BottomCenter), videoUrl = rtmpURL, subtitleUrl = null
-                )
+                gardenStreamKeyMap[crtGarden]?.let {
+                    VLCPlayer(
+                        modifier = Modifier
+                            .fillMaxHeight(0.7f)
+                            .fillMaxWidth(0.8f)
+                            .align(Alignment.BottomCenter), streamKey = it, subtitleUrl = null
+                    )
+                }
             }
         }
 
@@ -82,7 +89,7 @@ fun MyFarmView(modifier: Modifier) {
             onClick = { /*TODO*/ },
             modifier = Modifier
                 .offset(x = maxWidth * 0.75f, y = maxHeight * 0.71f)
-                .noRippleClickable {  }
+                .noRippleClickable { }
         ) {
             Text(
                 "효린이네",

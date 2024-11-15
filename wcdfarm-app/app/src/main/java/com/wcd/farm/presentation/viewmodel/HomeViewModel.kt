@@ -29,6 +29,9 @@ class HomeViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeViewModel, HomeViewState> by hiltMavericksViewModelFactory()
 
+    val crtGarden = gardenRepository.crtGarden
+    val gardenStreamKeyMap = gardenRepository.gardenStreamKeyMap
+
     init {
         handleIntent()
     }
@@ -58,5 +61,9 @@ class HomeViewModel @AssistedInject constructor(
 
     fun requestFilm() {
         gardenRepository.requestTakePicture()
+    }
+
+    fun getStreamKeys() {
+        gardenRepository.getStreamKeys()
     }
 }

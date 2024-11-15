@@ -12,15 +12,15 @@ import org.videolan.libvlc.Media
 import org.videolan.libvlc.MediaPlayer
 import org.videolan.libvlc.util.VLCVideoLayout
 
-const val rtmpURL = "rtmp://k11c104.p.ssafy.io/live/test.stream"
-
 @Composable
 fun VLCPlayer(
     modifier: Modifier,
-    videoUrl: String,
+    streamKey: String,
     subtitleUrl: String?,
 ) {
     val localContext = LocalContext.current
+    val videoUrl = "rtmp://k11c104.p.ssafy.io/live/$streamKey"
+
     val libVLC = remember(key1 = videoUrl, key2 = subtitleUrl) { LibVLC(localContext) }
     val media = remember(key1 = videoUrl, key2 = subtitleUrl) { Media(libVLC, Uri.parse(videoUrl)) }
     val mediaPlayer = remember(key1 = videoUrl, key2 = subtitleUrl) {
