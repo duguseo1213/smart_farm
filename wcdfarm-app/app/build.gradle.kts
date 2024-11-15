@@ -117,6 +117,9 @@ dependencies {
     //image loading
     implementation("io.coil-kt.coil3:coil-compose:3.0.2")
 
+    //rtmp live
+    implementation("org.videolan.android:libvlc-all:3.5.1")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

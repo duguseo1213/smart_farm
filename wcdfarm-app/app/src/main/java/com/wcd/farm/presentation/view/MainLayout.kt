@@ -49,6 +49,7 @@ import com.wcd.farm.presentation.view.info.InfoScreen
 import com.wcd.farm.presentation.view.mypage.MyPageScreen
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
+import com.wcd.farm.presentation.viewmodel.HomeViewModel
 import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -65,6 +66,8 @@ fun MainLayout() {
     val weatherViewModel: WeatherViewModel = hiltViewModel()
     val diseaseViewModel: DiseaseViewModel = mavericksViewModel()
     val showDiseaseView by diseaseViewModel.collectAsState(DiseaseViewState::showDiseaseView)
+    val homeViewModel: HomeViewModel = mavericksViewModel()
+
     LaunchedEffect(Unit) {
         val longitude = 126.8071876
         val latitude = 35.2040949
@@ -79,8 +82,9 @@ fun MainLayout() {
                 }
             }
         }
-        //weatherViewModel.getNearForecastWeather(latitude, longitude)
-        //weatherViewModel.getForecastWeather()
+        homeViewModel.getStreamKeys()
+        weatherViewModel.getNearForecastWeather(latitude, longitude)
+        weatherViewModel.getForecastWeather()
     }
 
     Scaffold(

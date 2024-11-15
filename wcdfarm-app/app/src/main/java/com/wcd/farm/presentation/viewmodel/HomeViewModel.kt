@@ -29,6 +29,9 @@ class HomeViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeViewModel, HomeViewState> by hiltMavericksViewModelFactory()
 
+    val crtGarden = gardenRepository.crtGarden
+    val gardenStreamKeyMap = gardenRepository.gardenStreamKeyMap
+
     init {
         handleIntent()
     }
@@ -45,6 +48,8 @@ class HomeViewModel @AssistedInject constructor(
                     HomeViewIntent.LeaveFarm -> setState { copy(isUserOnFarm = false) }
                     HomeViewIntent.ShowWeekWeather -> setState { copy(showWeekWeather = true) }
                     HomeViewIntent.HideWeekWeather -> setState { copy(showWeekWeather = false) }
+                    HomeViewIntent.ShowFarmImage -> setState { copy(displayType = HomeViewState.IMAGE) }
+                    HomeViewIntent.ShowFarmLive -> setState { copy(displayType = HomeViewState.LIVE) }
                 }
             }
         }
@@ -56,5 +61,9 @@ class HomeViewModel @AssistedInject constructor(
 
     fun requestFilm() {
         gardenRepository.requestTakePicture()
+    }
+
+    fun getStreamKeys() {
+        gardenRepository.getStreamKeys()
     }
 }
