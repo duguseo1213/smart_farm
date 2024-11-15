@@ -4,6 +4,7 @@ import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
 import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
 import com.ssafy.WeCanDoFarm.server.domain.device.dto.RegisterDeviceResponse;
+import com.ssafy.WeCanDoFarm.server.domain.device.dto.SyncDetectionStatusRequest;
 import com.ssafy.WeCanDoFarm.server.domain.device.entity.Device;
 import com.ssafy.WeCanDoFarm.server.domain.device.entity.DeviceStatus;
 import com.ssafy.WeCanDoFarm.server.domain.device.repository.DeviceRepository;
@@ -36,6 +37,13 @@ public class DeviceServiceImpl implements DeviceService {
     public String getStreamKey(Long gardenId) throws Exception {
         return gardenRepository.findById(gardenId).orElseThrow(() -> new BaseException(ErrorCode.SERVER_ERROR))
                             .getDevice().getStreamKey();
+    }
+
+    @Override
+    public void syncDetectionStatus(SyncDetectionStatusRequest request) throws Exception {
+        Device device = deviceRepository.findById(request.getDeviceId()).orElseThrow();
+        device.setOnDetection(request.getDetectionStatus());
+        deviceRepository.save(device);
     }
 
 }

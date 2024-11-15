@@ -1,10 +1,12 @@
 package com.ssafy.WeCanDoFarm.server.domain.harm.controller;
 
+import com.ssafy.WeCanDoFarm.server.core.annotation.CurrentUser;
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
 import com.ssafy.WeCanDoFarm.server.domain.harm.dto.*;
 import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmPicture;
 import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmVideo;
 import com.ssafy.WeCanDoFarm.server.domain.harm.service.HarmService;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -49,5 +51,17 @@ public class HarmController {
     {
         return SuccessResponse.of(harmService.getHarmVideo(harmPictureId));
     }
+    @GetMapping("/get-detection_status")
+    SuccessResponse<Boolean> getDetectionStatus(@RequestParam Long gardenId) throws Exception
+    {
+        return SuccessResponse.of(harmService.getDetectionStatus(gardenId));
+    }
+    @PostMapping("/toggle-detection")
+    SuccessResponse<String> toggleDetection(@CurrentUser User user, @RequestParam Long gardenId) throws Exception
+    {
+        harmService.toggleDetection(user.getId(),gardenId);
+        return SuccessResponse.empty();
+    }
+
 
 }

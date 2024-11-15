@@ -141,7 +141,6 @@ public class GardenServiceImpl implements GardenService {
         Garden garden = gardenRepository.findById(gardenId).orElseThrow();
         Long DeviceId = garden.getDevice().getDeviceId();
         FunctionMessage fm = new FunctionMessage(1,"물 주기",userId);
-        Object FunctionMessage;
         mqttOutboundGateway.publish("device/"+ DeviceId,fm);
     }
 
@@ -151,7 +150,6 @@ public class GardenServiceImpl implements GardenService {
         Garden garden = gardenRepository.findById(gardenId).orElseThrow();
         Long DeviceId = garden.getDevice().getDeviceId();
         FunctionMessage fm = new FunctionMessage(2,"사진 찍기",userId);
-        Object FunctionMessage;
         mqttOutboundGateway.publish("device/"+ DeviceId,fm);
     }
 

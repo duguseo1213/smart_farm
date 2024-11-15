@@ -16,4 +16,7 @@ public interface HarmService {
     String detectionHarmAnimal(MultipartFile file);
     List<GetHarmAnimalPictureResponse> getHarmAnimalPictures(Long gardenId) throws Exception;
     List<GetHarmHumanPictureResponse> getHarmHumanPictures(Long gardenId) throws Exception;
+    void toggleDetection(Long userId, Long gardenId) throws Exception;
+    Boolean getDetectionStatus(Long gardenId) throws Exception;
+
 }

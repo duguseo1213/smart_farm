@@ -1,5 +1,6 @@
 package com.ssafy.WeCanDoFarm.server.domain.harm.service;
 
+import com.ssafy.WeCanDoFarm.server.core.configuration.MqttConfig;
 import com.ssafy.WeCanDoFarm.server.core.exception.BaseException;
 import com.ssafy.WeCanDoFarm.server.core.exception.ErrorCode;
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
@@ -14,6 +15,7 @@ import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmPicture;
 import com.ssafy.WeCanDoFarm.server.domain.harm.entity.HarmVideo;
 import com.ssafy.WeCanDoFarm.server.domain.harm.repository.HarmPictureRepository;
 import com.ssafy.WeCanDoFarm.server.domain.harm.repository.HarmVideoRepository;
+import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.FunctionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -41,6 +43,7 @@ public class HarmServiceImpl implements HarmService {
     private final HarmVideoRepository HarmVideoRepository;
     private final GardenRepository gardenRepository;
     private final S3UploadService s3UploadService;
+    private final MqttConfig.MqttOutboundGateway mqttOutboundGateway;
 
     public String doHarmAnimalDetection(MultipartFile file) {
         ResponseEntity<String> responseEntity;
@@ -128,6 +131,20 @@ public class HarmServiceImpl implements HarmService {
             responses.add(response);
         }
         return responses;
+    }
+
+    @Override
+    public void toggleDetection(Long userId, Long gardenId) throws Exception {
+        Garden garden = gardenRepository.findById(gardenId).orElseThrow();
+        Long DeviceId = garden.getDevice().getDeviceId();
+        FunctionMessage fm = new FunctionMessage(3,"도난 토글",userId);
+        mqttOutboundGateway.publish("device/"+ DeviceId,fm);
+    }
+
+    @Override
+    public Boolean getDetectionStatus(Long gardenId) throws Exception {
+        return gardenRepository.findById(gardenId).orElseThrow().getDevice().getOnDetection();
+
     }
 
 }
