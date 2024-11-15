@@ -27,6 +27,9 @@ public class Device {
     @Column(name = "stream_key")
     String streamKey;
 
+    @Column(name = "on_detection")
+    Boolean onDetection;
+
     @Column(name = "registered_date")
     @CreatedDate
     private Date registeredDate;
@@ -36,6 +39,7 @@ public class Device {
         device.deviceStatus = deviceStatus;
         device.streamKey = streamKey;
         device.registeredDate = registeredDate;
+        device.onDetection = true;
         return device;
     }
     public static Device create(DeviceStatus deviceStatus,String streamKey){
@@ -43,7 +47,11 @@ public class Device {
         device.deviceStatus = deviceStatus;
         device.streamKey = streamKey;
         device.registeredDate = new Date();
+        device.onDetection = true;
         return device;
+    }
+    public void setOnDetection(boolean onDetection) {
+        this.onDetection = onDetection;
     }
 
 }
