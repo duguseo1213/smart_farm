@@ -48,7 +48,6 @@ public class NotificationService {
                 .setToken(user.getFcmToken())
                 .setNotification(notification)
                 .build();
-
         try {
             log.info("전송 시작됨!");
             firebaseMessaging.send(message);
