@@ -13,9 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wcd.farm.R
 import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.models.DividerProperties
 import ir.ehsannarmani.compose_charts.models.DotProperties
@@ -72,10 +75,13 @@ fun GrowthGraphView(modifier: Modifier) {
 
         )
         Text(
-            "성장 그래프",
-            Modifier
-                .background(Color(0XFFFFFCEB))
-                .padding(18.dp, 8.dp), fontSize = 22.sp
+            text = "성장 그래프",
+            fontFamily = FontFamily(Font(R.font.bookend_semibold)),
+            color = Color(0xFF204833),
+            fontSize = 22.sp,
+            modifier = Modifier
+                .background(Color(0xFFFFFCEB))
+                .padding(18.dp, 8.dp)
         )
     }
 }

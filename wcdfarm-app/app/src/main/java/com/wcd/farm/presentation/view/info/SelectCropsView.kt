@@ -34,10 +34,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wcd.farm.R
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 
 @Composable
@@ -70,8 +73,9 @@ fun CropsSelectButton(onClick: () -> Unit) {
         ) {
             Text(
                 text = "상추",
-                color = Color.Black,
-                fontSize = 24.sp,
+                fontFamily = FontFamily(Font(R.font.bookend_semibold)),
+                color = Color(0xFF204833),
+                fontSize = 20.sp,
                 modifier = Modifier.padding(16.dp, 0.dp)
             )
             Image(
@@ -97,6 +101,7 @@ fun CropsListView(showCropsList: Boolean, onDismissRequest: () -> Unit) {
         expanded = showCropsList,
         onDismissRequest = onDismissRequest,
         modifier = Modifier
+            .background(Color(0xFFFFFCEB))
             .width(calculatedWidth)
             .clip(RoundedCornerShape(16.dp)),
     ) {
@@ -108,7 +113,8 @@ fun CropsListView(showCropsList: Boolean, onDismissRequest: () -> Unit) {
 
 @Composable
 fun CropsItemView(onDismissRequest: () -> Unit) {
-    DropdownMenuItem(text = { Text("상추") }, onClick = { onDismissRequest() })
+    DropdownMenuItem(text = { Text("상추") },
+        onClick = { onDismissRequest() })
 }
 
 @Preview(showBackground = true)

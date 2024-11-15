@@ -36,6 +36,8 @@ class HomeViewModel @AssistedInject constructor(
         handleIntent()
     }
 
+    val gardenList = gardenRepository.gardenList
+
     fun sendIntent(intent: HomeViewIntent) = viewModelScope.launch(Dispatchers.Main) {
         homeViewIntent.send(intent)
     }
@@ -53,6 +55,10 @@ class HomeViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    fun getGardenList() {
+        gardenRepository.getGardenList()
     }
 
     fun requestWatering() {

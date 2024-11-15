@@ -1,6 +1,7 @@
 package com.wcd.farm.data.remote
 
 import com.wcd.farm.data.model.GardenDTO
+import com.wcd.farm.data.model.GardenState
 import com.wcd.farm.data.model.GardenUserDTO
 import com.wcd.farm.data.model.PlantDiseaseDTO
 import com.wcd.farm.data.model.ResponseDTO
@@ -21,11 +22,14 @@ interface GardenApi {
         private const val DEVICE_BASE = "device"
     }
 
-    @GET("$GARDEN_BASE/get-gardens/{username}")
-    suspend fun getGardens(@Path("username") username: String): Response<ResponseDTO<GardenDTO>>
+    @GET("$GARDEN_BASE/get-gardens")
+    suspend fun getGardens(): Response<ResponseDTO<List<GardenDTO>>>
 
     @GET("$GARDEN_BASE/get-gardens-users/{gardenId}")
     suspend fun getGardensUsers(@Path("gardenId") gardenId: Long): Response<ResponseDTO<List<GardenUserDTO>>>
+
+    @GET("$GARDEN_BASE/get-garden-data")
+    suspend fun getGardenData(): Response<ResponseDTO<GardenState>>
 
     @POST("$GARDEN_BASE/take-picture")
     suspend fun postTakePicture(@Body body: Map<String, String>): Response<ResponseDTO<String>>

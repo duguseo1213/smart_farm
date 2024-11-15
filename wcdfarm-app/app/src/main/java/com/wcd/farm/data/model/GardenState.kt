@@ -4,8 +4,7 @@ import java.math.BigInteger
 import java.util.Date
 
 data class GardenState(
-    val gardenstatusId: BigInteger,
-    val gardenId: BigInteger,
+    val temperature: Double,
     val humidity: Double,
     val illuminance: Double,
     val soilMoisture: Double,

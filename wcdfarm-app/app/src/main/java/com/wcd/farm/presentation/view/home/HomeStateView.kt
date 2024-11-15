@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -39,17 +40,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import com.wcd.farm.R
+import com.wcd.farm.presentation.viewmodel.InfoViewModel
 
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun StateView(modifier: Modifier) {
+    val infoViewModel: InfoViewModel = hiltViewModel()
+    val gardenState by infoViewModel.gardenState.collectAsState()
     TextButton(
         onClick = { Log.e("TEST", "Click") },
         contentPadding = PaddingValues(0.dp),
@@ -66,9 +71,9 @@ fun StateView(modifier: Modifier) {
         ) {
 
             Spacer(modifier = Modifier.width(10.dp))
-            StateBar(icon = Icons.Outlined.WaterDrop, 90, Color(0xFF86C6C6))
+            StateBar(icon = Icons.Outlined.WaterDrop, gardenState?.humidity?.toInt() ?: 100, Color(0xFF86C6C6), iconColor = Color(0xFF86C6C6))
             Spacer(modifier = Modifier.width(24.dp))
-            StateBar(icon = Icons.Outlined.WbSunny, ratio = 40, Color(0xFFFFD000))
+            StateBar(icon = Icons.Outlined.WbSunny, gardenState?.illuminance?.toInt() ?: 100, Color(0xFFFFD000), iconColor = Color(0xFFFFD000))
 
 
             var isPlaying by remember { mutableStateOf(false) }
@@ -88,21 +93,6 @@ fun StateView(modifier: Modifier) {
                     //.clickable(indication = null) { isPlaying = !isPlaying }
             )
 
-            LottieAnimation(
-                composition = composition,
-                progress = progress,
-                modifier = Modifier
-                    .size(200.dp)
-                    .clickable { isPlaying = !isPlaying }
-            )
-
-            LottieAnimation(
-                composition = composition,
-                progress = progress,
-                modifier = Modifier
-                    .size(200.dp)
-                    .clickable { isPlaying = !isPlaying }
-            )
             
             Button(onClick = { /*TODO*/ }) {
                 
@@ -113,7 +103,7 @@ fun StateView(modifier: Modifier) {
 }
 
 @Composable
-fun StateBar(icon: ImageVector, ratio: Int, color: Color) {
+fun StateBar(icon: ImageVector, ratio: Int, color: Color, iconColor: Color) {
     Column(
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -121,7 +111,8 @@ fun StateBar(icon: ImageVector, ratio: Int, color: Color) {
         Icon(
             imageVector = icon,
             contentDescription = "Water",
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
+            tint = iconColor
         )
         Spacer(modifier = Modifier.fillMaxHeight(0.05f))
 

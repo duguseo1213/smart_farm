@@ -13,8 +13,11 @@ class GardenRepository @Inject constructor(private val gardenApi: GardenApi) {
     private val _gardenList = MutableStateFlow<List<Long>>(listOf(2L))
     val gardenList = _gardenList.asStateFlow()
 
-    private val _crtGarden = MutableStateFlow(2L)
+    private val _crtGarden = MutableStateFlow(1L)
     val crtGarden = _crtGarden.asStateFlow()
+
+    private val _crtGardenState = MutableStateFlow<GardenState?>(null)
+    val crtGardenState = _crtGardenState.asStateFlow()
 
     private val _gardenStreamKeyMap = MutableStateFlow<Map<Long, String>>(emptyMap())
     val gardenStreamKeyMap = _gardenStreamKeyMap.asStateFlow()
@@ -43,6 +46,32 @@ class GardenRepository @Inject constructor(private val gardenApi: GardenApi) {
                 Log.e("TEST", response.body().toString())
             } else {
                 Log.e("TEST", response.errorBody()!!.string())
+            }
+        }
+    }
+
+    fun getGardenList() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = gardenApi.getGardens()
+
+            if(response.isSuccessful) {
+                val gardenList = response.body()?.data
+
+                if (gardenList != null) {
+                    _gardenList.value = gardenList
+                }
+            }
+        }
+    }
+
+    fun getGardenState() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = gardenApi.getGardenData()
+
+            if(response.isSuccessful) {
+                val gardenState = response.body()?.data
+
+                _crtGardenState.value = gardenState
             }
         }
     }

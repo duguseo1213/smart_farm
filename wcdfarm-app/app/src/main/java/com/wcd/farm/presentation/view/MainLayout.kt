@@ -82,6 +82,8 @@ fun MainLayout() {
                 }
             }
         }
+        //homeViewModel.getGardenList()
+
         homeViewModel.getStreamKeys()
         weatherViewModel.getNearForecastWeather(latitude, longitude)
         weatherViewModel.getForecastWeather()
