@@ -33,6 +33,7 @@ fun HomeScreen() {
         TodayWeatherView(Modifier.weight(0.16f))
         Spacer(Modifier.weight(0.01f))
         MyFarmView(modifier = Modifier.weight(0.35f))
+        //ExoPlayerUI(modifier = Modifier.weight(0.35f))
         Spacer(Modifier.weight(0.03f))
         MenuContainer(modifier = Modifier.weight(0.1f))
         Spacer(modifier = Modifier.weight(0.03f))

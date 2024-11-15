@@ -22,12 +22,18 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.sp
 import com.wcd.farm.R
 
+
 @Composable
 fun MyFarmView(modifier: Modifier) {
     BoxWithConstraints(modifier = modifier) {
         val viewPortHeight = maxHeight
         val viewPortWidth = maxWidth
-        Image(
+
+        VLCPlayer(modifier = Modifier
+            .fillMaxHeight(0.7f)
+            .fillMaxWidth(0.8f)
+            .align(Alignment.BottomCenter), videoUrl = rtmpURL, subtitleUrl = null)
+        /*Image(
             painter = painterResource(id = R.drawable.dog_on_farm),
             contentDescription = "",
             alignment = Alignment.BottomCenter,
@@ -36,7 +42,7 @@ fun MyFarmView(modifier: Modifier) {
                 .fillMaxWidth(0.8f)
                 .align(Alignment.BottomCenter),
             contentScale = ContentScale.FillBounds
-        )
+        )*/
         Image(
             painter = painterResource(id = R.drawable.house_frame),
             contentDescription = "frame",

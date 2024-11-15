@@ -111,6 +111,20 @@ dependencies {
     //lottie
     implementation ("com.airbnb.android:lottie-compose:6.0.0")
 
+    //
+    /*implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+    implementation("com.google.android.exoplayer:exoplayer-core:2.19.1")
+    implementation("com.google.android.exoplayer:exoplayer-dash:2.19.1")
+    implementation("com.google.android.exoplayer:exoplayer-ui:2.19.1")
+*/
+    implementation("androidx.media3:media3-exoplayer:1.4.1")
+    implementation("androidx.media3:media3-ui:1.4.1")
+    implementation("androidx.media3:media3-exoplayer-rtsp:1.4.1")
+    implementation("androidx.media3:media3-datasource-rtmp:1.4.1")
+    implementation("androidx.media3:media3-exoplayer-hls:1.4.1")
+
+    implementation("org.videolan.android:libvlc-all:3.5.1")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
