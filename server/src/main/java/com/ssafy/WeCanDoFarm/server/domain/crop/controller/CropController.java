@@ -38,4 +38,10 @@ public class CropController {
         ;
         return SuccessResponse.of(cropService.getCrop(gardenId));
     }
+
+    @PostMapping("/recommand-crop")
+    public SuccessResponse<List<String>> recommandCrop(String cropName){
+
+        return SuccessResponse.of(cropService.recommendCrop(cropName));
+    }
 }

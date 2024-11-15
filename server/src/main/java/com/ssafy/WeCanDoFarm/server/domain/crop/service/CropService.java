@@ -40,4 +40,8 @@ public class CropService {
     public List<String> getCrop(Long gardenId) {
         return cropRepository.getCropNamesByGardenId(gardenId);
     }
+
+    public List<String> recommendCrop(String cropName) {
+        return cropRepository.recommandCropByCropName(cropName);
+    }
 }

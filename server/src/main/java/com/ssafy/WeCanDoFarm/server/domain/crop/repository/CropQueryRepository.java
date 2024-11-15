@@ -7,4 +7,6 @@ public interface CropQueryRepository {
     void deleteCropByName(String CropName);
 
     List<String> getCropNamesByGardenId(Long gardenId);
+
+    List<String> recommandCropByCropName(String cropName);
 }

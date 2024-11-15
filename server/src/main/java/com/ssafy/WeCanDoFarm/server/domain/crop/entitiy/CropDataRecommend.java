@@ -16,14 +16,15 @@ public class CropDataRecommend {
     @Column(name = "crop_data_recommand_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "main_crop_id")
-    private Crop mainCrop;
+    private CropData mainCrop;
 
-    @Column(name = "crop_recommand")
-    private String cropRecommand;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "crop_recommand_id")
+    private CropData cropRecommand;
 
-    public CropDataRecommend create(Crop mainCrop, String cropRecommand) {
+    public CropDataRecommend create(CropData mainCrop, CropData cropRecommand) {
         CropDataRecommend cropDataRecommend = new CropDataRecommend();
         cropDataRecommend.mainCrop = mainCrop;
         cropDataRecommend.cropRecommand = cropRecommand;
