@@ -31,12 +31,14 @@ public class NotificationService {
     @EventListener
     // @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendNotificationEvent(NotificationEvent notificationEvent) {
+        log.info("알람 정보 {}",notificationEvent.toString());
         log.info("알람 전송!");
         User user = usersRepository.findById(notificationEvent.getTargetUserId())
                 .orElseThrow(
                         () -> new BaseException(ErrorCode.NOT_FOUND_USER)
                 );
-
+        log.info(user.getUsername());
+        log.info(user.getFcmToken());
         Notification notification = Notification.builder()
                 .setTitle(notificationEvent.getTitle())
                 .setBody(notificationEvent.getBody())
@@ -48,6 +50,7 @@ public class NotificationService {
                 .build();
 
         try {
+            log.info("전송 시작됨!");
             firebaseMessaging.send(message);
         } catch (FirebaseMessagingException e) {
             throw new BaseException(ErrorCode.NOT_SENDED_ALARM);
