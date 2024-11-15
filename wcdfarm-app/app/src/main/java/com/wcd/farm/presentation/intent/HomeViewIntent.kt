@@ -5,4 +5,6 @@ sealed class HomeViewIntent {
     object LeaveFarm: HomeViewIntent()
     object ShowWeekWeather: HomeViewIntent()
     object HideWeekWeather: HomeViewIntent()
+    object ShowFarmImage: HomeViewIntent()
+    object ShowFarmLive: HomeViewIntent()
 }

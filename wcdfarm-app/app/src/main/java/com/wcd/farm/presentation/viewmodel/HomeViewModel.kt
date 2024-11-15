@@ -43,6 +43,8 @@ class HomeViewModel @AssistedInject constructor(
                     HomeViewIntent.LeaveFarm -> setState { copy(isUserOnFarm = false) }
                     HomeViewIntent.ShowWeekWeather -> setState { copy(showWeekWeather = true) }
                     HomeViewIntent.HideWeekWeather -> setState { copy(showWeekWeather = false) }
+                    HomeViewIntent.ShowFarmImage -> setState { copy(displayType = HomeViewState.IMAGE) }
+                    HomeViewIntent.ShowFarmLive -> setState { copy(displayType = HomeViewState.LIVE) }
                 }
             }
         }
