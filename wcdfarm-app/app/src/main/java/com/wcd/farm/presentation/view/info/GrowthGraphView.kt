@@ -65,7 +65,7 @@ fun GrowthGraphView(modifier: Modifier) {
             dotsProperties = DotProperties(
                 enabled = true,
                 color = SolidColor(Color(0xFF1A6D40)),
-                radius = 5.dp,
+                radius = 3.dp,
             ),
             maxValue = 100.0,
             minValue = 0.0

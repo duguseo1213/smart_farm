@@ -4,6 +4,7 @@ import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.hilt.AssistedViewModelFactory
 import com.airbnb.mvrx.hilt.hiltMavericksViewModelFactory
+import com.wcd.farm.data.repository.GardenRepository
 import com.wcd.farm.presentation.intent.HomeViewIntent
 import com.wcd.farm.presentation.state.HomeViewState
 import dagger.assisted.Assisted
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel @AssistedInject constructor(
-    @Assisted initialState: HomeViewState
+    @Assisted initialState: HomeViewState,
+    private val gardenRepository: GardenRepository
 ): MavericksViewModel<HomeViewState>(initialState) {
 
     private val homeViewIntent = Channel<HomeViewIntent>()
@@ -51,10 +53,10 @@ class HomeViewModel @AssistedInject constructor(
     }
 
     fun requestWatering() {
-
+        gardenRepository.requestRemoteWater()
     }
 
     fun requestFilm() {
-
+        gardenRepository.requestTakePicture()
     }
 }

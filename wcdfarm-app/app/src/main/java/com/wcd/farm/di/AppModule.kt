@@ -3,12 +3,16 @@ package com.wcd.farm.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.wcd.farm.data.remote.AuthApi
+import com.wcd.farm.data.remote.DeviceApi
+import com.wcd.farm.data.remote.GalleryApi
 import com.wcd.farm.data.remote.GardenApi
 import com.wcd.farm.data.remote.HarmApi
 import com.wcd.farm.data.remote.ServerClient
+import com.wcd.farm.data.remote.UserApi
 import com.wcd.farm.data.remote.WeatherApi
 import com.wcd.farm.data.remote.WeatherApiClient
 import com.wcd.farm.data.repository.DiseaseRepository
+import com.wcd.farm.data.repository.GardenRepository
 import com.wcd.farm.data.repository.MemorialRepository
 import com.wcd.farm.data.repository.ServerRepository
 import com.wcd.farm.data.repository.WeatherRepository
@@ -50,6 +54,24 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideUserApi(): UserApi {
+        return ServerClient.userApi
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeviceApi(): DeviceApi {
+        return ServerClient.deviceApi
+    }
+
+    @Provides
+    @Singleton
+    fun provideGalleryApi(): GalleryApi {
+        return ServerClient.galleryApi
+    }
+
+    @Provides
+    @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
     }
@@ -68,14 +90,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDiseaseRepository(): DiseaseRepository {
-        return DiseaseRepository()
+    fun provideGardenRepository(gardenApi: GardenApi): GardenRepository {
+        return GardenRepository(gardenApi)
     }
 
     @Provides
     @Singleton
-    fun provideMemorialRepository(): MemorialRepository {
-        return MemorialRepository()
+    fun provideDiseaseRepository(gardenApi: GardenApi): DiseaseRepository {
+        return DiseaseRepository(gardenApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMemorialRepository(galleryApi: GalleryApi): MemorialRepository {
+        return MemorialRepository(galleryApi)
     }
 
     @Provides

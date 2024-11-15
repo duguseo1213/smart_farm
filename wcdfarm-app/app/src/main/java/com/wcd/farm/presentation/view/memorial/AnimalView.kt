@@ -6,14 +6,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.airbnb.mvrx.compose.mavericksViewModel
+import com.wcd.farm.presentation.viewmodel.MemorialViewModel
 
 
 @Composable
 fun AnimalScreen() {
-    val animalList = listOf(1, 2, 3)
+    val viewModel: MemorialViewModel = mavericksViewModel()
+    val harmList by viewModel.harmList.collectAsState()
     val listState = rememberLazyListState()
 
     LazyColumn(
@@ -22,8 +27,10 @@ fun AnimalScreen() {
             .fillMaxHeight(),
         state = listState
     ) {
-        items(animalList) { animal ->
-            InvasionView()
+        items(harmList) { harm ->
+            if(harm.harmTarget != "사람") {
+                InvasionView(harm, "방문")
+            }
         }
     }
 }

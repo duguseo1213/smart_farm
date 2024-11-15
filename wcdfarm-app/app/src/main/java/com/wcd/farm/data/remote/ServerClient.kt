@@ -106,4 +106,16 @@ object ServerClient {
     val HarmApi: HarmApi by lazy {
         retrofit.create(HarmApi::class.java)
     }
+
+    val deviceApi: DeviceApi by lazy {
+        retrofit.create(DeviceApi::class.java)
+    }
+
+    val userApi: UserApi by lazy {
+        retrofit.create(UserApi::class.java)
+    }
+
+    val galleryApi: GalleryApi by lazy {
+        retrofit.create(GalleryApi::class.java)
+    }
 }

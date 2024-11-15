@@ -10,21 +10,42 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.DpOffset
+import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun InfoScreen() {
     Column(Modifier.fillMaxHeight()) {
-        Spacer(modifier = Modifier.weight(0.05f))
-        CrtStateView(Modifier.weight(0.2f).clip(RoundedCornerShape(16.dp)).shadow(4.dp, RoundedCornerShape(16.dp))) // 0.25
+        Spacer(modifier = Modifier.weight(0.01f))
+        CrtStateView(
+            Modifier
+                .rsBlurShadow(4.dp, shape = RoundedCornerShape(16.dp), color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .weight(0.2f)
+        )
         Spacer(modifier = Modifier.weight(0.05f))
 
-        SelectCropsView(Modifier.weight(0.075f).clip(RoundedCornerShape(16.dp))) // 0.1f
+        SelectCropsView(
+            Modifier
+                .rsBlurShadow(4.dp, shape = RoundedCornerShape(16.dp), color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .weight(0.075f)
+        )
         Spacer(modifier = Modifier.weight(0.025f))
 
-        GrowthGraphView(Modifier.weight(0.4f).clip(RoundedCornerShape(16.dp))) // 0.4f
+        GrowthGraphView(
+            Modifier
+                .rsBlurShadow(4.dp, shape = RoundedCornerShape(16.dp), color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .weight(0.4f)
+                ) // 0.4f
         Spacer(modifier = Modifier.weight(0.05f))
 
-        Recommend(Modifier.weight(0.2f).clip(RoundedCornerShape(16.dp))) // 0.25f
+        Recommend(Modifier
+            .rsBlurShadow(4.dp, shape = RoundedCornerShape(16.dp), color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))
+            .weight(0.2f)
+            .clip(RoundedCornerShape(16.dp))) // 0.25f
         Spacer(modifier = Modifier.weight(0.025f))
     }
 }

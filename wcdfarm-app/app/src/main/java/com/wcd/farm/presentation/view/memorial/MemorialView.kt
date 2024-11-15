@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -41,11 +42,12 @@ import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import com.wcd.farm.R
+import com.wcd.farm.data.model.HarmDTO
 import com.wcd.farm.presentation.intent.MemorialViewIntent
 import com.wcd.farm.presentation.state.MemorialViewState
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.MemorialViewModel
-
+import java.time.format.DateTimeFormatter
 
 
 const val GALLERY_VIEW = 1
@@ -68,16 +70,16 @@ fun MemorialScreen() {
                 .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            MemorialMenu(showView == GALLERY_VIEW) {
+            MemorialMenu(showView == GALLERY_VIEW, "갤러리", R.drawable.gallery_icon) {
                 viewModel.sendIntent(MemorialViewIntent.ShowGalleryView)
             }
-            MemorialMenu(showView == GROWTH_VIEW) {
+            MemorialMenu(showView == GROWTH_VIEW, "성장과정", R.drawable.growth_icon) {
                 viewModel.sendIntent(MemorialViewIntent.ShowGrowthView)
             }
-            MemorialMenu(showView == ANIMAL_VIEW) {
+            MemorialMenu(showView == ANIMAL_VIEW, "방문동물", R.drawable.animal_icon) {
                 viewModel.sendIntent(MemorialViewIntent.ShowAnimalView)
             }
-            MemorialMenu(showView == THEFT_VIEW) {
+            MemorialMenu(showView == THEFT_VIEW, "도난관리", R.drawable.theft_icon) {
                 viewModel.sendIntent(MemorialViewIntent.ShowTheftView)
             }
         }
@@ -94,12 +96,12 @@ fun MemorialScreen() {
 
 
 @Composable
-fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
+fun MemorialMenu(crtMenu: Boolean, menuTitle: String, iconResId: Int, onClick: () -> Unit) {
     val color =
-        ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0XFF1A874D))
+        ButtonDefaults.buttonColors(containerColor = Color(0XFF2F6348), contentColor = Color(0XFFECEDC1))
     val color2 =
         ButtonDefaults.buttonColors(
-            containerColor = Color(0XFF197142),
+            containerColor = Color(0XFF1A874D),
             contentColor = Color(0XFFECEDC1)
         )
 
@@ -109,7 +111,7 @@ fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
         shape = RoundedCornerShape(16.dp),
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier
-            .size(70.dp, 72.dp)
+            .size(75.dp, 77.dp)
             .rsBlurShadow(
                 4.dp,
                 shape = RoundedCornerShape(16.dp),
@@ -120,10 +122,11 @@ fun MemorialMenu(crtMenu: Boolean, onClick: () -> Unit) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
-                imageVector = Icons.Outlined.CollectionsBookmark,
-                contentDescription = "Gallery"
+                painter = painterResource(id = iconResId),
+                contentDescription = menuTitle,
+                modifier = Modifier.size(40.dp)
             )
-            Text("갤러리")
+            Text(menuTitle)
         }
     }
 }
@@ -143,10 +146,12 @@ fun EmptyListView(notify: String) {
 }
 
 @Composable
-fun InvasionView() {
+fun InvasionView(harm: HarmDTO, harmType: String) {
+    val invasionDate = harm.createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    val invasionTime = harm.createdDate.format(DateTimeFormatter.ofPattern("a hh:mm"))
     Column {
         Text(
-            "2024-09-17",
+            invasionDate,
             color = Color(0xFF204833),
             fontSize = 28.sp,
             modifier = Modifier.padding(8.dp, 24.dp),
@@ -165,24 +170,24 @@ fun InvasionView() {
                     .padding(8.dp)
                     .fillMaxWidth()
             ) {
-                Text("오후 03:30 강아지 방문", fontSize = 20.sp, fontFamily = customFontFamily3)
+                Text("$invasionTime ${harm.harmTarget} $harmType", fontSize = 20.sp, fontFamily = customFontFamily3)
                 Button(
                     onClick = { /*TODO*/ },
                     shape = RectangleShape,
                     modifier = Modifier
                         .padding(0.dp)
-                        .size(32.dp),
+                        .size(30.dp),
                     colors = buttonTransparentTheme(),
                     contentPadding = PaddingValues(0.dp)
                 ) {
                     Icon(
-                        Icons.Outlined.DeleteForever,
+                        Icons.Outlined.DeleteOutline,
                         contentDescription = "Delete",
                         modifier = Modifier.size(36.dp)
                     )
                 }
-
             }
+
             Button(
                 onClick = { /*TODO*/ },
                 shape = RectangleShape,

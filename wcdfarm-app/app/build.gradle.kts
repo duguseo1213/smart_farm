@@ -5,6 +5,7 @@ plugins {
     kotlin("kapt")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -50,9 +51,11 @@ android {
 
 dependencies {
 
+    implementation(libs.firebase.messaging)
     val composeBom = platform("androidx.compose:compose-bom:2024.09.03")
     implementation(composeBom)
     androidTestImplementation(composeBom)
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
 
     //ui
     implementation(libs.androidx.ui)
@@ -111,18 +114,10 @@ dependencies {
     //lottie
     implementation ("com.airbnb.android:lottie-compose:6.0.0")
 
-    //
-    /*implementation("com.google.android.exoplayer:exoplayer:2.19.1")
-    implementation("com.google.android.exoplayer:exoplayer-core:2.19.1")
-    implementation("com.google.android.exoplayer:exoplayer-dash:2.19.1")
-    implementation("com.google.android.exoplayer:exoplayer-ui:2.19.1")
-*/
-    implementation("androidx.media3:media3-exoplayer:1.4.1")
-    implementation("androidx.media3:media3-ui:1.4.1")
-    implementation("androidx.media3:media3-exoplayer-rtsp:1.4.1")
-    implementation("androidx.media3:media3-datasource-rtmp:1.4.1")
-    implementation("androidx.media3:media3-exoplayer-hls:1.4.1")
+    //image loading
+    implementation("io.coil-kt.coil3:coil-compose:3.0.2")
 
+    //rtmp live
     implementation("org.videolan.android:libvlc-all:3.5.1")
 
     implementation(libs.androidx.core.ktx)

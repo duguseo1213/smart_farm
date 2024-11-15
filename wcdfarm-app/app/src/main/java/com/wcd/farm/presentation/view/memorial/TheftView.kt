@@ -1,21 +1,26 @@
 package com.wcd.farm.presentation.view.memorial
 
-import androidx.collection.emptyIntList
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.airbnb.mvrx.compose.mavericksViewModel
+import com.wcd.farm.presentation.viewmodel.MemorialViewModel
 
 @Composable
 fun TheftScreen() {
-    val theftList = emptyIntList()
+    val viewModel: MemorialViewModel = mavericksViewModel()
+    val harmList by viewModel.harmList.collectAsState()
     val listState = rememberLazyListState()
 
-    if (theftList.isEmpty()) {
+    if (harmList.isEmpty()) {
         EmptyListView(notify = "도난 이력이 없습니다.")
     }
 
@@ -25,8 +30,10 @@ fun TheftScreen() {
             .fillMaxHeight(),
         state = listState
     ) {
-        items(theftList.size) { animal ->
-            InvasionView()
+        items(harmList) { harm ->
+            if(harm.harmTarget == "사람") {
+                InvasionView(harm, "침입")
+            }
         }
     }
 }
