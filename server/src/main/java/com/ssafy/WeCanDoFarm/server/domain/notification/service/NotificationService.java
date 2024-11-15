@@ -31,6 +31,7 @@ public class NotificationService {
     @EventListener
     // @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendNotificationEvent(NotificationEvent notificationEvent) {
+        log.info("알람 전송!");
         User user = usersRepository.findById(notificationEvent.getTargetUserId())
                 .orElseThrow(
                         () -> new BaseException(ErrorCode.NOT_FOUND_USER)
@@ -51,5 +52,6 @@ public class NotificationService {
         } catch (FirebaseMessagingException e) {
             throw new BaseException(ErrorCode.NOT_SENDED_ALARM);
         }
+        log.info("전송! 완료");
     }
 }
