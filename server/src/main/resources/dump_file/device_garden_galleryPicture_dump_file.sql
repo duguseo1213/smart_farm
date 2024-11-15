@@ -1,7 +1,7 @@
 INSERT INTO WCDFarm.devices (registered_date, device_id, stream_key, device_status) VALUES
-('2023-11-01', 1,'donggin1', 'AVAILABLE'),
-('2023-10-29', 2,'donggin2', 'AVAILABLE'),
-('2023-10-28', 3,'donggin3', 'AVAILABLE');
+('2023-11-01', 1,'cctv001.stream', 'AVAILABLE'),
+('2023-10-29', 2,'cctv002.stream', 'AVAILABLE'),
+('2023-10-28', 3,'cctv003.stream', 'AVAILABLE');
 
 INSERT INTO WCDFarm.gardens (created_date, device_id, garden_id, garden_address, garden_image, garden_name) VALUES
 ('2023-11-01', 1, 1, '서울시 강남구', 'https://c207-bucket.s3.ap-southeast-2.amazonaws.com/35543_13467_3220.jpg', '강남 정원'),
