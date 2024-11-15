@@ -5,9 +5,7 @@ import com.ssafy.WeCanDoFarm.server.domain.device.dto.RegisterDeviceResponse;
 import com.ssafy.WeCanDoFarm.server.domain.device.service.DeviceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -21,6 +19,10 @@ public class DeviceController {
     @PostMapping("/register")
     public SuccessResponse<RegisterDeviceResponse> registerDevice() throws Exception{
         return SuccessResponse.of(deviceService.registerDevice());
+    }
+    @GetMapping("/get-stream-key")
+    public SuccessResponse<String> getStreamKey(@RequestParam Long gardenId) throws Exception{
+        return SuccessResponse.of(deviceService.getStreamKey(gardenId));
     }
 
 }
