@@ -19,5 +19,10 @@ public class CropDto {
         private String crops;
     }
 
+    @Data
+    @AllArgsConstructor
+    public static class GetCropRequest{
+        private Long gardenId;
+    }
 
 }

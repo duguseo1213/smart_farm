@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/v1/crop")
@@ -28,5 +30,18 @@ public class CropController {
     public SuccessResponse<Void> deleteCrop(CropDto.DeleteCropRequest request){
         cropService.deleteCrop(request);
         return SuccessResponse.empty();
+    }
+
+    @GetMapping("/get-crops/{gardenId}")
+    @Operation(summary = "작물 조회",description = "작물 조회")
+    public SuccessResponse<List<String>> deleteCrop(@PathVariable Long gardenId){
+        ;
+        return SuccessResponse.of(cropService.getCrop(gardenId));
+    }
+
+    @PostMapping("/recommand-crop")
+    public SuccessResponse<List<String>> recommandCrop(String cropName){
+
+        return SuccessResponse.of(cropService.recommendCrop(cropName));
     }
 }
