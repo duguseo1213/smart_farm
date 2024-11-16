@@ -39,7 +39,9 @@ class MemorialViewModel @AssistedInject constructor(
 
     val selectedDate = repository.selectedDate
     val pictureList = repository.pictureList
-    val harmList = repository.harmList
+    val harmAnimalList = repository.harmAnimalList
+    val harmTheftList = repository.harmTheftList
+
     val crtGarden = gardenRepository.crtGarden
 
     init {
@@ -72,5 +74,13 @@ class MemorialViewModel @AssistedInject constructor(
 
     fun getAllPictures(gardenId: Long) {
         repository.getAllPictures(gardenId)
+    }
+
+    fun getHarmAnimalList(gardenId: Long) {
+        repository.getHarmAnimalList(gardenId)
+    }
+
+    fun getHarmTheftList(gardenId: Long) {
+        repository.getHarmTheftList(gardenId)
     }
 }

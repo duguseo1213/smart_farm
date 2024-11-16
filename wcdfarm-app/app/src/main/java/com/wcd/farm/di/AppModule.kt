@@ -49,12 +49,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHarmApi(): HarmApi {
-        return ServerClient.HarmApi
-    }
-
-    @Provides
-    @Singleton
     fun provideUserApi(): UserApi {
         return ServerClient.userApi
     }
@@ -75,6 +69,12 @@ object AppModule {
     @Singleton
     fun provideTimeLapseApi(): TimeLapseApi {
         return ServerClient.timeLapseApi
+    }
+
+    @Provides
+    @Singleton
+    fun provideHarmApi(): HarmApi {
+        return ServerClient.harmApi
     }
 
     @Provides
@@ -109,8 +109,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMemorialRepository(galleryApi: GalleryApi, timeLapseApi: TimeLapseApi): MemorialRepository {
-        return MemorialRepository(galleryApi, timeLapseApi)
+    fun provideMemorialRepository(galleryApi: GalleryApi, timeLapseApi: TimeLapseApi, harmApi: HarmApi): MemorialRepository {
+        return MemorialRepository(galleryApi, timeLapseApi, harmApi)
     }
 
     @Provides

@@ -1,6 +1,7 @@
 package com.wcd.farm.data.repository
 
 import android.util.Log
+import com.wcd.farm.data.model.GardenState
 import com.wcd.farm.data.remote.GardenApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,7 +59,7 @@ class GardenRepository @Inject constructor(private val gardenApi: GardenApi) {
                 val gardenList = response.body()?.data
 
                 if (gardenList != null) {
-                    _gardenList.value = gardenList
+                    //_gardenList.value = gardenList
                 }
             }
         }
