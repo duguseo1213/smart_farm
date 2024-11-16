@@ -11,8 +11,23 @@ class InfoViewModel @Inject constructor(private val gardenRepository: GardenRepo
     val gardenState = gardenRepository.crtGardenState
 
     val crtGarden = gardenRepository.crtGarden
+    val selectedCrop = gardenRepository.selectedCrop
+    val gardenCropList = gardenRepository.gardenCropList
+    val recommendCropList = gardenRepository.recommendCropList
 
-    fun getGardenState() {
-        gardenRepository.getGardenState()
+    fun getGardenState(gardenId: Long) {
+        gardenRepository.getGardenState(gardenId)
+    }
+
+    fun getGardenCrops(gardenId: Long) {
+        gardenRepository.getGardenCrops(gardenId)
+    }
+
+    fun getRecommendCrops(cropName: String) {
+        gardenRepository.getRecommendCrops(cropName)
+    }
+
+    fun selectCrop(cropName: String) {
+        gardenRepository.selectCrop(cropName)
     }
 }

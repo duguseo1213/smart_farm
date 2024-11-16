@@ -16,18 +16,24 @@ import com.airbnb.mvrx.compose.mavericksViewModel
 import com.wcd.farm.presentation.intent.HomeViewIntent
 import com.wcd.farm.presentation.state.HomeViewState
 import com.wcd.farm.presentation.viewmodel.HomeViewModel
+import com.wcd.farm.presentation.viewmodel.InfoViewModel
 import com.wcd.farm.presentation.viewmodel.WeatherViewModel
 
 @Composable
 fun HomeScreen() {
     val homeViewModel: HomeViewModel = mavericksViewModel()
     val weatherViewModel: WeatherViewModel = hiltViewModel()
+    val infoViewModel: InfoViewModel = hiltViewModel()
     val showWeekWeather by homeViewModel.collectAsState(HomeViewState::showWeekWeather)
     val gardenList by homeViewModel.gardenList.collectAsState()
+    val crtGarden by homeViewModel.crtGarden.collectAsState()
+
     LaunchedEffect(Unit) {
         val longitude = 126.8071876
         val latitude = 35.2040949
+
         weatherViewModel.getLiveWeather(latitude, longitude)
+        if(crtGarden != 0L) infoViewModel.getGardenState(crtGarden)
     }
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {

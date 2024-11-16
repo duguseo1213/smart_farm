@@ -3,6 +3,7 @@ package com.wcd.farm.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.wcd.farm.data.remote.AuthApi
+import com.wcd.farm.data.remote.CropApi
 import com.wcd.farm.data.remote.DeviceApi
 import com.wcd.farm.data.remote.GalleryApi
 import com.wcd.farm.data.remote.GardenApi
@@ -79,6 +80,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideCropApi(): CropApi {
+        return ServerClient.cropApi
+    }
+
+    @Provides
+    @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
     }
@@ -97,8 +104,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGardenRepository(gardenApi: GardenApi): GardenRepository {
-        return GardenRepository(gardenApi)
+    fun provideGardenRepository(gardenApi: GardenApi, cropApi: CropApi): GardenRepository {
+        return GardenRepository(gardenApi, cropApi)
     }
 
     @Provides

@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -13,14 +16,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.DpOffset
 import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.wcd.farm.presentation.viewmodel.InfoViewModel
 
 @Composable
 fun InfoScreen() {
+    val infoViewModel: InfoViewModel = hiltViewModel()
+    val crtGarden by infoViewModel.crtGarden.collectAsState()
+    val selectedCrop by infoViewModel.selectedCrop.collectAsState()
+
+    LaunchedEffect(crtGarden) {
+        if(crtGarden != 0L) {
+            infoViewModel.getGardenState(crtGarden)
+            infoViewModel.getGardenCrops(crtGarden)
+        }
+    }
+
+    LaunchedEffect(selectedCrop) {
+        if(selectedCrop != "") {
+            infoViewModel.getRecommendCrops(selectedCrop)
+        }
+    }
+
     Column(Modifier.fillMaxHeight()) {
         Spacer(modifier = Modifier.weight(0.01f))
         CrtStateView(
             Modifier
-                .rsBlurShadow(4.dp, shape = RoundedCornerShape(16.dp), color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))
+                .rsBlurShadow(
+                    4.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color.Black.copy(0.25f),
+                    offset = DpOffset(x = 0.dp, y = 4.dp)
+                )
                 .clip(RoundedCornerShape(16.dp))
                 .weight(0.2f)
         )
@@ -28,7 +55,12 @@ fun InfoScreen() {
 
         SelectCropsView(
             Modifier
-                .rsBlurShadow(4.dp, shape = RoundedCornerShape(16.dp), color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))
+                .rsBlurShadow(
+                    4.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color.Black.copy(0.25f),
+                    offset = DpOffset(x = 0.dp, y = 4.dp)
+                )
                 .clip(RoundedCornerShape(16.dp))
                 .weight(0.075f)
         )
@@ -36,16 +68,27 @@ fun InfoScreen() {
 
         GrowthGraphView(
             Modifier
-                .rsBlurShadow(4.dp, shape = RoundedCornerShape(16.dp), color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))
+                .rsBlurShadow(
+                    4.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color.Black.copy(0.25f),
+                    offset = DpOffset(x = 0.dp, y = 4.dp)
+                )
                 .clip(RoundedCornerShape(16.dp))
                 .weight(0.4f)
-                ) // 0.4f
+                )
         Spacer(modifier = Modifier.weight(0.05f))
 
-        Recommend(Modifier
-            .rsBlurShadow(4.dp, shape = RoundedCornerShape(16.dp), color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp))
-            .weight(0.2f)
-            .clip(RoundedCornerShape(16.dp))) // 0.25f
+        Recommend(
+            Modifier
+                .rsBlurShadow(
+                    4.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color.Black.copy(0.25f),
+                    offset = DpOffset(x = 0.dp, y = 4.dp)
+                )
+                .weight(0.2f)
+                .clip(RoundedCornerShape(16.dp))) // 0.25f
         Spacer(modifier = Modifier.weight(0.025f))
     }
 }

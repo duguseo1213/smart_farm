@@ -21,6 +21,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -40,15 +41,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.wcd.farm.R
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
+import com.wcd.farm.presentation.viewmodel.InfoViewModel
 
 @Composable
 fun SelectCropsView(modifier: Modifier) {
     var showCropsList by remember { mutableStateOf(false) }
+    val viewModel: InfoViewModel = hiltViewModel()
+    val selectedCrop by viewModel.selectedCrop.collectAsState()
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        CropsSelectButton{ showCropsList = true }
+        CropsSelectButton { if(selectedCrop != "") showCropsList = true }
 
         CropsListView(showCropsList) {
             showCropsList = false
@@ -58,6 +63,9 @@ fun SelectCropsView(modifier: Modifier) {
 
 @Composable
 fun CropsSelectButton(onClick: () -> Unit) {
+    val viewModel: InfoViewModel = hiltViewModel()
+    val selectedCrop by viewModel.selectedCrop.collectAsState()
+
     Button(
         onClick = onClick,
         colors = buttonTransparentTheme(),
@@ -72,7 +80,7 @@ fun CropsSelectButton(onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "상추",
+                text = if(selectedCrop != "") selectedCrop else "등록된 작물이 없습니다.",
                 fontFamily = FontFamily(Font(R.font.bookend_semibold)),
                 color = Color(0xFF204833),
                 fontSize = 20.sp,
@@ -113,12 +121,16 @@ fun CropsListView(showCropsList: Boolean, onDismissRequest: () -> Unit) {
 
 @Composable
 fun CropsItemView(onDismissRequest: () -> Unit) {
-    DropdownMenuItem(text = { Text("상추") },
-        onClick = { onDismissRequest() })
-}
+    val viewModel: InfoViewModel = hiltViewModel()
+    val gardenCropList by viewModel.gardenCropList.collectAsState()
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewSelectCropsView() {
-    SelectCropsView(modifier = Modifier)
+    for (crop in gardenCropList) {
+        DropdownMenuItem(text = { Text(crop) },
+            onClick = {
+                viewModel.selectCrop(crop)
+                onDismissRequest()
+            })
+    }
+
+
 }

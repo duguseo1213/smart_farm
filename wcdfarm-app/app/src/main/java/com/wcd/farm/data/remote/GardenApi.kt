@@ -29,7 +29,7 @@ interface GardenApi {
     suspend fun getGardensUsers(@Path("gardenId") gardenId: Long): Response<ResponseDTO<List<GardenUserDTO>>>
 
     @GET("$GARDEN_BASE/get-garden-data")
-    suspend fun getGardenData(): Response<ResponseDTO<GardenState>>
+    suspend fun getGardenData(@Query("gardenId") gardenId: Long): Response<ResponseDTO<GardenState>>
 
     @POST("$GARDEN_BASE/take-picture")
     suspend fun postTakePicture(@Body body: Map<String, String>): Response<ResponseDTO<String>>
