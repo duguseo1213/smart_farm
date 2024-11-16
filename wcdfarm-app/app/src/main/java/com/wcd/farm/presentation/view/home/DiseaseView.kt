@@ -2,6 +2,7 @@ package com.wcd.farm.presentation.view.home
 
 import android.content.ContentValues
 import android.provider.MediaStore
+import android.util.Log
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -34,8 +35,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import coil3.compose.AsyncImage
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import com.wcd.farm.presentation.intent.DiseaseViewIntent
 import com.wcd.farm.presentation.state.DiseaseViewState
 import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
 import java.io.File
@@ -46,63 +49,56 @@ fun DiseaseScreen(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val state by viewModel.collectAsState(DiseaseViewState::viewState)
     val showDiseaseDetectResult by viewModel.collectAsState(DiseaseViewState::showDiseaseDetectResult)
+    val diseaseDetect by viewModel.diseaseDetect.collectAsState()
 
-    val contentValues = ContentValues().apply {
-        put(MediaStore.Images.Media.DISPLAY_NAME, "image_${System.currentTimeMillis()}.jpg")
-        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        put(
-            MediaStore.Images.Media.RELATIVE_PATH,
-            "Pictures/CameraX-Image"/*Environment.DIRECTORY_PICTURES*/
-        )
-    }
+    AlertDialog(onDismissRequest = onDismissRequest, confirmButton = {
+        when (state) {
+            0 -> Row(
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+            ) {
+                TextButton(onClick = { viewModel.takePhoto(context) }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Camera,
+                        contentDescription = "Camera",
+                        tint = Color.Black
+                    )
+                }
+            }
 
-    AlertDialog(
-        onDismissRequest = onDismissRequest, confirmButton = {
-            when (state) {
-                0 -> Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    TextButton(onClick = { viewModel.takePhoto(context/*, contentValues*/) })
-                    {
-                        Icon(
-                            imageVector = Icons.Outlined.Camera,
-                            contentDescription = "Camera",
-                            tint = Color.Black
+            1 -> Row(modifier = Modifier.fillMaxWidth()) {
+                if (!showDiseaseDetectResult) {
+                    TextButton(onClick = { viewModel.showPreviewCaptureView() }) {
+                        Text(
+                            "재촬영"
                         )
                     }
-                }
-
-                1 -> Row(modifier = Modifier.fillMaxWidth()) {
-                    if (!showDiseaseDetectResult) {
-                        TextButton(onClick = { viewModel.showPreviewCaptureView() }) {
-                            Text(
-                                "재촬영"
-                            )
-                        }
-                        TextButton(onClick = { viewModel.requestDiseaseDetection() }) { Text("질병 확인") }
-                    } else {
-                        TextButton(onClick = { viewModel.closeDiseaseView() }) {
-                            Text("닫기")
-                        }
+                    TextButton(onClick = {
+                        viewModel.sendIntent(DiseaseViewIntent.ShowDiseaseDetectionResult)
+                        viewModel.requestDiseaseDetection()
+                    }) { Text("질병 확인") }
+                } else {
+                    TextButton(onClick = { viewModel.closeDiseaseView() }) {
+                        Text("닫기")
                     }
+                }
 
+            }
+        }
+
+
+    }, text = {
+
+        Surface(
+            modifier = Modifier
+        ) {
+            when (state) {
+                0 -> CameraPreview()
+                1 -> {
+                    CaptureImage(showDiseaseDetectResult)
                 }
             }
-
-
-        }, text = {
-
-            Surface(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                when (state) {
-                    0 -> CameraPreview()
-                    1 -> CaptureImage()
-                }
-            }
-        },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        }
+    }, properties = DialogProperties(usePlatformDefaultWidth = false)
     )
 }
 
@@ -117,8 +113,7 @@ fun CameraPreview() {
         put(MediaStore.Images.Media.DISPLAY_NAME, "image_${System.currentTimeMillis()}.jpg")
         put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
         put(
-            MediaStore.Images.Media.RELATIVE_PATH,
-            "Pictures/CameraX-Image"
+            MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image"
         )
     }
 
@@ -137,53 +132,48 @@ fun CameraPreview() {
 
     Box(modifier = Modifier) {
         Column {
-            AndroidView(
-                factory = { previewView },
-                update = { }
-            )
+            AndroidView(factory = { previewView }, update = { })
         }
     }
 }
 
 @Composable
-fun CaptureImage() {
+fun CaptureImage(showDiseaseDetectResult: Boolean) {
     val viewModel: DiseaseViewModel = mavericksViewModel()
     val bitmap by viewModel.bitmap.collectAsState()
-    val showDiseaseDetectResult by viewModel.collectAsState(DiseaseViewState::showDiseaseDetectResult)
     val onDiseaseDetectState by viewModel.collectAsState(DiseaseViewState::onDiseaseDetect)
     val isPlantDisease by viewModel.collectAsState(DiseaseViewState::isPlantDisease)
     val diseaseDetect by viewModel.diseaseDetect.collectAsState()
 
-    Box(modifier = Modifier) {
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         if (bitmap != null) {
+
             Image(
                 bitmap = bitmap!!.asImageBitmap(),
                 contentDescription = "DiseasePhoto",
+                modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds,
                 colorFilter = if (showDiseaseDetectResult) ColorFilter.tint(
-                    Color.DarkGray,
-                    BlendMode.Multiply
+                    Color.DarkGray, BlendMode.Multiply
                 ) else null
             )
 
             if (showDiseaseDetectResult) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    if (onDiseaseDetectState) {
-                        Text("검출중입니다")
-                    } else if (isPlantDisease) {
-                        Image(
-                            bitmap = bitmap!!.asImageBitmap(),
-                            contentDescription = "",
-                            modifier = Modifier.fillMaxSize(0.4f)
-                        )
-                        Text("${diseaseDetect?.diseaseName} 검출", color = Color.White)
-                        Text("${diseaseDetect?.diseaseSolvent}", color = Color.White)
+                if (onDiseaseDetectState) {
+                    Text("검출중입니다")
+                } else {
+                    if (isPlantDisease) {
+                        Column {
+                            Image(
+                                bitmap = bitmap!!.asImageBitmap(),
+                                contentDescription = "",
+                                modifier = Modifier.fillMaxSize(0.4f)
+                            )
+                            Text("${diseaseDetect?.diseaseName} 검출", color = Color.White)
+                            Text("${diseaseDetect?.diseaseSolvent}", color = Color.White)
+                        }
                     } else {
-                        Text("검출되지 않았습니다.")
+                        Text("검출되지 않았습니다.", color = Color.White)
                     }
                 }
             }

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -42,6 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -62,8 +64,6 @@ class DiseaseViewModel @AssistedInject constructor(
         MavericksViewModelFactory<DiseaseViewModel, DiseaseViewState> by hiltMavericksViewModelFactory()
 
     private val cameraProvider = repository.cameraProvider
-    private val photoFile = repository.photoFile
-    private val cacheDir = repository.cacheDir
     private val imageCapture = repository.imageCapture
 
     val bitmap = repository.bitmap
@@ -71,7 +71,9 @@ class DiseaseViewModel @AssistedInject constructor(
 
     init {
         handleIntent()
-        repository.setImageCapture(ImageCapture.Builder().setTargetResolution(Size(1280, 720)).build())
+        repository.setImageCapture(
+            ImageCapture.Builder().setTargetResolution(Size(720, 1280)).build()
+        )
     }
 
     fun sendIntent(intent: DiseaseViewIntent) = viewModelScope.launch(Dispatchers.Main) {
@@ -81,6 +83,7 @@ class DiseaseViewModel @AssistedInject constructor(
     private fun handleIntent() {
         viewModelScope.launch(Dispatchers.Main) {
             diseaseViewIntent.consumeAsFlow().collect { intent ->
+                Log.e("TEST", "intent: $intent")
                 when (intent) {
                     DiseaseViewIntent.ShowDiseaseView -> setState { copy(showDiseaseView = true) }
                     DiseaseViewIntent.HideDiseaseView -> {
@@ -97,11 +100,7 @@ class DiseaseViewModel @AssistedInject constructor(
                     }
 
                     DiseaseViewIntent.ShowDiseaseDetectionResult -> {
-                        setState { copy(showDiseaseDetectResult = true) }
-                    }
-
-                    DiseaseViewIntent.ShowOnDiseaseDetection -> {
-                        setState { copy(onDiseaseDetect = true) }
+                        setState { copy(showDiseaseDetectResult = true, onDiseaseDetect = true) }
                     }
 
                     DiseaseViewIntent.ShowDiseaseDetected -> {
@@ -109,7 +108,7 @@ class DiseaseViewModel @AssistedInject constructor(
                     }
 
                     DiseaseViewIntent.ShowDiseaseNotDetected -> {
-                        setState { copy(isPlantDisease = false) }
+                        setState { copy(onDiseaseDetect = false, isPlantDisease = false) }
                     }
                 }
             }
@@ -177,57 +176,43 @@ class DiseaseViewModel @AssistedInject constructor(
 
     fun takePhoto(context: Context) {
         val mImageCapture = imageCapture.value ?: return
-        Log.e("TEST", "cacheDir: " + cacheDir.value!!.path)
         val externalDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        if (cacheDir.value != null) {
-            val newPhotoFile = File(externalDir, "newImage.jpg")
 
-            repository.setPhotoFile(newPhotoFile)
-            val outputOptions = ImageCapture.OutputFileOptions.Builder(
-                newPhotoFile
-                /*context.contentResolver,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues*/
-            ).build()
+        val newPhotoFile = File(externalDir, "newImage.jpg")
+        if (newPhotoFile.exists()) {
+            newPhotoFile.delete()
+        }
+        repository.setPhotoFile(newPhotoFile)
 
-            mImageCapture.takePicture(
-                outputOptions,
-                ContextCompat.getMainExecutor(context),
-                object : ImageCapture.OnImageSavedCallback {
-                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        stopCamera()
-                        try {
-                            CoroutineScope(Dispatchers.Default).launch {
-                                Log.e("TEST", "savedUri: " + outputFileResults.savedUri.toString())
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(
+            newPhotoFile
+        ).build()
 
-                                val drawable = Glide.with(context)
-                                    .load(outputFileResults.savedUri)
-                                    .apply(
-                                        RequestOptions()
-                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                            .skipMemoryCache(false)
-                                            .format(DecodeFormat.PREFER_RGB_565)
-                                    ).submit().get()
+        mImageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(context),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    stopCamera()
+                    try {
+                        CoroutineScope(Dispatchers.Default).launch {
+                            val bitmap = BitmapFactory.decodeFile(outputFileResults.savedUri!!.path)
 
-                                val bitmap = drawableToBitmap(drawable)
-                                //val base64 = bitmapToBase64(bitmap)
-
-                                repository.setPreviewImage(bitmap)
-                                sendIntent(DiseaseViewIntent.ShowCaptureImageView)
-                            }
-
-                        } catch (exception: Exception) {
-                            Log.e("TEST", exception.message!!)
+                            repository.setPreviewImage(bitmap)
+                            sendIntent(DiseaseViewIntent.ShowCaptureImageView)
                         }
-                    }
 
-                    override fun onError(exception: ImageCaptureException) {
-                        Log.e("TEST", "사진 촬영 실패 ${exception.message}")
+                    } catch (exception: Exception) {
+                        Log.e("TEST", exception.message!!)
                     }
                 }
-            )
 
-        }
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e("TEST", "사진 촬영 실패 ${exception.message}")
+                }
+            }
+        )
+
 
     }
 
@@ -235,34 +220,11 @@ class DiseaseViewModel @AssistedInject constructor(
         cameraProvider.value?.unbindAll()
     }
 
-    private fun drawableToBitmap(drawable: Drawable): Bitmap {
-        if (drawable is BitmapDrawable) {
-            return drawable.bitmap
-        }
-
-        val bitmap = Bitmap.createBitmap(
-            drawable.intrinsicWidth,
-            drawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-
-        return bitmap
-    }
-
-    fun bitmapToBase64(bitmap: Bitmap): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
-    }
-
     fun requestDiseaseDetection() {
+
         repository.requestPlantDiseaseDetection(
-            isDone = { sendIntent(DiseaseViewIntent.ShowOnDiseaseDetection) },
             diseaseDetected = { isDetected ->
+                Log.e("TEST", "isDetected: $isDetected")
                 if (isDetected) {
                     sendIntent(DiseaseViewIntent.ShowDiseaseDetected)
                 } else {

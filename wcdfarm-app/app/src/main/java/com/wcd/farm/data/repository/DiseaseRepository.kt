@@ -60,20 +60,19 @@ class DiseaseRepository @Inject constructor(private val gardenApi: GardenApi) {
         _bitmap.value = bitmap
     }
 
-    fun requestPlantDiseaseDetection(isDone: () -> Unit, diseaseDetected: (diseaseDetected: Boolean) -> Unit) {
+    fun requestPlantDiseaseDetection(diseaseDetected: (diseaseDetected: Boolean) -> Unit) {
 
             CoroutineScope(Dispatchers.IO).launch {
                 val requestFile = photoFile.value!!.asRequestBody("image/*".toMediaTypeOrNull())
                 val body = MultipartBody.Part.createFormData("file", photoFile.value!!.name, requestFile)
 
                 val response = gardenApi.postDiseaseDetection(body)
-                isDone()
-                Log.e("TEST", response.toString())
+
                 if(response.isSuccessful) {
-                    Log.e("TEST", response.body()?.data.toString())
                     val result = response.body()?.data
 
                     if (result != null) {
+                        Log.e("TEST", "result: ${result.diseased}")
                         diseaseDetected(result.diseased)
                         _diseaseDetect.value = result
                     }
@@ -91,5 +90,9 @@ class DiseaseRepository @Inject constructor(private val gardenApi: GardenApi) {
         val imageBytes = baos.toByteArray()
         val base64String = android.util.Base64.encodeToString(imageBytes, android.util.Base64.NO_WRAP)
         return base64String
+    }
+
+    fun setBitmap(bitmap: Bitmap) {
+        _bitmap.value = bitmap
     }
 }
