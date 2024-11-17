@@ -4,6 +4,7 @@ import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.hilt.AssistedViewModelFactory
 import com.airbnb.mvrx.hilt.hiltMavericksViewModelFactory
+import com.wcd.farm.data.model.HarmDTO
 import com.wcd.farm.data.repository.GardenRepository
 import com.wcd.farm.data.repository.MemorialRepository
 import com.wcd.farm.presentation.intent.MemorialViewIntent
@@ -43,8 +44,11 @@ class MemorialViewModel @AssistedInject constructor(
     val crtTimeLapseImage = repository.crtTimeLapseImage
     val harmAnimalList = repository.harmAnimalList
     val harmTheftList = repository.harmTheftList
+    val invasionVideoUrl = repository.invasionVideoUrl
+    val selectedHarm = repository.selectedHarm
 
     val crtGarden = gardenRepository.crtGarden
+
 
     init {
         handleIntent()
@@ -65,6 +69,9 @@ class MemorialViewModel @AssistedInject constructor(
                     MemorialViewIntent.ShowGrowthView -> setState { copy(showMemorialView = GROWTH_VIEW) }
                     MemorialViewIntent.ShowAnimalView -> setState { copy(showMemorialView = ANIMAL_VIEW) }
                     MemorialViewIntent.ShowTheftView -> setState { copy(showMemorialView = THEFT_VIEW) }
+
+                    MemorialViewIntent.ShowInvasionView -> setState { copy(showInvasionVideo = true) }
+                    MemorialViewIntent.HideInvasionView -> setState { copy(showInvasionVideo = false) }
                 }
             }
         }
@@ -88,5 +95,13 @@ class MemorialViewModel @AssistedInject constructor(
 
     fun getTimeLapse(gardenId: Long) {
         repository.getTimeLapse(gardenId)
+    }
+
+    fun getInvasionVideoUrl(harmPictureId: Long) {
+        repository.getInvasionVideoUrl(harmPictureId)
+    }
+
+    fun selectHarm(harm: HarmDTO) {
+        repository.selectHarm(harm)
     }
 }

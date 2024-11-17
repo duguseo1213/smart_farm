@@ -9,5 +9,6 @@ sealed class MemorialViewIntent {
     object ShowDialog : MemorialViewIntent()
     object HideDialog : MemorialViewIntent()
 
-
+    object ShowInvasionView : MemorialViewIntent()
+    object HideInvasionView : MemorialViewIntent()
 }

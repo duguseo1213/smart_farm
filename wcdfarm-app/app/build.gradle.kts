@@ -120,6 +120,10 @@ dependencies {
     //rtmp live
     implementation("org.videolan.android:libvlc-all:3.5.1")
 
+    //video
+    implementation("androidx.media3:media3-exoplayer:1.4.1")
+    implementation("androidx.media3:media3-ui:1.4.1")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

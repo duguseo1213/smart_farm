@@ -46,6 +46,12 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
     private val _newPicture = MutableStateFlow<String?>(null)
     val newPicture = _newPicture.asStateFlow()
 
+    private val _selectedHarm = MutableStateFlow<HarmDTO?>(null)
+    val selectedHarm = _selectedHarm.asStateFlow()
+
+    private val _invasionVideoUrl = MutableStateFlow("")
+    val invasionVideoUrl = _invasionVideoUrl.asStateFlow()
+
     fun setSelectedDate(date: LocalDate) {
         _selectedDate.value = date
     }
@@ -132,6 +138,23 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
                 setNewPicture(null)
             }
         }
+    }
 
+    fun getInvasionVideoUrl(harmPictureId: Long) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = harmApi.getHarmVideo(harmPictureId)
+
+            if(response.isSuccessful) {
+                val videoUrl = response.body()?.data
+
+                if (videoUrl != null) {
+                    _invasionVideoUrl.value = videoUrl
+                }
+            }
+        }
+    }
+
+    fun selectHarm(harm: HarmDTO) {
+        _selectedHarm.value = harm
     }
 }
