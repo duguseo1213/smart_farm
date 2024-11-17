@@ -85,7 +85,7 @@ fun MainLayout() {
                 }
             }
         }
-        //homeViewModel.getGardenList()
+        homeViewModel.getGardenList()
 
         homeViewModel.getStreamKeys()
         weatherViewModel.getNearForecastWeather(latitude, longitude)
@@ -116,6 +116,8 @@ fun MainLayout() {
                 diseaseViewModel.sendIntent(DiseaseViewIntent.HideDiseaseView)
             }
         }
+    } else {
+        //homeViewModel.addGarden(2L)
     }
 
 }

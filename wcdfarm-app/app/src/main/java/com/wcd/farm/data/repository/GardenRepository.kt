@@ -16,7 +16,7 @@ class GardenRepository @Inject constructor(
     private val gardenApi: GardenApi,
     private val cropApi: CropApi
 ) {
-    private val _gardenList = MutableStateFlow<List<GardenDTO>>(listOf(GardenDTO(2, "효린이네", "광주광역시 광산구 장덕동 982-10", "2024-10-24"))/*emptyList()*/)
+    private val _gardenList = MutableStateFlow<List<GardenDTO>>(emptyList())
     val gardenList = _gardenList.asStateFlow()
 
     private val _crtGarden = MutableStateFlow<Int?>(null)
@@ -73,8 +73,10 @@ class GardenRepository @Inject constructor(
 
             if (response.isSuccessful) {
                 val gardenList = response.body()?.data
+                Log.e("TEST", "getGardenList: " + response.body().toString())
 
-                if (gardenList!!.isNotEmpty()) {
+                if (!gardenList.isNullOrEmpty()) {
+
                     _gardenList.value = gardenList
                     if(_crtGarden.value == null) _crtGarden.value = 0
                 }
@@ -159,11 +161,19 @@ class GardenRepository @Inject constructor(
         }
     }
 
-    fun addGarden() {
+    fun addGarden(gardenId: Long) {
         CoroutineScope(Dispatchers.IO).launch {
-            val body = mutableMapOf<String, String>()
+            val body = mutableMapOf<String, Long>()
+            body["gardenId"] = gardenId
 
-            val response = gardenApi.postAddGarden(body)
+            val response = gardenApi.addUserToGarden(body)
+
+            if(response.isSuccessful) {
+                getGardenList()
+                Log.e("TEST", "success: " + response.body().toString())
+            } else {
+                Log.e("TEST", "error: " + response.errorBody()!!.string())
+            }
         }
     }
 
@@ -174,7 +184,7 @@ class GardenRepository @Inject constructor(
             val response = gardenApi.changeGardenName(gardenName, gardenId)
 
             if(response.isSuccessful) {
-                gardenApi.getGardens()
+                getGardenList()
                 Log.e("TEST", response.body().toString())
             } else {
                 Log.e("TEST", response.errorBody()!!.string())

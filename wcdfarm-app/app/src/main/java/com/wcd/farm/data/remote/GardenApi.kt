@@ -22,7 +22,7 @@ interface GardenApi {
         private const val DEVICE_BASE = "device"
     }
 
-    @GET("$GARDEN_BASE/get-gardens")
+    @GET("$GARDEN_BASE/get-gardens/aaa")
     suspend fun getGardens(): Response<ResponseDTO<List<GardenDTO>>>
 
     @GET("$GARDEN_BASE/get-gardens-users/{gardenId}")
@@ -42,7 +42,7 @@ interface GardenApi {
     suspend fun postDiseaseDetection(@Part file: MultipartBody.Part): Response<ResponseDTO<PlantDiseaseDTO>>
 
     @POST("$GARDEN_BASE/add-user-to-garden")
-    suspend fun postAddUserToGarden(@Body body: Map<String, String>): Response<ResponseDTO<String>>
+    suspend fun addUserToGarden(@Body body: Map<String, Long>): Response<ResponseDTO<String>>
 
     @POST("$GARDEN_BASE/add-garden")
     suspend fun postAddGarden(@Body body: Map<String, String>): Response<ResponseDTO<String>>

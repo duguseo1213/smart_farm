@@ -52,6 +52,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
@@ -75,11 +77,10 @@ fun MyFarmView(modifier: Modifier, focusManager: FocusManager) {
     var changeName by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
 
-    LaunchedEffect(crtGarden) {
-        if(crtGarden != null) {
+    LaunchedEffect(gardenList) {
+        if (crtGarden != null) {
             changeName = gardenList[crtGarden!!].gardenName
         }
-
     }
 
     BoxWithConstraints(modifier = modifier.noRippleClickable {
@@ -126,16 +127,20 @@ fun MyFarmView(modifier: Modifier, focusManager: FocusManager) {
 
         Column(
             modifier = Modifier
-                .offset(x = maxWidth * 0.78f, y = maxHeight * 0.76f)
+                .offset(x = maxWidth * 0.785f, y = maxHeight * 0.76f)
         ) {
-
             BasicTextField(
                 value = changeName,
-                onValueChange = { changeName = it },
+                onValueChange = {
+                    if (it.length <= 6) {
+                        changeName = it
+                    }
+                },
                 textStyle = TextStyle(
                     letterSpacing = (-2).sp,
                     fontFamily = FontFamily(Font(R.font.hakgyo)),
-                    fontSize = 17.sp,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
                 ),
                 modifier = Modifier
                     .widthIn(max = viewPortWidth * 0.20f)
@@ -155,7 +160,7 @@ fun MyFarmView(modifier: Modifier, focusManager: FocusManager) {
                         contentDescription = "",
                         modifier = Modifier.noRippleClickable {
                             focusManager.clearFocus()
-                            changeName = gardenList[crtGarden!!].gardenName ?: ""
+                            changeName = gardenList[crtGarden!!].gardenName
                             isFocused = false
                         })
                     Icon(
