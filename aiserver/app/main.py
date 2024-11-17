@@ -30,6 +30,7 @@ img_width = 224
 Plant_Disease_Detection_Labels = 45
 Plant_Disease_Detection_State_Dict_PATH = os.path.join(script_dir,"PlantDisease/plant.pth")
 Animal_Detection_Model_PATH = os.path.join(script_dir,"AnimalDetection/best.pt")
+Human_Detection_Model_PATH = os.path.join(script_dir,"AnimalDetection/best_human.pt")
 # plantDiseaseDetection
 plant_disease_detection_model = MyCnnModel.MyCnn(Plant_Disease_Detection_Labels)
 plant_disease_detection_model.load_state_dict(torch.load(Plant_Disease_Detection_State_Dict_PATH, map_location=torch.device('cpu')))
@@ -42,7 +43,7 @@ plant_disease_image_transform = transforms.Compose([
 
 # animal Detection Model
 animal_detection_model = YOLO(Animal_Detection_Model_PATH)
-
+human_detection_model = YOLO(Human_Detection_Model_PATH)
 @app.post("/plantDiseaseDetection")
 async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
 
@@ -90,6 +91,17 @@ async def animalDetection(imageFile: UploadFile = File(...)):
         # print({"isHarm": True, "HarmAnimalType": best_class_name, "HarmPictureId":1})
         return {best_class_name}
     # print({"isHarm": False, "HarmAnimalType": "none", "HarmPictureId":1})
+    result2 = human_detection_model(image)
+    detections2 = result2[0]
+    print("second")
+    highest_confidence = 0
+    best_class_name = None
+    
+    for detection in detections2.boxes:
+        confidence = detection.conf[0].item()  # 신뢰도
+        if confidence >= 0.5:  # 신뢰도가 50% 이상인지 확인
+            return {"Human"}
+            
     return {"none"}
 
     
