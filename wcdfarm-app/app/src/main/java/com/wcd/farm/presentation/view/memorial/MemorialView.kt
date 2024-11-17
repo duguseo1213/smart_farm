@@ -100,7 +100,7 @@ fun MemorialScreen() {
 
         when (showView) {
             GALLERY_VIEW -> GalleryView()
-            GROWTH_VIEW -> Text("Growth")
+            GROWTH_VIEW -> TimeLapseScreen()
             ANIMAL_VIEW -> AnimalScreen()
             THEFT_VIEW -> TheftScreen()
         }

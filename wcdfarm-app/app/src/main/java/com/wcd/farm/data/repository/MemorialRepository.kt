@@ -40,7 +40,7 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
     private val _timeLapseImageList = MutableStateFlow<List<TimeLapseImageDTO>>(emptyList())
     val timeLapseImageList = _timeLapseImageList.asStateFlow()
 
-    private val _crtTimeLapseImage = MutableStateFlow<TimeLapseImageDTO?>(null)
+    private val _crtTimeLapseImage = MutableStateFlow<Int?>(null)
     val crtTimeLapseImage = _crtTimeLapseImage.asStateFlow()
 
     private val _newPicture = MutableStateFlow<String?>(null)
@@ -156,5 +156,9 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
 
     fun selectHarm(harm: HarmDTO) {
         _selectedHarm.value = harm
+    }
+
+    fun setTimeLapseImage(index: Int?) {
+        _crtTimeLapseImage.value = index
     }
 }

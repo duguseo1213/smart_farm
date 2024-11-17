@@ -18,6 +18,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -104,5 +105,26 @@ class MemorialViewModel @AssistedInject constructor(
 
     fun selectHarm(harm: HarmDTO) {
         repository.selectHarm(harm)
+    }
+
+    fun startTimeLapse() {
+        viewModelScope.launch {
+            if(timeLapseList.value.isEmpty()) {
+                setCrtTimeLapseImage(null)
+            } else {
+                setCrtTimeLapseImage(0)
+            }
+
+            while (true) {
+                delay(500)
+                val currentIndex = crtTimeLapseImage.value
+                val nextIndex = (currentIndex?.plus(1))?.rem(timeLapseList.value.size)
+                setCrtTimeLapseImage(nextIndex)
+            }
+        }
+    }
+
+    private fun setCrtTimeLapseImage(index: Int?) {
+        repository.setTimeLapseImage(index)
     }
 }

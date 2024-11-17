@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -39,7 +40,11 @@ fun TimeLapseScreen() {
     val timeLapseImageList by viewModel.timeLapseList.collectAsState()
     val crtTimeLapseImage by viewModel.crtTimeLapseImage.collectAsState()
 
-    crtTimeLapseImage?.let { TimeLapseImage(it) }
+    LaunchedEffect(timeLapseImageList) {
+        viewModel.startTimeLapse()
+    }
+
+    crtTimeLapseImage?.let { TimeLapseImage(timeLapseImageList[it]) }
 }
 
 @Composable
@@ -54,21 +59,6 @@ fun TimeLapseImage(timeLapseImage: TimeLapseImageDTO) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
                 .fillMaxWidth()
-        ) {
-            /*Text(
-                text = "${picture.pictureDate.format(DateTimeFormatter.ofPattern("HH:mm"))} ${picture.pictureDescription}",
-                fontSize = 20.sp,
-                color = Color.Black,
-                fontFamily = customFontFamily3 // customFontFamily1 설정
-            )*/
-            Icon(imageVector = Icons.Outlined.EditCalendar,
-                contentDescription = "Edit",
-                modifier = Modifier.size(20.dp))
-        }
-        Button(
-            onClick = { /*TODO*/ },
-            contentPadding = PaddingValues(0.dp),
-            shape = RoundedCornerShape(5.dp)
         ) {
             AsyncImage(
                 model = timeLapseImage.image,
