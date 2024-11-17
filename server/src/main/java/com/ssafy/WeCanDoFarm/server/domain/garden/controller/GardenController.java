@@ -83,10 +83,15 @@ public class GardenController {
     }
 
     @GetMapping("/get-garden-data")
-    public SuccessResponse<List<GetGardenDataResponse>> getGardenData(@RequestParam Long gardenId) throws Exception {
+    public SuccessResponse<GetGardenDataResponse> getGardenData(@RequestParam Long gardenId) throws Exception {
         return SuccessResponse.of(gardenService.getGardenStatus(gardenId));
     }
 
+    @PostMapping("/change-garden-name")
+    public SuccessResponse<Void> changeGardenName(GardenDto.ChangeGardenNameRequest request) throws Exception {
+        gardenService.changeGardenName(request.getGardenId(),request.getGardenName());
+        return SuccessResponse.empty();
+    }
     
 }
 

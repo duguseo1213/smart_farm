@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -156,7 +157,7 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public List<GetGardenDataResponse> getGardenStatus(Long gardenId) throws Exception {
+    public GetGardenDataResponse getGardenStatus(Long gardenId) throws Exception {
         List<GardenStatus> list =gardenRepository.findGardenStatusFromLastWeek(gardenId, LocalDate.now().minusDays(7));
         List<GetGardenDataResponse> responses = new ArrayList<>();
         for(GardenStatus gardenStatus : list){
@@ -168,9 +169,20 @@ public class GardenServiceImpl implements GardenService {
             response.setHumidity(gardenStatus.getHumidity());
             responses.add(response);
         }
-        return responses;
+        responses.sort(new Comparator<GetGardenDataResponse>() {
+            @Override
+            public int compare(GetGardenDataResponse o1, GetGardenDataResponse o2) {
+                return o2.getCreatedDate().compareTo(o1.getCreatedDate());
+            }
+        });
+        return responses[0];
     }
 
+    @Override
+    public void changeGardenName(Long gardenId, String newName) throws Exception {
+        Garden garden = gardenRepository.findById(gardenId).orElseThrow();
+        garden.changeName(new String(newName.getBytes()));
+    }
 
 
 }

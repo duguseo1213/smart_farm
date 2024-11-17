@@ -56,4 +56,7 @@ public class Garden {
         this.device = device;
     }
 
+    public void changeName(String gardenName) {
+        this.gardenName = gardenName;
+    }
 }

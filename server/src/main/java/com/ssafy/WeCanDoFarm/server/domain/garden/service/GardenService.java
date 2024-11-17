@@ -22,6 +22,7 @@ public interface GardenService{
     void addGardenData(Long deviceId, GardenDataMessage message) throws Exception;
     void remoteWater(Long gardenId, Long userId) throws Exception;
     void takePicture(Long gardenId, Long userId) throws Exception;
-    List<GetGardenDataResponse> getGardenStatus(Long gardenId) throws Exception;
+    GetGardenDataResponse getGardenStatus(Long gardenId) throws Exception;
+    void changeGardenName(Long gardenId, String newName) throws Exception;
 
 }
