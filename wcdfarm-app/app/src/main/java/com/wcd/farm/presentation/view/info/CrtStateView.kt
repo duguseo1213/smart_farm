@@ -46,7 +46,6 @@ fun CrtStateView(modifier: Modifier) {
     ) {
         CrtWeatherView(Modifier.weight(0.5f))
         CrtFarmStateView(Modifier.weight(0.5f))
-
     }
 }
 

@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,6 +69,8 @@ fun MainLayout() {
     val showDiseaseView by diseaseViewModel.collectAsState(DiseaseViewState::showDiseaseView)
     val homeViewModel: HomeViewModel = mavericksViewModel()
 
+    val crtGarden by homeViewModel.crtGarden.collectAsState()
+
     LaunchedEffect(Unit) {
         val longitude = 126.8071876
         val latitude = 35.2040949
@@ -87,29 +90,34 @@ fun MainLayout() {
         homeViewModel.getStreamKeys()
         weatherViewModel.getNearForecastWeather(latitude, longitude)
         weatherViewModel.getForecastWeather()
+
+        //homeViewModel
     }
 
-    Scaffold(
-        containerColor = Color(LocalContext.current.getColor(R.color.background)),
-        bottomBar = { BottomBar(currentScreen)}
-    ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            Box(modifier = Modifier.padding(36.dp, 18.dp)) {
-                when (currentScreen.value) {
-                    HOME -> HomeScreen()
-                    INFO -> InfoScreen()
-                    MEMORIAL -> MemorialScreen()
-                    MY_PAGE -> MyPageScreen()
+    if(crtGarden != null) {
+        Scaffold(
+            containerColor = Color(LocalContext.current.getColor(R.color.background)),
+            bottomBar = { BottomBar(currentScreen)}
+        ) { innerPadding ->
+            Box(modifier = Modifier.padding(innerPadding)) {
+                Box(modifier = Modifier.padding(36.dp, 18.dp)) {
+                    when (currentScreen.value) {
+                        HOME -> HomeScreen()
+                        INFO -> InfoScreen()
+                        MEMORIAL -> MemorialScreen()
+                        MY_PAGE -> MyPageScreen()
+                    }
                 }
+            }
+        }
+
+        if(showDiseaseView) {
+            DiseaseScreen {
+                diseaseViewModel.sendIntent(DiseaseViewIntent.HideDiseaseView)
             }
         }
     }
 
-    if(showDiseaseView) {
-        DiseaseScreen {
-            diseaseViewModel.sendIntent(DiseaseViewIntent.HideDiseaseView)
-        }
-    }
 }
 
 @Composable

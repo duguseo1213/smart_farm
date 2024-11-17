@@ -1,6 +1,7 @@
 package com.wcd.farm.data.repository
 
 import android.util.Log
+import com.wcd.farm.data.model.GardenDTO
 import com.wcd.farm.data.model.GardenState
 import com.wcd.farm.data.remote.CropApi
 import com.wcd.farm.data.remote.GardenApi
@@ -15,10 +16,10 @@ class GardenRepository @Inject constructor(
     private val gardenApi: GardenApi,
     private val cropApi: CropApi
 ) {
-    private val _gardenList = MutableStateFlow<List<Long>>(listOf(2L))
+    private val _gardenList = MutableStateFlow<List<GardenDTO>>(listOf(GardenDTO(2, "효린이네", "광주광역시 광산구 장덕동 982-10", "2024-10-24"))/*emptyList()*/)
     val gardenList = _gardenList.asStateFlow()
 
-    private val _crtGarden = MutableStateFlow(1L)
+    private val _crtGarden = MutableStateFlow<GardenDTO?>(GardenDTO(2, "효린이네", "광주광역시 광산구 장덕동 982-10", "2024-10-24"))
     val crtGarden = _crtGarden.asStateFlow()
 
     private val _crtGardenState = MutableStateFlow<GardenState?>(null)
@@ -72,7 +73,7 @@ class GardenRepository @Inject constructor(
                 val gardenList = response.body()?.data
 
                 if (gardenList != null) {
-                    //_gardenList.value = gardenList
+                    _gardenList.value = gardenList
                 }
             }
         }
@@ -84,7 +85,7 @@ class GardenRepository @Inject constructor(
 
             if (response.isSuccessful) {
                 val gardenState = response.body()?.data
-
+                Log.e("TEST", "getGardenState: " + response.body().toString())
                 _crtGardenState.value = gardenState
             }
         }
@@ -126,13 +127,13 @@ class GardenRepository @Inject constructor(
     fun getStreamKeys() {
         CoroutineScope(Dispatchers.IO).launch {
             val gardenStreamKeyMap = mutableMapOf<Long, String>()
-            for (gardenId in gardenList.value) {
-                val response = gardenApi.getStreamKey(crtGarden.value)
+            for (garden in gardenList.value) {
+                val response = gardenApi.getStreamKey(garden.gardenId)
 
                 if (response.isSuccessful) {
                     val streamKey = response.body()!!.data
-                    Log.e("TEST", "$gardenId $streamKey")
-                    gardenStreamKeyMap[gardenId] = streamKey
+                    Log.e("TEST", "${garden.gardenId} $streamKey")
+                    gardenStreamKeyMap[garden.gardenId] = streamKey
                 }
             }
 
@@ -153,6 +154,13 @@ class GardenRepository @Inject constructor(
                 Log.e("TEST", response.body().toString())
             }
         }
+    }
 
+    fun addGarden() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val body = mutableMapOf<String, String>()
+
+            val response = gardenApi.postAddGarden(body)
+        }
     }
 }

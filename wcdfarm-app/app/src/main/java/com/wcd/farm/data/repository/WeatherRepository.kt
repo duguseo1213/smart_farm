@@ -69,12 +69,13 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
                     val liveWeather = weatherString.asJsonObject
                     val category = liveWeather["category"].asString
                     val value = liveWeather["obsrValue"]
-
+                   // if(category == "SKY" )Log.e("TEST", "SKY: " + value.asString)
                     when (category) {
                         "T1H" -> weatherInfo.tmp = value.asDouble
                         "RN1" -> weatherInfo.rain = value.asString
                         "REH" -> weatherInfo.humidity = value.asInt
                         "WSD" -> weatherInfo.wind = value.asDouble
+                        "PTY" -> weatherInfo.isRain = value.asInt
                     }
                 }
                 _weather.value = weatherInfo

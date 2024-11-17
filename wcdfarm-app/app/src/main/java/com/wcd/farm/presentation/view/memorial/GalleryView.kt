@@ -78,8 +78,8 @@ fun GalleryView() {
     val selectedDate by viewModel.selectedDate.collectAsState()
     val crtGarden by viewModel.crtGarden.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.getAllPictures(crtGarden)
+    LaunchedEffect(crtGarden) {
+        crtGarden?.let { viewModel.getAllPictures(it.gardenId) }
     }
 
     Column {

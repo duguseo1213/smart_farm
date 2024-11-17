@@ -20,7 +20,7 @@ import com.wcd.farm.presentation.viewmodel.MemorialViewModel
 fun AnimalScreen() {
     val viewModel: MemorialViewModel = mavericksViewModel()
     val listState = rememberLazyListState()
-    val crtGardenId by viewModel.crtGarden.collectAsState()
+    val crtGarden by viewModel.crtGarden.collectAsState()
 
     val animalList by viewModel.harmAnimalList.collectAsState()
 
@@ -28,8 +28,9 @@ fun AnimalScreen() {
         EmptyListView(notify = "방문 이력이 없습니다.")
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.getHarmAnimalList(crtGardenId)
+    LaunchedEffect(crtGarden) {
+
+        crtGarden?.let { viewModel.getHarmAnimalList(it.gardenId) }
     }
 
     LazyColumn(

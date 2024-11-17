@@ -5,6 +5,7 @@ import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.hilt.AssistedViewModelFactory
 import com.airbnb.mvrx.hilt.hiltMavericksViewModelFactory
+import com.wcd.farm.data.repository.GardenRepository
 import com.wcd.farm.data.repository.ServerRepository
 import com.wcd.farm.presentation.intent.AppViewIntent
 import com.wcd.farm.presentation.state.AppViewState

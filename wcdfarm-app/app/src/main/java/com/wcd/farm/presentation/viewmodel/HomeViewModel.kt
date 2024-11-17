@@ -72,4 +72,8 @@ class HomeViewModel @AssistedInject constructor(
     fun getStreamKeys() {
         gardenRepository.getStreamKeys()
     }
+
+    fun addGarden() {
+        gardenRepository.addGarden()
+    }
 }

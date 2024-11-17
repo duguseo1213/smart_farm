@@ -26,14 +26,15 @@ fun InfoScreen() {
     val selectedCrop by infoViewModel.selectedCrop.collectAsState()
 
     LaunchedEffect(crtGarden) {
-        if(crtGarden != 0L) {
-            infoViewModel.getGardenState(crtGarden)
-            infoViewModel.getGardenCrops(crtGarden)
+        crtGarden?.let {
+            infoViewModel.getGardenState(it.gardenId)
+            infoViewModel.getGardenCrops(it.gardenId)
         }
+
     }
 
     LaunchedEffect(selectedCrop) {
-        if(selectedCrop != "") {
+        if (selectedCrop != "") {
             infoViewModel.getRecommendCrops(selectedCrop)
         }
     }
@@ -76,7 +77,7 @@ fun InfoScreen() {
                 )
                 .clip(RoundedCornerShape(16.dp))
                 .weight(0.4f)
-                )
+        )
         Spacer(modifier = Modifier.weight(0.05f))
 
         Recommend(
@@ -88,7 +89,8 @@ fun InfoScreen() {
                     offset = DpOffset(x = 0.dp, y = 4.dp)
                 )
                 .weight(0.2f)
-                .clip(RoundedCornerShape(16.dp))) // 0.25f
+                .clip(RoundedCornerShape(16.dp))
+        ) // 0.25f
         Spacer(modifier = Modifier.weight(0.025f))
     }
 }

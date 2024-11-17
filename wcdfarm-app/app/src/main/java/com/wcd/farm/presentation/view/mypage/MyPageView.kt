@@ -153,7 +153,7 @@ fun CropsState() {
         onDismissRequest = { /*TODO*/ },
         confirmButton = {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                TextButton(onClick = { viewModel.addCrop(crtGarden, newCropName) }) {
+                TextButton(onClick = { viewModel.addCrop(crtGarden!!.gardenId, newCropName) }) {
                     Text("작물 추가하기")
                 }
             }

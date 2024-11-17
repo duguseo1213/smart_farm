@@ -33,7 +33,11 @@ fun HomeScreen() {
         val latitude = 35.2040949
 
         weatherViewModel.getLiveWeather(latitude, longitude)
-        if(crtGarden != 0L) infoViewModel.getGardenState(crtGarden)
+        crtGarden?.let { infoViewModel.getGardenState(it.gardenId) }
+    }
+
+    LaunchedEffect(crtGarden) {
+        crtGarden?.let { infoViewModel.getGardenState(it.gardenId) }
     }
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {

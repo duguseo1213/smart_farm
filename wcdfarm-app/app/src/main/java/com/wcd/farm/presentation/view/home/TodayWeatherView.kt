@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowRight
+import androidx.compose.material.icons.outlined.Cloud
+import androidx.compose.material.icons.outlined.Snowshoeing
+import androidx.compose.material.icons.outlined.Terrain
 import androidx.compose.material.icons.outlined.WbCloudy
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.AlertDialog
@@ -62,7 +65,7 @@ fun TodayWeatherView(modifier: Modifier) {
     val weatherViewModel: WeatherViewModel = hiltViewModel()
     val weather by weatherViewModel.weather.collectAsState()
 
-    if (weather.tmp == 0.0) {
+    if (weather.tmp == -100.0) {
         Column(
             modifier = modifier
                 .fillMaxWidth(),
@@ -109,8 +112,22 @@ fun HomeServiceNameView() {
 
 @Composable
 fun TodayWeatherIcon(modifier: Modifier) {
+    val weatherViewModel: WeatherViewModel = hiltViewModel()
+    val weather by weatherViewModel.weather.collectAsState()
+
     Icon(
-        Icons.Outlined.WbSunny,
+        if(weather.isRain == 0) {
+            when(weather.sky) {
+                1 -> Icons.Outlined.WbSunny
+                3 -> Icons.Outlined.Cloud
+                4 -> Icons.Outlined.Cloud
+                else -> Icons.Outlined.WbSunny
+            }
+        } else if(listOf(1, 2, 5, 6).contains(weather.isRain)) {
+            Icons.Outlined.Terrain
+        } else {
+            Icons.Outlined.Snowshoeing
+        },
         "RAINY",
         tint = Color(0xFF28543D),
         modifier = modifier

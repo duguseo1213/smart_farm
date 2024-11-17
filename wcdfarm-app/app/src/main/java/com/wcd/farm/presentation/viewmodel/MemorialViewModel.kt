@@ -83,4 +83,8 @@ class MemorialViewModel @AssistedInject constructor(
     fun getHarmTheftList(gardenId: Long) {
         repository.getHarmTheftList(gardenId)
     }
+
+    fun getTimeLapse(gardenId: Long) {
+        repository.getTimeLapse(gardenId)
+    }
 }

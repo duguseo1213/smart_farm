@@ -24,6 +24,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,6 +61,12 @@ const val THEFT_VIEW = 4
 fun MemorialScreen() {
     val viewModel: MemorialViewModel = mavericksViewModel()
     val showView by viewModel.collectAsState(MemorialViewState::showMemorialView)
+    val crtGarden by viewModel.crtGarden.collectAsState()
+
+    LaunchedEffect(crtGarden) {
+
+        crtGarden?.let { viewModel.getTimeLapse(it.gardenId) }
+    }
 
     Spacer(modifier = Modifier.fillMaxHeight(0.07f))
     Column(

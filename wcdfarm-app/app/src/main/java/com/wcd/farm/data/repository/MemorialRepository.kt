@@ -75,8 +75,14 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
         }
     }
 
-    fun getTimeLapse() {
+    fun getTimeLapse(gardenId: Long) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = timeLapseApi.getTimeLapseList(gardenId)
 
+            if(response.isSuccessful) {
+                Log.e("TEST", response.body().toString())
+            }
+        }
     }
 
     fun getHarmAnimalList(gardenId: Long) {

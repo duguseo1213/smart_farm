@@ -67,7 +67,7 @@ fun MyFarmView(modifier: Modifier) {
             }
 
             HomeViewState.LIVE -> {
-                gardenStreamKeyMap[crtGarden]?.let {
+                gardenStreamKeyMap[crtGarden?.gardenId]?.let {
                     VLCPlayer(
                         modifier = Modifier
                             .fillMaxHeight(0.7f)

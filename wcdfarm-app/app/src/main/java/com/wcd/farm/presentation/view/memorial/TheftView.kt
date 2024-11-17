@@ -20,11 +20,11 @@ import com.wcd.farm.presentation.viewmodel.MemorialViewModel
 fun TheftScreen() {
     val viewModel: MemorialViewModel = mavericksViewModel()
     val listState = rememberLazyListState()
-    val crtGardenId by viewModel.crtGarden.collectAsState()
+    val crtGarden by viewModel.crtGarden.collectAsState()
     val theftList by viewModel.harmTheftList.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getHarmTheftList(crtGardenId)
+        crtGarden?.let { viewModel.getHarmTheftList(it.gardenId) }
     }
 
     if (theftList.isEmpty()) {
