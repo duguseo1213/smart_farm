@@ -31,6 +31,8 @@ Plant_Disease_Detection_Labels = 45
 Plant_Disease_Detection_State_Dict_PATH = os.path.join(script_dir,"PlantDisease/plant.pth")
 Animal_Detection_Model_PATH = os.path.join(script_dir,"AnimalDetection/best.pt")
 Human_Detection_Model_PATH = os.path.join(script_dir,"AnimalDetection/best_human.pt")
+# Lettuce_Detection_Model_PATH= os.path.join(script_dir,"LettuceDetection/best_lettuce.pt")
+Card_Detection_Model_PATH= os.path.join(script_dir,"LettuceDetection/best_card_detection.pt")
 # plantDiseaseDetection
 plant_disease_detection_model = MyCnnModel.MyCnn(Plant_Disease_Detection_Labels)
 plant_disease_detection_model.load_state_dict(torch.load(Plant_Disease_Detection_State_Dict_PATH, map_location=torch.device('cpu')))
@@ -44,6 +46,8 @@ plant_disease_image_transform = transforms.Compose([
 # animal Detection Model
 animal_detection_model = YOLO(Animal_Detection_Model_PATH)
 human_detection_model = YOLO(Human_Detection_Model_PATH)
+# Lettuce_detection_model = YOLO(Lettuce_Detection_Model_PATH)
+Card_detection_model = YOLO(Card_Detection_Model_PATH)
 @app.post("/plantDiseaseDetection")
 async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
 
@@ -102,6 +106,25 @@ async def animalDetection(imageFile: UploadFile = File(...)):
         if confidence >= 0.5:  # 신뢰도가 50% 이상인지 확인
             return {"Human"}
             
+    return {"none"}
+
+@app.post("/LettuceSegment")
+async def LettuceSegment(imageFile: UploadFile = File(...)):
+    image_data = await imageFile.read()  # UploadFile에서 데이터 읽기
+    image = Image.open(io.BytesIO(image_data))  # bytes 데이터를 PIL 이미지로 변환
+    
+    results = Card_detection_model(image)
+    print(results)
+    
+    for result in results:
+        boxes = result.boxes  # Boxes object for bounding box outputs
+        masks = result.masks  # Masks object for segmentation masks outputs
+        keypoints = result.keypoints  # Keypoints object for pose outputs
+        probs = result.probs  # Probs object for classification outputs
+        obb = result.obb  # Oriented boxes object for OBB outputs
+        result.show()  # display to screen
+        result.save(filename="result.jpg")  # save to disk
+    
     return {"none"}
 
     

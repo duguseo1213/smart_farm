@@ -103,7 +103,9 @@ public class GardenServiceImpl implements GardenService {
     public void registerUserToGarden(User user,RegisterUserToGardenRequest request) throws Exception {
         Garden garden = gardenRepository.findById(request.getGardenId()).orElseThrow();
         log.info(user.toString());
-        UserToGarden userToGarden = UserToGarden.create(user, garden,GardenUserType.MEMBER);
+        GardenUserType type = request.getUserType() == null ? GardenUserType.MEMBER : request.getUserType();
+        UserToGarden userToGarden = UserToGarden.create(user, garden,type);
+
         userToGardenRepository.save(userToGarden);
 
     }
