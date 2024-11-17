@@ -66,10 +66,11 @@ fun MemorialScreen() {
     val viewModel: MemorialViewModel = mavericksViewModel()
     val showView by viewModel.collectAsState(MemorialViewState::showMemorialView)
     val showInvasionVideo by viewModel.collectAsState(MemorialViewState::showInvasionVideo)
+    val gardenList by viewModel.gardenList.collectAsState()
     val crtGarden by viewModel.crtGarden.collectAsState()
 
     LaunchedEffect(crtGarden) {
-        crtGarden?.let { viewModel.getTimeLapse(it.gardenId) }
+        crtGarden?.let { viewModel.getTimeLapse(gardenList[it].gardenId) }
     }
 
     Spacer(modifier = Modifier.fillMaxHeight(0.07f))

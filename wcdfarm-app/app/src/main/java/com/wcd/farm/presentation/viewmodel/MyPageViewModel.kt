@@ -9,7 +9,9 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(private val gardenRepository: GardenRepository): ViewModel() {
 
     val cropList = gardenRepository.gardenCropList
+    val gardenList = gardenRepository.gardenList
     val crtGarden = gardenRepository.crtGarden
+
 
     fun addCrop(gardenId: Long, cropName: String) {
         gardenRepository.addCrop(gardenId, cropName)

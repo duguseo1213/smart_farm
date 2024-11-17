@@ -74,12 +74,13 @@ val customFontFamily3 = FontFamily(
 fun GalleryView() {
     val viewModel: MemorialViewModel = mavericksViewModel()
 
+    val gardenList by viewModel.gardenList.collectAsState()
     val calendarState by viewModel.collectAsState(MemorialViewState::showDialog)
     val selectedDate by viewModel.selectedDate.collectAsState()
     val crtGarden by viewModel.crtGarden.collectAsState()
 
     LaunchedEffect(crtGarden) {
-        crtGarden?.let { viewModel.getAllPictures(it.gardenId) }
+        crtGarden?.let { viewModel.getAllPictures(gardenList[it].gardenId) }
     }
 
     Column {

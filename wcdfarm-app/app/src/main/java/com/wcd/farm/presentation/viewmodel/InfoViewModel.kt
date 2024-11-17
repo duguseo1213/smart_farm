@@ -10,6 +10,7 @@ class InfoViewModel @Inject constructor(private val gardenRepository: GardenRepo
     ViewModel() {
     val gardenState = gardenRepository.crtGardenState
 
+    val gardenList = gardenRepository.gardenList
     val crtGarden = gardenRepository.crtGarden
     val selectedCrop = gardenRepository.selectedCrop
     val gardenCropList = gardenRepository.gardenCropList

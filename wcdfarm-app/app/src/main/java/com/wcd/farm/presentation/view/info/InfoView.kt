@@ -22,13 +22,14 @@ import com.wcd.farm.presentation.viewmodel.InfoViewModel
 @Composable
 fun InfoScreen() {
     val infoViewModel: InfoViewModel = hiltViewModel()
+    val gardenList by infoViewModel.gardenList.collectAsState()
     val crtGarden by infoViewModel.crtGarden.collectAsState()
     val selectedCrop by infoViewModel.selectedCrop.collectAsState()
 
     LaunchedEffect(crtGarden) {
         crtGarden?.let {
-            infoViewModel.getGardenState(it.gardenId)
-            infoViewModel.getGardenCrops(it.gardenId)
+            infoViewModel.getGardenState(gardenList[it].gardenId)
+            infoViewModel.getGardenCrops(gardenList[it].gardenId)
         }
 
     }

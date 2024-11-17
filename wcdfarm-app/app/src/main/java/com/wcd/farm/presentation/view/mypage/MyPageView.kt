@@ -143,7 +143,7 @@ fun InviteFarmButton() {
 fun CropsState() {
     val viewModel: MyPageViewModel = hiltViewModel()
     val gardenCropList = listOf("1", "2", "3")
-
+    val gardenList by viewModel.gardenList.collectAsState()
     val crtGarden by viewModel.crtGarden.collectAsState()
     var newCropName by remember {
         mutableStateOf("")
@@ -153,7 +153,7 @@ fun CropsState() {
         onDismissRequest = { /*TODO*/ },
         confirmButton = {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                TextButton(onClick = { viewModel.addCrop(crtGarden!!.gardenId, newCropName) }) {
+                TextButton(onClick = { viewModel.addCrop(gardenList[crtGarden!!].gardenId, newCropName) }) {
                     Text("작물 추가하기")
                 }
             }

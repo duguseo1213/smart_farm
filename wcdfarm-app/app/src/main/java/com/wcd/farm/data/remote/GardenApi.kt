@@ -47,6 +47,9 @@ interface GardenApi {
     @POST("$GARDEN_BASE/add-garden")
     suspend fun postAddGarden(@Body body: Map<String, String>): Response<ResponseDTO<String>>
 
+    @POST("$GARDEN_BASE/change-garden-name")
+    suspend fun changeGardenName(@Query("gardenName") gardenName: String, @Query("gardenId") gardenId: Long): Response<ResponseDTO<Any>>
+
     @GET("$DEVICE_BASE/get-stream-key")
     suspend fun getStreamKey(@Query("gardenId") gardenId: Long): Response<ResponseDTO<String>>
 }

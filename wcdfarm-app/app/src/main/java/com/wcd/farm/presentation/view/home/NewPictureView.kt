@@ -25,6 +25,7 @@ import com.wcd.farm.presentation.viewmodel.HomeViewModel
 @Composable
 fun NewPictureView() {
     val viewModel: HomeViewModel = mavericksViewModel()
+    val gardenList by viewModel.gardenList.collectAsState()
     val newPicture by viewModel.newPicture.collectAsState()
     val crtGarden by viewModel.crtGarden.collectAsState()
 
@@ -42,7 +43,7 @@ fun NewPictureView() {
                 viewModel.addNewPicture(
                     newPicture!!,
                     description,
-                    crtGarden!!.gardenId
+                    gardenList[crtGarden!!].gardenId
                 )
             }) {
             Text("저장")

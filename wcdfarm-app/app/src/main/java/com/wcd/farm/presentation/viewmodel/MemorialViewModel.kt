@@ -38,6 +38,7 @@ class MemorialViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<MemorialViewModel, MemorialViewState> by hiltMavericksViewModelFactory()
 
+    val gardenList = gardenRepository.gardenList
     val selectedDate = repository.selectedDate
     val pictureList = repository.pictureList
     val timeLapseList = repository.timeLapseImageList

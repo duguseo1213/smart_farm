@@ -19,8 +19,10 @@ class GardenRepository @Inject constructor(
     private val _gardenList = MutableStateFlow<List<GardenDTO>>(listOf(GardenDTO(2, "효린이네", "광주광역시 광산구 장덕동 982-10", "2024-10-24"))/*emptyList()*/)
     val gardenList = _gardenList.asStateFlow()
 
-    private val _crtGarden = MutableStateFlow<GardenDTO?>(GardenDTO(2, "효린이네", "광주광역시 광산구 장덕동 982-10", "2024-10-24"))
+    private val _crtGarden = MutableStateFlow<Int?>(null)
     val crtGarden = _crtGarden.asStateFlow()
+    //private val _crtGarden = MutableStateFlow<GardenDTO?>(GardenDTO(2, "효린이네", "광주광역시 광산구 장덕동 982-10", "2024-10-24"))
+    //val crtGarden = _crtGarden.asStateFlow()
 
     private val _crtGardenState = MutableStateFlow<GardenState?>(null)
     val crtGardenState = _crtGardenState.asStateFlow()
@@ -72,8 +74,9 @@ class GardenRepository @Inject constructor(
             if (response.isSuccessful) {
                 val gardenList = response.body()?.data
 
-                if (gardenList != null) {
+                if (gardenList!!.isNotEmpty()) {
                     _gardenList.value = gardenList
+                    if(_crtGarden.value == null) _crtGarden.value = 0
                 }
             }
         }
@@ -161,6 +164,21 @@ class GardenRepository @Inject constructor(
             val body = mutableMapOf<String, String>()
 
             val response = gardenApi.postAddGarden(body)
+        }
+    }
+
+    fun changeGardenName(gardenId: Long, gardenName: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.e("TEST", gardenId.toString())
+            Log.e("TEST", gardenName)
+            val response = gardenApi.changeGardenName(gardenName, gardenId)
+
+            if(response.isSuccessful) {
+                gardenApi.getGardens()
+                Log.e("TEST", response.body().toString())
+            } else {
+                Log.e("TEST", response.errorBody()!!.string())
+            }
         }
     }
 }

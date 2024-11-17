@@ -87,4 +87,8 @@ class HomeViewModel @AssistedInject constructor(
     fun addNewPicture(imageUrl: String, description: String, gardenId: Long) {
         memorialRepository.addNewPicture(imageUrl, description, gardenId)
     }
+
+    fun changeGardenName(gardenId: Long, gardenName: String) {
+        gardenRepository.changeGardenName(gardenId, gardenName)
+    }
 }
