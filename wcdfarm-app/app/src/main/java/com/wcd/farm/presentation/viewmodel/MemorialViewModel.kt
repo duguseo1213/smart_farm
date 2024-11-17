@@ -39,6 +39,8 @@ class MemorialViewModel @AssistedInject constructor(
 
     val selectedDate = repository.selectedDate
     val pictureList = repository.pictureList
+    val timeLapseList = repository.timeLapseImageList
+    val crtTimeLapseImage = repository.crtTimeLapseImage
     val harmAnimalList = repository.harmAnimalList
     val harmTheftList = repository.harmTheftList
 

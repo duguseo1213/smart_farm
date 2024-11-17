@@ -3,7 +3,9 @@ package com.wcd.farm.data.remote
 import com.wcd.farm.data.model.PictureDTO
 import com.wcd.farm.data.model.ResponseDTO
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 import java.time.LocalDate
 
@@ -20,4 +22,7 @@ interface GalleryApi {
         @Query("gardenId") gardenId: Long,
         @Query("createdDate") createdDate: LocalDate
     ): Response<ResponseDTO<List<PictureDTO>>>
+
+    @POST("$GALLERY_BASE/add-picture")
+    suspend fun addPicture(@Body body: Map<String, String>): Response<ResponseDTO<String>>
 }

@@ -64,7 +64,6 @@ fun MemorialScreen() {
     val crtGarden by viewModel.crtGarden.collectAsState()
 
     LaunchedEffect(crtGarden) {
-
         crtGarden?.let { viewModel.getTimeLapse(it.gardenId) }
     }
 

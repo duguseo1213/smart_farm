@@ -27,6 +27,7 @@ fun HomeScreen() {
     val showWeekWeather by homeViewModel.collectAsState(HomeViewState::showWeekWeather)
     val gardenList by homeViewModel.gardenList.collectAsState()
     val crtGarden by homeViewModel.crtGarden.collectAsState()
+    val newPicture by homeViewModel.newPicture.collectAsState()
 
     LaunchedEffect(Unit) {
         val longitude = 126.8071876
@@ -54,6 +55,10 @@ fun HomeScreen() {
             ForecastWeatherView {
                 homeViewModel.sendIntent(HomeViewIntent.HideWeekWeather)
             }
+        }
+
+        if (newPicture != null) {
+            NewPictureView()
         }
     }
 }

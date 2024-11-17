@@ -40,6 +40,12 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
     private val _timeLapseImageList = MutableStateFlow<List<TimeLapseImageDTO>>(emptyList())
     val timeLapseImageList = _timeLapseImageList.asStateFlow()
 
+    private val _crtTimeLapseImage = MutableStateFlow<TimeLapseImageDTO?>(null)
+    val crtTimeLapseImage = _crtTimeLapseImage.asStateFlow()
+
+    private val _newPicture = MutableStateFlow<String?>(null)
+    val newPicture = _newPicture.asStateFlow()
+
     fun setSelectedDate(date: LocalDate) {
         _selectedDate.value = date
     }
@@ -80,7 +86,7 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
             val response = timeLapseApi.getTimeLapseList(gardenId)
 
             if(response.isSuccessful) {
-                Log.e("TEST", response.body().toString())
+                _timeLapseImageList.value = response.body()!!.data
             }
         }
     }
@@ -107,5 +113,25 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
                 _harmTheftList.value = list
             }
         }
+    }
+
+    fun setNewPicture(imageUrl: String?) {
+        _newPicture.value = imageUrl
+    }
+
+    fun addNewPicture(imageUrl: String, description: String, gardenId: Long) {
+        val body = mutableMapOf<String, String>()
+        body["image"] = imageUrl
+        body["description"] = description
+        body["gardenId"] = gardenId.toString()
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = galleryApi.addPicture(body)
+
+            if(response.isSuccessful) {
+                Log.e("TEST", response.body()!!.data)
+                setNewPicture(null)
+            }
+        }
+
     }
 }

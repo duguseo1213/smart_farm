@@ -18,7 +18,10 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.wcd.farm.R
 import com.wcd.farm.data.remote.UserApi
+import com.wcd.farm.data.repository.MemorialRepository
 import com.wcd.farm.presentation.MainActivity
+import com.wcd.farm.presentation.viewmodel.HomeViewModel
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +34,8 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
     @Inject
     lateinit var userApi: UserApi
+    @Inject
+    lateinit var memorialRepository: MemorialRepository
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
@@ -52,6 +57,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
             }
         } else {
             Log.e("TEST", remoteMessage.notification!!.imageUrl.toString())
+            memorialRepository.setNewPicture(remoteMessage.notification!!.imageUrl.toString())
         }
         //Log.e("TEST", remoteMessage.data["image"])
 

@@ -5,6 +5,7 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.hilt.AssistedViewModelFactory
 import com.airbnb.mvrx.hilt.hiltMavericksViewModelFactory
 import com.wcd.farm.data.repository.GardenRepository
+import com.wcd.farm.data.repository.MemorialRepository
 import com.wcd.farm.presentation.intent.HomeViewIntent
 import com.wcd.farm.presentation.state.HomeViewState
 import dagger.assisted.Assisted
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel @AssistedInject constructor(
     @Assisted initialState: HomeViewState,
-    private val gardenRepository: GardenRepository
+    private val gardenRepository: GardenRepository,
+    private val memorialRepository: MemorialRepository
 ): MavericksViewModel<HomeViewState>(initialState) {
 
     private val homeViewIntent = Channel<HomeViewIntent>()
@@ -31,6 +33,7 @@ class HomeViewModel @AssistedInject constructor(
 
     val crtGarden = gardenRepository.crtGarden
     val gardenStreamKeyMap = gardenRepository.gardenStreamKeyMap
+    val newPicture = memorialRepository.newPicture
 
     init {
         handleIntent()
@@ -75,5 +78,13 @@ class HomeViewModel @AssistedInject constructor(
 
     fun addGarden() {
         gardenRepository.addGarden()
+    }
+
+    fun showNewPicture(imageUrl: String?) {
+        memorialRepository.setNewPicture(imageUrl)
+    }
+
+    fun addNewPicture(imageUrl: String, description: String, gardenId: Long) {
+        memorialRepository.addNewPicture(imageUrl, description, gardenId)
     }
 }

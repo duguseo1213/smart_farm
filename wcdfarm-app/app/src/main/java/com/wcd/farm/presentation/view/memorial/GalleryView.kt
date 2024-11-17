@@ -190,7 +190,6 @@ fun MemoryView(picture: PictureDTO) {
                     .clip(RoundedCornerShape(5.dp))
             )
         }
-
     }
 }
 
