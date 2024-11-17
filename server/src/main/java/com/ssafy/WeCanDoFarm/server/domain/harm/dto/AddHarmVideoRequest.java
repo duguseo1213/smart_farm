@@ -4,7 +4,6 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 @Data
 public class AddHarmVideoRequest {
-    Long gardenId;
     Long harmPictureId;
     MultipartFile file;
 }

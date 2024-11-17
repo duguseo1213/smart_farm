@@ -20,6 +20,7 @@ import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessage;
 import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
 import com.ssafy.WeCanDoFarm.server.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -39,6 +40,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class GardenServiceImpl implements GardenService {
 
     private final RestTemplate restTemplate;
@@ -97,9 +99,9 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public void registerUserToGarden(RegisterUserToGardenRequest request) throws Exception {
+    public void registerUserToGarden(User user,RegisterUserToGardenRequest request) throws Exception {
         Garden garden = gardenRepository.findById(request.getGardenId()).orElseThrow();
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+        log.info(user.toString());
         UserToGarden userToGarden = UserToGarden.create(user, garden,GardenUserType.MEMBER);
         userToGardenRepository.save(userToGarden);
 

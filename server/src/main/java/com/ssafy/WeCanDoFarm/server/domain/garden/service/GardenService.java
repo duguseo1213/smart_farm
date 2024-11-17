@@ -4,6 +4,7 @@ import com.ssafy.WeCanDoFarm.server.domain.garden.dto.*;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.GardenStatus;
 import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.GardenDataMessage;
+import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public interface GardenService{
 
     List<Garden> getGardens(String username) throws Exception;
     void registerGarden(RegisterGardenRequest request) throws Exception;
-    void registerUserToGarden(RegisterUserToGardenRequest request) throws Exception;
+    void registerUserToGarden(User user, RegisterUserToGardenRequest request) throws Exception;
     List<GetUserFromGardenResponse> getUserFromGarden(Long gardenId) throws Exception;
     PlantDiseaseDto.PlantDiseaseResponse plantDiseaseDetection(MultipartFile file) throws Exception;
     void addGardenData(Long deviceId, GardenDataMessage message) throws Exception;

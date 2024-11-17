@@ -85,7 +85,8 @@ public class HarmServiceImpl implements HarmService {
     public void addHarmVideo(AddHarmVideoRequest request) throws Exception {
         String filePath = s3UploadService.upload(request.getFile());
         HarmPicture harmPicture = HarmPictureRepository.findById(request.getHarmPictureId()).orElseThrow();
-        HarmVideo harmVideo =  HarmVideo.create(harmPicture,gardenRepository.findById(request.getGardenId()).orElseThrow(),filePath);
+        Garden garden = harmPicture.getGarden();
+        HarmVideo harmVideo =  HarmVideo.create(harmPicture,garden,filePath);
         HarmVideoRepository.save(harmVideo);
     }
 

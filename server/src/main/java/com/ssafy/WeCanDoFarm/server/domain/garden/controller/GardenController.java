@@ -51,17 +51,16 @@ public class GardenController {
 
     }
 
-
-    @PostMapping("/add-garden")
+    @PostMapping("/create-garden")
     public SuccessResponse<String> registerGarden(@RequestBody RegisterGardenRequest request) throws Exception {
         gardenService.registerGarden(request);
         return SuccessResponse.of("텃밭 등록완료");
     }
 
     @PostMapping("/add-user-to-garden")
-    public SuccessResponse<String> registerUserToGarden(@RequestBody RegisterUserToGardenRequest request) throws Exception {
+    public SuccessResponse<String> registerUserToGarden(@CurrentUser User user,@RequestBody RegisterUserToGardenRequest request) throws Exception {
 
-        gardenService.registerUserToGarden(request);
+        gardenService.registerUserToGarden(user,request);
         return SuccessResponse.empty();
     }
 

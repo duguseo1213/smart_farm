@@ -1,11 +1,13 @@
 package com.ssafy.WeCanDoFarm.server.domain.harm.controller;
 
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
+import com.ssafy.WeCanDoFarm.server.domain.harm.dto.AddHarmVideoRequest;
 import com.ssafy.WeCanDoFarm.server.domain.harm.dto.HarmPictureDto;
 import com.ssafy.WeCanDoFarm.server.domain.harm.service.HarmService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,5 +27,11 @@ public class HarmIoTController {
             id = harmService.addHarmPicture(request.getDeviceId(),request.getFile(),animalType);
         }
         return SuccessResponse.of(HarmPictureDto.HarmDetectionResponse.of(animalType,id));
+    }
+
+    @PostMapping("/add-harm-video")
+    SuccessResponse<String> addHarmVideo(AddHarmVideoRequest request) throws Exception {
+        harmService.addHarmVideo(request);
+        return SuccessResponse.empty();
     }
 }
