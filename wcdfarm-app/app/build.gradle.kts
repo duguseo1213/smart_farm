@@ -115,7 +115,8 @@ dependencies {
     implementation ("com.airbnb.android:lottie-compose:6.0.0")
 
     //image loading
-    implementation("io.coil-kt.coil3:coil-compose:3.0.2")
+    implementation("io.coil-kt.coil3:coil-compose:3.0.3")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.3")
 
     //rtmp live
     implementation("org.videolan.android:libvlc-all:3.5.1")

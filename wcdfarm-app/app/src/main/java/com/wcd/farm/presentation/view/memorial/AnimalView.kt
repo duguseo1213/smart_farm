@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.airbnb.mvrx.compose.mavericksViewModel
 import com.wcd.farm.data.model.HarmDTO
 import com.wcd.farm.presentation.viewmodel.MemorialViewModel
@@ -30,10 +31,8 @@ fun AnimalScreen() {
     }
 
     LaunchedEffect(crtGarden) {
-
         crtGarden?.let { viewModel.getHarmAnimalList(gardenList[it].gardenId) }
     }
-
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(30.dp, Alignment.Top),
         modifier = Modifier

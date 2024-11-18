@@ -1,7 +1,6 @@
 package com.wcd.farm.presentation.view.memorial
 
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -23,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -44,6 +44,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import coil3.compose.AsyncImage
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
@@ -53,6 +54,8 @@ import com.wcd.farm.presentation.intent.MemorialViewIntent
 import com.wcd.farm.presentation.state.MemorialViewState
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.MemorialViewModel
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -163,15 +166,16 @@ fun EmptyListView(notify: String) {
             modifier = Modifier.offset(y = -maxHeight / 5)
         )
     }
-
 }
 
 @Composable
 fun InvasionView(harm: HarmDTO, harmType: String) {
     val viewModel: MemorialViewModel = mavericksViewModel()
+    val date = ZonedDateTime.parse(harm.createdDate)
 
-    val invasionDate = harm.createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-    val invasionTime = harm.createdDate.format(DateTimeFormatter.ofPattern("a hh:mm"))
+    val invasionDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    val invasionTime = date.format(DateTimeFormatter.ofPattern("a hh:mm"))
+    
     Column {
         Text(
             invasionDate,
@@ -215,20 +219,22 @@ fun InvasionView(harm: HarmDTO, harmType: String) {
                 }
             }
 
-            Button(
+            TextButton(
                 onClick = {
                     viewModel.selectHarm(harm)
                     viewModel.sendIntent(MemorialViewIntent.ShowInvasionView)
                 },
+                modifier = Modifier.fillMaxSize(),
                 shape = RectangleShape,
-                colors = buttonTransparentTheme(),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.dog_on_farm),
-                    contentDescription = "invader",
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.clip(RoundedCornerShape(8.dp))
+                AsyncImage(
+                    model = harm.harmPicture,
+                    contentDescription = "harm",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
                 )
             }
         }
@@ -245,38 +251,41 @@ fun InvasionVideoView() {
     val invasionDate = selectedHarm?.createdDate?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     val invasionTime = selectedHarm?.createdDate?.format(DateTimeFormatter.ofPattern("a hh:mm"))
 
-    AlertDialog(onDismissRequest = { viewModel.sendIntent(MemorialViewIntent.HideInvasionView) }, confirmButton = { /*TODO*/ }, text = {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                "$invasionTime ${selectedHarm?.harmTarget} ${selectedHarm?.harmTarget}",
-                fontSize = 20.sp,
-                fontFamily = customFontFamily3
-            )
-            Button(
-                onClick = { /*TODO*/ },
-                shape = RectangleShape,
+    AlertDialog(
+        onDismissRequest = { viewModel.sendIntent(MemorialViewIntent.HideInvasionView) },
+        confirmButton = { /*TODO*/ },
+        text = {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(0.dp)
-                    .size(30.dp),
-                colors = buttonTransparentTheme(),
-                contentPadding = PaddingValues(0.dp)
+                    .padding(8.dp)
+                    .fillMaxWidth()
             ) {
-                Icon(
-                    Icons.Outlined.DeleteOutline,
-                    contentDescription = "Delete",
-                    modifier = Modifier.size(36.dp)
+                Text(
+                    "$invasionTime ${selectedHarm?.harmTarget} ${selectedHarm?.harmTarget}",
+                    fontSize = 20.sp,
+                    fontFamily = customFontFamily3
                 )
+                Button(
+                    onClick = { /*TODO*/ },
+                    shape = RectangleShape,
+                    modifier = Modifier
+                        .padding(0.dp)
+                        .size(30.dp),
+                    colors = buttonTransparentTheme(),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Icon(
+                        Icons.Outlined.DeleteOutline,
+                        contentDescription = "Delete",
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
             }
-        }
 
-        VideoPlayer(videoUrl = videoUrl)
-    })
+            VideoPlayer(videoUrl = videoUrl)
+        })
 }
 
 @Composable

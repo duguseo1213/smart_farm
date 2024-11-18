@@ -86,6 +86,7 @@ object ServerClient {
             chain.proceed(request)
         }
         .addInterceptor(retryInterceptor)
+        //.addInterceptor()
         .build()
 
     private val retrofit = Retrofit.Builder()

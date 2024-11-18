@@ -31,7 +31,7 @@ import kotlinx.coroutines.withContext
 fun LoginScreen() {
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
+    /*LaunchedEffect(Unit) {
         val url =
             "https://k11c104.p.ssafy.io/oauth2/authorization/kakao?redirect_uri=app://wcdfarm"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -41,7 +41,7 @@ fun LoginScreen() {
                 context.startActivity(intent)
             }
         }
-    }
+    }*/
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
