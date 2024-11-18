@@ -170,12 +170,15 @@ fun CaptureImage(showDiseaseDetectResult: Boolean, onDiseaseDetectState: Boolean
                                 contentDescription = "",
                                 modifier = Modifier.fillMaxWidth(0.8f).align(Alignment.CenterHorizontally)
                             )
-                            Text("${diseaseDetect?.diseaseName} 검출", color = Color.White)
-                            Text("${diseaseDetect?.diseaseSolvent}", color = Color.White)
+                            Text("${diseaseDetect?.diseaseName} 검출", color = Color.White,fontFamily = FontFamily(
+                                Font(R.font.ef_yoony))
+                            Text("${diseaseDetect?.diseaseSolvent}", color = Color.White, fontFamily = FontFamily(
+                                Font(R.font.ef_yoony))
                         }
                     } else {
                         Log.e("TEST", "isPlantDisease: false")
-                        Text("검출되지 않았습니다.", color = Color.White)
+                        Text("검출되지 않았습니다.", color = Color.White,fontFamily = FontFamily(
+                                Font(R.font.ef_yoony))
                     }
                 }
             }
