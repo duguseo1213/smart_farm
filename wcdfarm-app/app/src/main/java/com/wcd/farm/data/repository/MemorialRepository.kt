@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import javax.inject.Inject
 
@@ -22,7 +24,7 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
     private val _selectedDate = MutableStateFlow(LocalDate.now())
     val selectedDate = _selectedDate.asStateFlow()
 
-    private val _datePictureListMap = MutableStateFlow<Map<LocalDate, List<PictureDTO>>>(emptyMap())
+    private val _datePictureListMap = MutableStateFlow<Map<String, List<PictureDTO>>>(emptyMap())
     val datePictureListMap = _datePictureListMap.asStateFlow()
 
     private val _pictureList = MutableStateFlow<List<PictureDTO>>(emptyList())
@@ -58,31 +60,44 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
 
     fun getAllPictures(gardenId: Long) {
         CoroutineScope(Dispatchers.IO).launch {
-            Log.e("TEST", "getPictures")
             val response = galleryApi.getPictures(gardenId)
-            Log.e("TEST", response.isSuccessful.toString())
             if(response.isSuccessful) {
-                /*Log.e("TEST", "success")
-                Log.e("TEST", response.body()!!.data.size.toString())*/
-                /*val pictureList = response.body()?.data
-
+                Log.e("TEST", "getAllPictures: " + response.body().toString())
+                val pictureList = response.body()?.data
+1
                 if (pictureList != null) {
+                    val newMap = mutableMapOf<String, MutableList<PictureDTO>>()
+                    //_pictureList.value = pictureList
                     for(picture in pictureList) {
-                        Log.e("TEST", picture.toString())
+                        val time = LocalDateTime.parse(picture.pictureDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                        val date = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        if(!newMap.containsKey(date)) newMap[date] = mutableListOf()
+                        newMap[date]?.add(picture)
                     }
-                }*/
-            } else {
-
+                    _datePictureListMap.value = newMap
+                }
             }
         }
     }
 
-    fun getPicturesOnDate(gardenId: Long) {
+    fun updatePictures(date: String) {
+        if(datePictureListMap.value.containsKey(date)) {
+            _pictureList.value = datePictureListMap.value[date]!!
+        }
+    }
+
+    fun getPicturesOnDate(gardenId: Long, createdDate: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = galleryApi.getPictureOnDate(gardenId, selectedDate.value)
+            Log.e("TEST", "getPicturesOnDate: $gardenId, $createdDate")
+            val response = galleryApi.getPictureOnDate(gardenId, createdDate)
 
             if(response.isSuccessful) {
+                Log.e("TEST", "getPicturesOnDate: " + response.body().toString())
                 val pictureList = response.body()?.data
+                if (pictureList != null) {
+                    Log.e("TEST", "isNotNull")
+                    //_pictureList.value = pictureList
+                }
             }
         }
     }
@@ -93,6 +108,7 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
 
             if(response.isSuccessful) {
                 _timeLapseImageList.value = response.body()!!.data
+                Log.e("TEST", "timeLapse: " + response.body().toString())
             }
         }
     }
@@ -102,9 +118,11 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
             val response = harmApi.getHarmAnimal(gardenId)
 
             if(response.isSuccessful) {
-                val list = response.body()!!.data
+                val list = response.body()?.data
                 Log.e("TEST", response.body()!!.toString())
-                _harmAnimalList.value = list
+                if(list != null) {
+                    _harmAnimalList.value = list
+                }
             }
         }
     }

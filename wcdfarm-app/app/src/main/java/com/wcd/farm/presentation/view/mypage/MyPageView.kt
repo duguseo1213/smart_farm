@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil3.compose.AsyncImage
 import com.airbnb.mvrx.compose.mavericksViewModel
 import com.wcd.farm.R
 import com.wcd.farm.data.model.CropDTO
@@ -75,7 +76,6 @@ fun MyPageScreen() {
         ) {
             Text("농장 정보", Modifier.padding(0.dp, 8.dp), fontSize = 16.sp)
 
-
             Column(
                 Modifier
                     .clip(RoundedCornerShape(16.dp))
@@ -87,9 +87,10 @@ fun MyPageScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.dog_on_farm),
-                    contentDescription = "Farm",
+                AsyncImage(
+                    model = gardenList[crtGarden!!].gardenImage,
+                    //painter = painterResource(id = R.drawable.dog_on_farm),
+                    contentDescription = "",
                     modifier = Modifier
                         .width(350.dp)
                         .height(50.dp)
@@ -109,14 +110,15 @@ fun MyPageScreen() {
                         fontFamily = FontFamily(Font(R.font.bookend_semibold)),
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val cropStateList = gardenCropList.map { crop -> "${crop.cropName}   ${crop.growthPercentage}%" }
+                    val cropStateList =
+                        gardenCropList.map { crop -> "${crop.cropName}   ${crop.growthPercentage}%" }
                     FarmInfo("농장 주소", listOf(gardenList[crtGarden!!].gardenAddress))
                     FarmInfo("시작 날짜", listOf(gardenList[crtGarden!!].createdDate))
                     FarmInfo("작물 현황", cropStateList)
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Row (
+                    Row(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -224,7 +226,12 @@ fun CropState(crop: CropDTO) {
                 withStyle(style = SpanStyle(fontSize = 25.sp, fontWeight = FontWeight.ExtraBold)) {
                     append("${crop.growthPercentage}% ")
                 }
-                withStyle(style = SpanStyle(fontSize = 18.sp, fontWeight = FontWeight.Normal)) { // 성장 글씨 크기 줄임
+                withStyle(
+                    style = SpanStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                ) { // 성장 글씨 크기 줄임
                     append("성장")
                 }
             },
@@ -235,12 +242,17 @@ fun CropState(crop: CropDTO) {
             imageVector = Icons.Outlined.DeleteOutline,
             contentDescription = "Trash Icon",
             tint = Color.Black,
-            modifier = Modifier.size(20.dp).noRippleClickable { viewModel.deleteCrop(gardenList[crtGarden!!].gardenId, crop.cropName) }
+            modifier = Modifier
+                .size(20.dp)
+                .noRippleClickable {
+                    viewModel.deleteCrop(
+                        gardenList[crtGarden!!].gardenId,
+                        crop.cropName
+                    )
+                }
         )
     }
 }
-
-
 
 
 @Composable
@@ -251,6 +263,6 @@ fun InputNewCrop(newCropName: String, onValueChange: (String) -> Unit) {
             .padding(16.dp)
             .fillMaxWidth()
     ) {
-        TextField(value = newCropName, onValueChange = { onValueChange(it) } )
+        TextField(value = newCropName, onValueChange = { onValueChange(it) })
     }
 }

@@ -18,6 +18,7 @@ import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wcd.farm.presentation.viewmodel.InfoViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun InfoScreen() {
@@ -32,11 +33,18 @@ fun InfoScreen() {
             infoViewModel.getGardenCrops(gardenList[it].gardenId)
         }
 
+        while (true) {
+            delay(5000)
+            crtGarden?.let {
+                infoViewModel.getGardenState(gardenList[it].gardenId)
+            }
+        }
     }
 
     LaunchedEffect(selectedCrop) {
         if (selectedCrop.cropName != "") {
             infoViewModel.getRecommendCrops(selectedCrop.cropName)
+            infoViewModel.getCropGrowthStages(gardenList[crtGarden!!].gardenId, selectedCrop.cropName)
         }
     }
 

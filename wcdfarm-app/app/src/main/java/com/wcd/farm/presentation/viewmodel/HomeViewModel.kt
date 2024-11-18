@@ -100,4 +100,8 @@ class HomeViewModel @AssistedInject constructor(
     fun setCrtWeatherGardenIndex(index: Int) {
         gardenRepository.setCrtWeatherGardenIndex(index)
     }
+
+    fun toggleHarm(gardenId: Long) {
+        gardenRepository.toggleHarm(gardenId)
+    }
 }

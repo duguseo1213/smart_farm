@@ -6,6 +6,7 @@ import com.wcd.farm.data.model.GardenDTO
 import com.wcd.farm.data.model.GardenState
 import com.wcd.farm.data.remote.CropApi
 import com.wcd.farm.data.remote.GardenApi
+import com.wcd.farm.data.remote.HarmApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class GardenRepository @Inject constructor(
     private val gardenApi: GardenApi,
-    private val cropApi: CropApi
+    private val cropApi: CropApi,
+    private val harmApi: HarmApi
 ) {
     private val _gardenList = MutableStateFlow<List<GardenDTO>>(emptyList())
     val gardenList = _gardenList.asStateFlow()
@@ -103,7 +105,7 @@ class GardenRepository @Inject constructor(
             val response = cropApi.getCrops(gardenId)
 
             if (response.isSuccessful) {
-                Log.e("TEST", response.body().toString())
+                Log.e("TEST", "getGardenCrops: " + response.body().toString())
                 val gardenCropList = response.body()?.data
 
                 if (!gardenCropList.isNullOrEmpty()) {
@@ -158,9 +160,10 @@ class GardenRepository @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             val response = cropApi.addCrop(gardenId, cropName)
             if (response.isSuccessful) {
+                Log.e("TEST", "addCrop: " + response.body().toString())
                 getGardenCrops(gardenId)
 
-                Log.e("TEST", response.body().toString())
+
             }
         }
     }
@@ -213,5 +216,22 @@ class GardenRepository @Inject constructor(
 
     fun setCrtWeatherGardenIndex(index: Int) {
         _crtWeatherGardenIndex.value = index
+    }
+
+    fun getCropGrowthStages(gardenId: Long, cropName: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = cropApi.getCropGrowthStages(gardenId, cropName)
+        }
+    }
+
+    fun toggleHarm(gardenId: Long) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = harmApi.toggleDetection(gardenId)
+
+            if(response.isSuccessful) {
+                Log.e("TEST", response.body().toString())
+            }
+
+        }
     }
 }

@@ -127,4 +127,12 @@ class MemorialViewModel @AssistedInject constructor(
     private fun setCrtTimeLapseImage(index: Int?) {
         repository.setTimeLapseImage(index)
     }
+
+    fun getPicturesOnDate(gardenId: Long, createdDate: String) {
+        repository.getPicturesOnDate(gardenId, createdDate)
+    }
+
+    fun updatePictures(date: String) {
+        repository.updatePictures(date)
+    }
 }

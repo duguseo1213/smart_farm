@@ -8,6 +8,7 @@ import com.wcd.farm.data.remote.DeviceApi
 import com.wcd.farm.data.remote.GalleryApi
 import com.wcd.farm.data.remote.GardenApi
 import com.wcd.farm.data.remote.HarmApi
+import com.wcd.farm.data.remote.MeteoApi
 import com.wcd.farm.data.remote.ServerClient
 import com.wcd.farm.data.remote.TimeLapseApi
 import com.wcd.farm.data.remote.UserApi
@@ -28,7 +29,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object  AppModule {
 
     @Provides
     @Singleton
@@ -86,6 +87,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideMeteoApi(): MeteoApi {
+        return ServerClient.meteoApi
+    }
+
+    @Provides
+    @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
     }
@@ -98,14 +105,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWeatherRepository(weatherApi: WeatherApi): WeatherRepository = WeatherRepository(
-        provideWeatherApi()
+    fun provideWeatherRepository(weatherApi: WeatherApi, meteoApi: MeteoApi): WeatherRepository = WeatherRepository(
+        provideWeatherApi(), provideMeteoApi()
     )
 
     @Provides
     @Singleton
-    fun provideGardenRepository(gardenApi: GardenApi, cropApi: CropApi): GardenRepository {
-        return GardenRepository(gardenApi, cropApi)
+    fun provideGardenRepository(gardenApi: GardenApi, cropApi: CropApi, harmApi: HarmApi): GardenRepository {
+        return GardenRepository(gardenApi, cropApi, harmApi)
     }
 
     @Provides

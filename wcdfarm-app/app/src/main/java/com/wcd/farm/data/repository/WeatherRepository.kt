@@ -8,6 +8,7 @@ import com.wcd.farm.data.LatXLngY
 import com.wcd.farm.data.model.ForecastWeather
 import com.wcd.farm.data.model.WeatherDTO
 import com.wcd.farm.data.model.WeatherInfo
+import com.wcd.farm.data.remote.MeteoApi
 import com.wcd.farm.data.remote.WeatherApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 
-class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) {
+class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi, private val meteoApi: MeteoApi) {
 
     private val _latXLngYList = MutableStateFlow(mutableListOf<LatXLngY>())
     val latXLngYList = _latXLngYList.asStateFlow()
@@ -177,67 +178,77 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
         }
     }
 
-    fun getForecastWeather(time: LocalDateTime) {
-        val baseTime = time.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "0600"
-        val customOptions: MutableMap<String, String> = mutableMapOf()
-        customOptions["regId"] = "11F20000"
-        customOptions["tmFc"] = baseTime
+    fun getForecastWeather(latitude: Double, longitude: Double, time: LocalDateTime) {
 
-        val options = getOptions(customOptions)
+
+
         CoroutineScope(Dispatchers.IO).launch {
-            val response = weatherApi.getForecastWeather(options)
-            if (response.isSuccessful) {
-                val list = _forecastWeather.value.toMutableList()
-                Log.e("TEST", response.body().toString())
-                val item = getItem(response.body()!!)[0].asJsonObject
-                for (i in 3..7) {
-                    val amRainPredictField = "rnSt${i}Am"
-                    val pmRainPredictField = "rnSt${i}Pm"
-                    val amWeatherField = "wf${i}Am"
-                    val pmWeatherField = "wf${i}Pm"
 
-                    val amRainPredict = item[amRainPredictField].asInt
-                    val pmRainPredict = item[pmRainPredictField].asInt
+            val areaCodeResponse = meteoApi.getAreaCode(latitude, longitude)
 
-                    val amWeather = item[amWeatherField].asString
-                    val pmWeather = item[pmWeatherField].asString
-                    val amWeatherCode = weatherStringToCode(amWeather)
-                    val pmWeatherCode = weatherStringToCode(pmWeather)
+            if(areaCodeResponse.isSuccessful) {
+                val areaCode = areaCodeResponse.body()!!.data.areacode
+                val baseTime = time.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "0600"
+                val customOptions: MutableMap<String, String> = mutableMapOf()
+                customOptions["regId"] = areaCode
+                customOptions["tmFc"] = baseTime
+                val options = getOptions(customOptions)
 
-                    list[i - 1] = list[i - 1].copy(
-                        amRainProbability = amRainPredict,
-                        pmRainProbability = pmRainPredict,
-                        amWeather = amWeatherCode,
-                        pmWeather = pmWeatherCode
-                    )
+                val response = weatherApi.getForecastWeather(options)
+                if (response.isSuccessful) {
+                    val list = _forecastWeather.value.toMutableList()
+                    val item = getItem(response.body()!!)[0].asJsonObject
+                    for (i in 3..7) {
+                        val amRainPredictField = "rnSt${i}Am"
+                        val pmRainPredictField = "rnSt${i}Pm"
+                        val amWeatherField = "wf${i}Am"
+                        val pmWeatherField = "wf${i}Pm"
+
+                        val amRainPredict = item[amRainPredictField].asInt
+                        val pmRainPredict = item[pmRainPredictField].asInt
+
+                        val amWeather = item[amWeatherField].asString
+                        val pmWeather = item[pmWeatherField].asString
+                        val amWeatherCode = weatherStringToCode(amWeather)
+                        val pmWeatherCode = weatherStringToCode(pmWeather)
+
+                        list[i - 1] = list[i - 1].copy(
+                            amRainProbability = amRainPredict,
+                            pmRainProbability = pmRainPredict,
+                            amWeather = amWeatherCode,
+                            pmWeather = pmWeatherCode
+                        )
+                    }
+
+                    _forecastWeather.value = list
                 }
 
-                _forecastWeather.value = list
-            }
+                val customOptions2: MutableMap<String, String> = mutableMapOf()
+                customOptions2["regId"] = "11F20501"
+                customOptions2["tmFc"] = baseTime
 
-            val customOptions2: MutableMap<String, String> = mutableMapOf()
-            customOptions2["regId"] = "11F20501"
-            customOptions2["tmFc"] = baseTime
+                val options2 = getOptions(customOptions2)
 
-            val options2 = getOptions(customOptions2)
+                val response2 = weatherApi.getForecastTmp(options2)
 
-            val response2 = weatherApi.getForecastTmp(options2)
+                if (response2.isSuccessful) {
+                    val list = _forecastWeather.value.toMutableList()
 
-            if (response2.isSuccessful) {
-                val list = _forecastWeather.value.toMutableList()
+                    val item = getItem(response2.body()!!)[0].asJsonObject
+                    for (i in 3..7) {
+                        val tmpMinField = "taMin$i"
+                        val tmpMaxField = "taMax$i"
 
-                val item = getItem(response2.body()!!)[0].asJsonObject
-                for (i in 3..7) {
-                    val tmpMinField = "taMin$i"
-                    val tmpMaxField = "taMax$i"
+                        val minTmp = item[tmpMinField].asInt
+                        val maxTmp = item[tmpMaxField].asInt
 
-                    val minTmp = item[tmpMinField].asInt
-                    val maxTmp = item[tmpMaxField].asInt
-
-                    list[i - 1] = list[i - 1].copy(minTmp = minTmp, maxTmp = maxTmp)
+                        list[i - 1] = list[i - 1].copy(minTmp = minTmp, maxTmp = maxTmp)
+                    }
+                    _forecastWeather.value = list
                 }
-                _forecastWeather.value = list
             }
+
+
         }
     }
 

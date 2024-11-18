@@ -20,7 +20,7 @@ interface GalleryApi {
     @GET("$GALLERY_BASE/get-pictures-on-date")
     suspend fun getPictureOnDate(
         @Query("gardenId") gardenId: Long,
-        @Query("createdDate") createdDate: LocalDate
+        @Query("createdDate") createdDate: String
     ): Response<ResponseDTO<List<PictureDTO>>>
 
     @POST("$GALLERY_BASE/add-picture")

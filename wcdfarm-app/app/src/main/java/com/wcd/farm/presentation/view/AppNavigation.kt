@@ -23,7 +23,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val loginState by appViewModel.loginState.collectAsState()
 
-    LaunchedEffect(Unit) {
+    /*LaunchedEffect(Unit) {
         appViewModel.getLoginState()
     }
 
@@ -31,7 +31,7 @@ fun AppNavigation() {
         if(loginState) {
             appViewModel.sendIntent(AppViewIntent.ShowMainView)
         }
-    }
+    }*/
 
     LaunchedEffect(appViewState) {
         when (appViewState) {

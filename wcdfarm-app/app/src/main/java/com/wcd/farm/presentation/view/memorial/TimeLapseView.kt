@@ -37,8 +37,14 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TimeLapseScreen() {
     val viewModel: MemorialViewModel = mavericksViewModel()
+    val crtGardenList by viewModel.gardenList.collectAsState()
+    val crtGarden by viewModel.crtGarden.collectAsState()
     val timeLapseImageList by viewModel.timeLapseList.collectAsState()
     val crtTimeLapseImage by viewModel.crtTimeLapseImage.collectAsState()
+
+    LaunchedEffect(Unit) {
+        //crtGarden?.let { viewModel.getTimeLapse(crtGardenList[crtGarden!!].gardenId) }
+    }
 
     LaunchedEffect(timeLapseImageList) {
         viewModel.startTimeLapse()

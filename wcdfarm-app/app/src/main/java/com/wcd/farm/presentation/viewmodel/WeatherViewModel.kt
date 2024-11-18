@@ -24,8 +24,8 @@ class WeatherViewModel @Inject constructor(private val weatherRepository: Weathe
         weatherRepository.getNearForecastWeather(latitude, longitude, time)
     }
 
-    fun getForecastWeather() {
+    fun getForecastWeather(latitude: Double, longitude: Double) {
         val time = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-        weatherRepository.getForecastWeather(time)
+        weatherRepository.getForecastWeather(latitude, longitude, time)
     }
 }

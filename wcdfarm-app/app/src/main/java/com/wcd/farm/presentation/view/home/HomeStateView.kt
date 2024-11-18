@@ -45,43 +45,64 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.airbnb.mvrx.compose.mavericksViewModel
 import com.gigamole.composeshadowsplus.rsblur.rsBlurShadow
 import com.wcd.farm.R
+import com.wcd.farm.presentation.intent.HomeViewIntent
+import com.wcd.farm.presentation.viewmodel.HomeViewModel
 import com.wcd.farm.presentation.viewmodel.InfoViewModel
 
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun StateView(modifier: Modifier) {
+fun StateView(modifier: Modifier, isUserOnFarm: Boolean) {
+    val viewModel: HomeViewModel = mavericksViewModel()
     val infoViewModel: InfoViewModel = hiltViewModel()
+    val gardenList by viewModel.gardenList.collectAsState()
+    val crtGarden by viewModel.crtGarden.collectAsState()
     val gardenState by infoViewModel.gardenState.collectAsState()
     TextButton(
-        onClick = { Log.e("TEST", "Click") },
+        onClick = {
+            viewModel.toggleHarm(gardenList[crtGarden!!].gardenId)
+            if(isUserOnFarm) viewModel.sendIntent(HomeViewIntent.LeaveFarm)
+            else viewModel.sendIntent(HomeViewIntent.ArriveFarm)
+                  },
         contentPadding = PaddingValues(0.dp),
         shape = RoundedCornerShape(8.dp),
-        modifier = modifier.rsBlurShadow(4.dp, color = Color.Black.copy(0.25f), offset = DpOffset(x = 0.dp, y = 4.dp)) // 쉼표 추가
-    ){
+        modifier = modifier.rsBlurShadow(
+            4.dp,
+            color = Color.Black.copy(0.25f),
+            offset = DpOffset(x = 0.dp, y = 4.dp)
+        ) // 쉼표 추가
+    ) {
         Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
-                //.clip(RoundedCornerShape(8.dp))
                 .background(Color.White)
                 .padding(24.dp, 4.dp, 24.dp, 24.dp)
         ) {
-
             Spacer(modifier = Modifier.width(10.dp))
-            StateBar(icon = Icons.Outlined.WaterDrop, gardenState?.humidity?.toInt() ?: 100, Color(0xFF86C6C6), iconColor = Color(0xFF86C6C6))
+            StateBar(
+                icon = Icons.Outlined.WaterDrop,
+                gardenState?.humidity?.toInt() ?: 100,
+                Color(0xFF86C6C6),
+                iconColor = Color(0xFF86C6C6)
+            )
             Spacer(modifier = Modifier.width(24.dp))
-            StateBar(icon = Icons.Outlined.WbSunny, gardenState?.illuminance?.toInt() ?: 100, Color(0xFFFFD000), iconColor = Color(0xFFFFD000))
-
+            StateBar(
+                icon = Icons.Outlined.WbSunny,
+                gardenState?.illuminance?.toInt() ?: 100,
+                Color(0xFFFFD000),
+                iconColor = Color(0xFFFFD000)
+            )
 
             var isPlaying by remember { mutableStateOf(false) }
             val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.happy_farmcharacter))
             val progress by animateLottieCompositionAsState(
                 composition = composition,
                 isPlaying = isPlaying,
-                iterations = 1 // 한 번만 실행
+                iterations = 1
             )
 
             LottieAnimation(
@@ -90,13 +111,7 @@ fun StateView(modifier: Modifier) {
                 modifier = Modifier
                     .size(200.dp)
                     .clickable() { isPlaying = !isPlaying }
-                    //.clickable(indication = null) { isPlaying = !isPlaying }
             )
-
-            
-            Button(onClick = { /*TODO*/ }) {
-                
-            }
         }
     }
 
@@ -106,7 +121,8 @@ fun StateView(modifier: Modifier) {
 fun StateBar(icon: ImageVector, ratio: Int, color: Color, iconColor: Color) {
     Column(
         verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxHeight()
     ) {
         Icon(
             imageVector = icon,
@@ -124,7 +140,7 @@ fun StateBar(icon: ImageVector, ratio: Int, color: Color, iconColor: Color) {
         }
         Box(
             modifier = Modifier,
-            contentAlignment = if (height > textHeight-30) Alignment.TopCenter else Alignment.BottomCenter
+            contentAlignment = if (height > textHeight - 10) Alignment.TopCenter else Alignment.BottomCenter
         ) {
             BoxWithConstraints(
                 modifier = Modifier
@@ -141,7 +157,7 @@ fun StateBar(icon: ImageVector, ratio: Int, color: Color, iconColor: Color) {
                     .onGloballyPositioned { layoutCoordinates ->
                         textHeight = layoutCoordinates.size.height
                     },
-                color = if (height > textHeight-30) Color.White else Color.Red
+                color = if (height > textHeight - 10) Color.White else Color.Red
             )
         }
 

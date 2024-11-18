@@ -130,4 +130,8 @@ object ServerClient {
     val cropApi: CropApi by lazy {
         retrofit.create(CropApi::class.java)
     }
+
+    val meteoApi: MeteoApi by lazy {
+        retrofit.create(MeteoApi::class.java)
+    }
 }

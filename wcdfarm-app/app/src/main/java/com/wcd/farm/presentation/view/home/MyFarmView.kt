@@ -55,6 +55,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import com.wcd.farm.R
@@ -96,8 +97,9 @@ fun MyFarmView(modifier: Modifier, focusManager: FocusManager) {
 
         when (farmDisplayType) {
             HomeViewState.IMAGE -> {
-                Image(
-                    painter = painterResource(id = R.drawable.dog_on_farm),
+                AsyncImage(
+                    model = gardenList[crtGarden!!].gardenImage,
+                    //painter = painterResource(id = R.drawable.dog_on_farm),
                     contentDescription = "",
                     alignment = Alignment.BottomCenter,
                     modifier = Modifier

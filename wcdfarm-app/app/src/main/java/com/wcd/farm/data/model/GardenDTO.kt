@@ -4,5 +4,8 @@ data class GardenDTO(
     val gardenId: Long = -1,
     val gardenName: String = "",
     val gardenAddress: String = "",
-    val createdDate: String = "2024-10-14"
+    val createdDate: String = "",
+    val gardenImage: String,
+    val lat: Double,
+    val lon: Double,
 )

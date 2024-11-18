@@ -1,5 +1,6 @@
 package com.wcd.farm.presentation.view
 
+import android.Manifest
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import com.google.firebase.messaging.FirebaseMessaging
+import com.gun0912.tedpermission.coroutine.TedPermission
 import com.wcd.farm.R
 import com.wcd.farm.data.remote.ServerClient
 import com.wcd.farm.presentation.intent.DiseaseViewIntent
@@ -75,9 +77,15 @@ fun MainLayout() {
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener { token ->
             CoroutineScope(Dispatchers.IO).launch {
+                val permissionResult =
+                    TedPermission.create()
+                        .setPermissions(
+                            Manifest.permission.POST_NOTIFICATIONS
+                        )
+                        .check()
                 val response = ServerClient.userApi.setFcmToken(token.result)
 
-                if(response.isSuccessful) {
+                if (response.isSuccessful) {
                     Log.e("TEST", response.body().toString())
                 } else {
                     Log.e("TEST", response.errorBody()!!.string())
@@ -89,10 +97,10 @@ fun MainLayout() {
         homeViewModel.getStreamKeys()
     }
 
-    if(crtGarden != null) {
+    if (crtGarden != null) {
         Scaffold(
             containerColor = Color(LocalContext.current.getColor(R.color.background)),
-            bottomBar = { BottomBar(currentScreen)}
+            bottomBar = { BottomBar(currentScreen) }
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
                 Box(modifier = Modifier.padding(36.dp, 18.dp)) {
@@ -106,13 +114,13 @@ fun MainLayout() {
             }
         }
 
-        if(showDiseaseView) {
+        if (showDiseaseView) {
             DiseaseScreen {
                 diseaseViewModel.sendIntent(DiseaseViewIntent.HideDiseaseView)
             }
         }
     } else {
-        homeViewModel.addGarden(2L)
+        //homeViewModel.addGarden(2L)
     }
 
 }
@@ -147,15 +155,25 @@ fun BottomBar(currentScreen: MutableState<String>) {
 }
 
 @Composable
-fun BottomBarItem(currentScreen: MutableState<String>, icon: ImageVector, description: String, onClick: () -> Unit) {
+fun BottomBarItem(
+    currentScreen: MutableState<String>,
+    icon: ImageVector,
+    description: String,
+    onClick: () -> Unit
+) {
     Button(
         onClick = onClick,
         colors = buttonTransparentTheme(),
         contentPadding = PaddingValues(16.dp, 4.dp)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            val color = if(currentScreen.value == description) Color.White else Color(0XFF81AF96)
-            Icon(imageVector = icon, contentDescription = description, modifier = Modifier.size(28.dp), tint = color)
+            val color = if (currentScreen.value == description) Color.White else Color(0XFF81AF96)
+            Icon(
+                imageVector = icon,
+                contentDescription = description,
+                modifier = Modifier.size(28.dp),
+                tint = color
+            )
             Text(description, fontWeight = FontWeight.Medium, fontSize = 14.sp, color = color)
         }
     }

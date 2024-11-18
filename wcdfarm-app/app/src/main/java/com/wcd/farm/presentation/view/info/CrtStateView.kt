@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -82,7 +83,12 @@ fun CrtWeatherView(modifier: Modifier) {
 fun CrtFarmStateView(modifier: Modifier) {
     val infoViewModel: InfoViewModel = hiltViewModel()
     val gardenState by infoViewModel.gardenState.collectAsState()
-    Row(verticalAlignment = Alignment.Bottom, modifier = modifier.fillMaxHeight()) {
+    Row(
+        verticalAlignment = Alignment.Bottom,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(2.dp)
+    ) {
         Spacer(modifier = Modifier.width(10.dp))
         StateBar(icon = Icons.Outlined.WaterDrop, gardenState?.humidity?.toInt() ?: 100, color = Color(0xFF86C6C6), iconColor = Color(0xFF86C6C6))
         Spacer(modifier = Modifier.width(36.dp))

@@ -16,6 +16,9 @@ interface CropApi {
     @GET("$CROP_BASE/get-crops/{gardenId}")
     suspend fun getCrops(@Path("gardenId") gardenId: Long): Response<ResponseDTO<List<CropDTO>>>
 
+    @GET("$CROP_BASE/get-crop-growth-stages")
+    suspend fun getCropGrowthStages(@Query("gardenId") gardenId: Long, @Query("cropName") cropName: String): Response<ResponseDTO<List<Any>>>
+
     @POST("$CROP_BASE/recommand-crop")
     suspend fun getRecommendCrop(@Query("cropName") cropName: String): Response<ResponseDTO<List<String>>>
 

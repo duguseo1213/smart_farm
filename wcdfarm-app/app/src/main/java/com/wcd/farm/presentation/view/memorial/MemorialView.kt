@@ -73,7 +73,7 @@ fun MemorialScreen() {
     val crtGarden by viewModel.crtGarden.collectAsState()
 
     LaunchedEffect(crtGarden) {
-        crtGarden?.let { viewModel.getTimeLapse(gardenList[it].gardenId) }
+        //crtGarden?.let { viewModel.getTimeLapse(gardenList[it].gardenId) }
     }
 
     Spacer(modifier = Modifier.fillMaxHeight(0.07f))

@@ -1,9 +1,12 @@
 package com.wcd.farm.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.wcd.farm.data.model.CropDTO
 import com.wcd.farm.data.repository.GardenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,5 +34,9 @@ class InfoViewModel @Inject constructor(private val gardenRepository: GardenRepo
 
     fun selectCrop(crop: CropDTO) {
         gardenRepository.selectCrop(crop)
+    }
+
+    fun getCropGrowthStages(gardenId: Long, cropName: String) {
+        gardenRepository.getCropGrowthStages(gardenId, cropName)
     }
 }

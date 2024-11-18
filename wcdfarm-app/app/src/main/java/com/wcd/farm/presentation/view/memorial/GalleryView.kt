@@ -59,6 +59,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.wcd.farm.data.model.PictureDTO
 import java.sql.Date
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 val customFontFamily1 = FontFamily(
@@ -81,6 +82,12 @@ fun GalleryView() {
 
     LaunchedEffect(crtGarden) {
         crtGarden?.let { viewModel.getAllPictures(gardenList[it].gardenId) }
+    }
+
+    LaunchedEffect(selectedDate) {
+        val date = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        viewModel.updatePictures(date)
+        //viewModel.getPicturesOnDate(gardenList[crtGarden!!].gardenId, selectedDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
     }
 
     Column {
@@ -155,6 +162,7 @@ fun MemoryList() {
 
 @Composable
 fun MemoryView(picture: PictureDTO) {
+    val time = LocalDateTime.parse(picture.pictureDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
     Column(
         Modifier
             .fillMaxSize()
@@ -167,7 +175,7 @@ fun MemoryView(picture: PictureDTO) {
                 .fillMaxWidth()
         ) {
             Text(
-                text = "${picture.pictureDate.format(DateTimeFormatter.ofPattern("HH:mm"))} ${picture.pictureDescription}",
+                text = "${time.format(DateTimeFormatter.ofPattern("HH:mm"))} ${picture.pictureDescription}",
                 fontSize = 20.sp,
                 color = Color.Black,
                 fontFamily = customFontFamily3 // customFontFamily1 설정
