@@ -152,7 +152,7 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     public void takePicture(Long gardenId, Long userId) throws Exception {
-
+        log.info("gardenId {}",gardenId);
         Garden garden = gardenRepository.findById(gardenId).orElseThrow();
         Long DeviceId = garden.getDevice().getDeviceId();
         FunctionMessage fm = new FunctionMessage(2,"사진 찍기",userId);
