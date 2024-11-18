@@ -179,7 +179,11 @@ public class GardenServiceImpl implements GardenService {
                 return o2.getCreatedDate().compareTo(o1.getCreatedDate());
             }
         });
-        return responses.get(0);
+        if(!responses.isEmpty()){
+            GetGardenDataResponse response = responses.get(0);
+            return responses.get(0);
+        }
+        return null;
     }
 
     @Override
