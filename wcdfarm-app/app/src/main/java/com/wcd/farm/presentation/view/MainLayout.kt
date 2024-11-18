@@ -72,8 +72,7 @@ fun MainLayout() {
     val crtGarden by homeViewModel.crtGarden.collectAsState()
 
     LaunchedEffect(Unit) {
-        val longitude = 126.8071876
-        val latitude = 35.2040949
+
         FirebaseMessaging.getInstance().token.addOnCompleteListener { token ->
             CoroutineScope(Dispatchers.IO).launch {
                 val response = ServerClient.userApi.setFcmToken(token.result)
@@ -88,10 +87,6 @@ fun MainLayout() {
         homeViewModel.getGardenList()
 
         homeViewModel.getStreamKeys()
-        weatherViewModel.getNearForecastWeather(latitude, longitude)
-        weatherViewModel.getForecastWeather()
-
-        //homeViewModel
     }
 
     if(crtGarden != null) {

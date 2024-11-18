@@ -34,6 +34,7 @@ class HomeViewModel @AssistedInject constructor(
     val crtGarden = gardenRepository.crtGarden
     val gardenStreamKeyMap = gardenRepository.gardenStreamKeyMap
     val newPicture = memorialRepository.newPicture
+    val crtWeatherGardenIndex = gardenRepository.crtWeatherGardenIndex
 
     init {
         handleIntent()
@@ -94,5 +95,9 @@ class HomeViewModel @AssistedInject constructor(
 
     fun setCrtGarden(index: Int) {
         gardenRepository.setCrtGarden(index)
+    }
+
+    fun setCrtWeatherGardenIndex(index: Int) {
+        gardenRepository.setCrtWeatherGardenIndex(index)
     }
 }

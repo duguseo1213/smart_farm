@@ -1,14 +1,10 @@
 package com.wcd.farm.presentation.view.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -18,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
@@ -39,6 +34,7 @@ fun HomeScreen() {
     val showWeekWeather by homeViewModel.collectAsState(HomeViewState::showWeekWeather)
     val gardenList by homeViewModel.gardenList.collectAsState()
     val crtGarden by homeViewModel.crtGarden.collectAsState()
+    val crtWeatherGardenIndex by homeViewModel.crtWeatherGardenIndex.collectAsState()
     val newPicture by homeViewModel.newPicture.collectAsState()
 
     val focusManager = LocalFocusManager.current
@@ -46,22 +42,37 @@ fun HomeScreen() {
     LaunchedEffect(crtGarden) {
         val longitude = 126.8071876
         val latitude = 35.2040949
-        crtGarden?.let { infoViewModel.getGardenState(gardenList[it].gardenId) }
-        weatherViewModel.getLiveWeather(latitude, longitude)
+        crtGarden?.let {
+            infoViewModel.getGardenState(gardenList[it].gardenId)
+            if (crtGarden != crtWeatherGardenIndex) {
+                weatherViewModel.getNearForecastWeather(latitude, longitude)
+                weatherViewModel.getForecastWeather()
+                weatherViewModel.getLiveWeather(latitude, longitude)
+                crtGarden?.let { homeViewModel.setCrtWeatherGardenIndex(it) }
+            }
+        }
+
+
     }
 
     val pagerState = rememberPagerState { gardenList.size }
 
     LaunchedEffect(pagerState.currentPage) {
+        val longitude = 126.8071876
+        val latitude = 35.2040949
         homeViewModel.setCrtGarden(pagerState.currentPage)
+        /*weatherViewModel.getNearForecastWeather(latitude, longitude)
+        weatherViewModel.getForecastWeather()*/
         //homeViewModel.setCrtGarden(gardenList.size - pagerState.currentPage - 1)
     }
 
     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) {
         Column(
             Modifier
-                .fillMaxSize().padding(4.dp)
-                .addFocusCleaner(focusManager), horizontalAlignment = Alignment.CenterHorizontally) {
+                .fillMaxSize()
+                .padding(4.dp)
+                .addFocusCleaner(focusManager), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             TodayWeatherView(Modifier.weight(0.16f))
             Spacer(Modifier.weight(0.01f))
             MyFarmView(modifier = Modifier.weight(0.35f), focusManager)

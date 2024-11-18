@@ -22,8 +22,9 @@ class GardenRepository @Inject constructor(
 
     private val _crtGarden = MutableStateFlow<Int?>(null)
     val crtGarden = _crtGarden.asStateFlow()
-    //private val _crtGarden = MutableStateFlow<GardenDTO?>(GardenDTO(2, "효린이네", "광주광역시 광산구 장덕동 982-10", "2024-10-24"))
-    //val crtGarden = _crtGarden.asStateFlow()
+
+    private val _crtWeatherGardenIndex = MutableStateFlow<Int?>(null)
+    val crtWeatherGardenIndex = _crtWeatherGardenIndex.asStateFlow()
 
     private val _crtGardenState = MutableStateFlow<GardenState?>(null)
     val crtGardenState = _crtGardenState.asStateFlow()
@@ -208,5 +209,9 @@ class GardenRepository @Inject constructor(
 
     fun setCrtGarden(index: Int) {
         _crtGarden.value = index
+    }
+
+    fun setCrtWeatherGardenIndex(index: Int) {
+        _crtWeatherGardenIndex.value = index
     }
 }
