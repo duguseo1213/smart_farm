@@ -22,4 +22,7 @@ interface CropApi {
     @POST("$CROP_BASE/add-crop")
     suspend fun addCrop(@Query("gardenId") gardenId: Long, @Query("crops") cropName: String): Response<ResponseDTO<Any>>
 
+    @POST("$CROP_BASE/delete-crop")
+    suspend fun deleteCrop(@Query("gardenId") gardenId: Long, @Query("crops") cropName: String): Response<ResponseDTO<Any>>
+
 }

@@ -16,4 +16,12 @@ class MyPageViewModel @Inject constructor(private val gardenRepository: GardenRe
     fun addCrop(gardenId: Long, cropName: String) {
         gardenRepository.addCrop(gardenId, cropName)
     }
+
+    fun deleteCrop(gardenId: Long, cropName: String) {
+        gardenRepository.deleteCrop(gardenId, cropName)
+    }
+
+    fun getCrops(gardenId: Long) {
+        gardenRepository.getGardenCrops(gardenId)
+    }
 }
