@@ -11,6 +11,6 @@ import java.util.List;
 public interface GalleryPictureRepository extends JpaRepository<GalleryPicture, Long> {
     @Query("SELECT g FROM GalleryPicture g WHERE g.garden.gardenId = :gardenId")
     List<GalleryPicture> findByGardenId(@Param("gardenId") Long gardenId);
-    @Query("SELECT g FROM GalleryPicture g WHERE g.garden.gardenId = :gardenId AND FUNCTION('DATE', g.garden.createdDate) = FUNCTION('DATE', :date)")
+    @Query("SELECT g FROM GalleryPicture g WHERE g.garden.gardenId = :gardenId AND FUNCTION('DATE', g.createdDate) = FUNCTION('DATE', :date)")
     List<GalleryPicture> findByGardenIdOnDate(@Param("gardenId") Long gardenId, @Param("date") Date date);
 }
