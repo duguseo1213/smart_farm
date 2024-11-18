@@ -55,6 +55,6 @@ public class CropQueryRepositoryImpl implements CropQueryRepository {
                 .from(crop)
                 .join(crop.garden,garden)
                 .where(garden.gardenId.eq(gardenId),crop.cropName.eq(cropName))
-                .fetchOne();
+                .fetchFirst();
     }
 }
