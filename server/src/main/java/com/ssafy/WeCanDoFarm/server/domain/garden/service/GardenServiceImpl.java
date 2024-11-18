@@ -33,6 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -160,7 +161,8 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     public GetGardenDataResponse getGardenStatus(Long gardenId) throws Exception {
-        List<GardenStatus> list =gardenRepository.findGardenStatusFromLastWeek(gardenId, LocalDate.now().minusDays(7));
+        LocalDateTime sevenDaysAgo = LocalDate.now().minusDays(7).atStartOfDay();
+        List<GardenStatus> list =gardenRepository.findGardenStatusFromLastWeek(gardenId, sevenDaysAgo);
         List<GetGardenDataResponse> responses = new ArrayList<>();
         for(GardenStatus gardenStatus : list){
             GetGardenDataResponse response = new GetGardenDataResponse();
