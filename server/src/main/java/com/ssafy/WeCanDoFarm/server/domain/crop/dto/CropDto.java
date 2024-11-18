@@ -2,6 +2,7 @@ package com.ssafy.WeCanDoFarm.server.domain.crop.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 public class CropDto {
 
@@ -23,6 +24,20 @@ public class CropDto {
     @AllArgsConstructor
     public static class GetCropRequest{
         private Long gardenId;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class GetCropResponse{
+        private String cropName;
+        private int growthPercentage;
+
+        public static GetCropResponse create(String cropName, int growthPercentage){
+            GetCropResponse getCropResponse = new GetCropResponse();
+            getCropResponse.setCropName(cropName);
+            getCropResponse.setGrowthPercentage(growthPercentage);
+            return getCropResponse;
+        }
     }
 
 }

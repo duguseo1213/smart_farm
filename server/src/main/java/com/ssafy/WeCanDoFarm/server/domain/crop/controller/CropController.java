@@ -36,8 +36,7 @@ public class CropController {
 
     @GetMapping("/get-crops/{gardenId}")
     @Operation(summary = "작물 조회",description = "작물 조회")
-    public SuccessResponse<List<String>> deleteCrop(@PathVariable Long gardenId){
-        ;
+    public SuccessResponse<List<CropDto.GetCropResponse>> deleteCrop(@PathVariable Long gardenId){
         return SuccessResponse.of(cropService.getCrop(gardenId));
     }
 

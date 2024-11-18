@@ -27,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -88,8 +89,16 @@ public class CropService {
         }
     }
 
-    public List<String> getCrop(Long gardenId) {
-        return cropRepository.getCropNamesByGardenId(gardenId);
+    public List<CropDto.GetCropResponse> getCrop(Long gardenId) {
+        List<String> lists = cropRepository.getCropNamesByGardenId(gardenId);
+        List<CropDto.GetCropResponse> responses = new ArrayList<>();
+        for(String cropName : lists ){
+            Crop crop = cropRepository.getCrop(gardenId, cropName);
+            int percentage = stageRepository.findEarliestByCropId(crop.getCropId());
+            responses.add(CropDto.GetCropResponse.create(cropName,percentage));
+        }
+
+        return null;
     }
 
     public List<String> recommendCrop(String cropName) {

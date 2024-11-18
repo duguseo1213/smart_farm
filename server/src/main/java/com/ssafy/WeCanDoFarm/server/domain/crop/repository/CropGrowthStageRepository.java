@@ -13,4 +13,7 @@ public interface CropGrowthStageRepository extends JpaRepository<CropGrowthStage
 
     @Query("SELECT c FROM CropGrowthStage c WHERE c.crop.cropId = :cropId")
     List<CropGrowthStage> findByCropId(@Param("cropId") Long cropId);
+
+    @Query("SELECT c.growthPercentage FROM CropGrowthStage c WHERE c.crop.cropId = :cropId ORDER BY c.date ASC")
+    int findEarliestByCropId(@Param("cropId") Long cropId);
 }
