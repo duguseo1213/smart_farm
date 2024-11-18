@@ -82,7 +82,7 @@ fun CrtWeatherView(modifier: Modifier) {
 fun CrtFarmStateView(modifier: Modifier) {
     val infoViewModel: InfoViewModel = hiltViewModel()
     val gardenState by infoViewModel.gardenState.collectAsState()
-    Row(verticalAlignment = Alignment.Bottom, modifier = modifier) {
+    Row(verticalAlignment = Alignment.Bottom, modifier = modifier.fillMaxHeight()) {
         Spacer(modifier = Modifier.width(10.dp))
         StateBar(icon = Icons.Outlined.WaterDrop, gardenState?.humidity?.toInt() ?: 100, color = Color(0xFF86C6C6), iconColor = Color(0xFF86C6C6))
         Spacer(modifier = Modifier.width(36.dp))
