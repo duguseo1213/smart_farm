@@ -25,7 +25,6 @@ public class CropGrowthStage {
     private Crop crop;
 
     @Column(name="growth_percentage")
-    @CreationTimestamp
     private int growthPercentage;
 
     @Column(name = "created_date")
