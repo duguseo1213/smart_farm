@@ -3,6 +3,7 @@ package com.ssafy.WeCanDoFarm.server.domain.garden.entity;
 import com.ssafy.WeCanDoFarm.server.domain.device.entity.Device;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -63,4 +64,6 @@ public class Garden {
     public void changeName(String gardenName) {
         this.gardenName = gardenName;
     }
+
+
 }

@@ -15,4 +15,17 @@ public class GetGardenResponse {
     String gardenImage;
     Double lat;
     Double lon;
+
+    @Override
+    public String toString() {
+        return "GetGardenResponse{" +
+                "GardenId=" + GardenId +
+                ", gardenName='" + gardenName + '\'' +
+                ", gardenAddress='" + gardenAddress + '\'' +
+                ", gardenCreated=" + gardenCreated +
+                ", gardenImage='" + gardenImage + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                '}';
+    }
 }

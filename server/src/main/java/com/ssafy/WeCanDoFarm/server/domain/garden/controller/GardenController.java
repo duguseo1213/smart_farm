@@ -43,6 +43,7 @@ public class GardenController {
             getGardenResponse.setGardenImage(garden.getGardenImage());
             getGardenResponse.setLat(garden.getLatitude());
             getGardenResponse.setLon(garden.getLongitude());
+            log.info(getGardenResponse.toString());
             gardenResponseList.add(getGardenResponse);
 
         }
