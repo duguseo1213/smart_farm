@@ -161,6 +161,17 @@ class GardenRepository @Inject constructor(
         }
     }
 
+    fun deleteCrop(gardenId: Long, cropName: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = cropApi.deleteCrop(gardenId, cropName)
+            if (response.isSuccessful) {
+                getGardenCrops(gardenId)
+
+                Log.e("TEST", response.body().toString())
+            }
+        }
+    }
+
     fun addGarden(gardenId: Long) {
         CoroutineScope(Dispatchers.IO).launch {
             val body = mutableMapOf<String, Long>()

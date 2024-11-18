@@ -22,7 +22,7 @@ interface GardenApi {
         private const val DEVICE_BASE = "device"
     }
 
-    @GET("$GARDEN_BASE/get-gardens/aaa")
+    @GET("$GARDEN_BASE/get-gardens")
     suspend fun getGardens(): Response<ResponseDTO<List<GardenDTO>>>
 
     @GET("$GARDEN_BASE/get-gardens-users/{gardenId}")
