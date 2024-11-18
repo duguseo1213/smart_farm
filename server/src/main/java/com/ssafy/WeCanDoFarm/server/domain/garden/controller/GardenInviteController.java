@@ -18,7 +18,7 @@ public class GardenInviteController {
                                       @RequestParam("userType") GardenUserType userType) {
         // 쿼리 파라미터로 추가할 URL 생성
 
-        String appUrl = "myapp://somepath?GardenId=" + gardenId + "&userType=" + userType;
+        String appUrl = "app://wcdfarm?GardenId=" + gardenId + "&userType=" + userType;
         log.info(appUrl);
         // 리다이렉트
         return new ModelAndView("redirect:" + appUrl);

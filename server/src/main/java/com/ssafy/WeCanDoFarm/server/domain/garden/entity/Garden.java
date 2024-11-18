@@ -40,7 +40,11 @@ public class Garden {
     @Column(name = "crop")
     private String crop;
 
+    @Column(name = "lat")
+    private Double latitude;
 
+    @Column(name = "lon")
+    private Double longitude;
 
     public static Garden create(String gardenName, String gardenImage, String gardenAddress, String crop,Device device) {
         Garden garden = new Garden();

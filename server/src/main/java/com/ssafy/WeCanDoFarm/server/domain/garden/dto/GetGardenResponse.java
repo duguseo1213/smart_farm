@@ -13,4 +13,6 @@ public class GetGardenResponse {
     String gardenAddress;
     Date gardenCreated;
     String gardenImage;
+    Double lat;
+    Double lon;
 }
