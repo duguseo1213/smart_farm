@@ -2,9 +2,14 @@ package com.wcd.farm.presentation.view.home
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
@@ -35,38 +41,46 @@ fun HomeScreen() {
 
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(crtGarden) {
         val longitude = 126.8071876
         val latitude = 35.2040949
-
+        crtGarden?.let { infoViewModel.getGardenState(gardenList[it].gardenId) }
         weatherViewModel.getLiveWeather(latitude, longitude)
-        crtGarden?.let { infoViewModel.getGardenState(gardenList[it].gardenId) }
     }
 
-    LaunchedEffect(crtGarden) {
-        crtGarden?.let { infoViewModel.getGardenState(gardenList[it].gardenId) }
+    val pagerState = rememberPagerState { gardenList.size }
+
+    LaunchedEffect(pagerState.currentPage) {
+        homeViewModel.setCrtGarden(pagerState.currentPage)
+        //homeViewModel.setCrtGarden(gardenList.size - pagerState.currentPage - 1)
     }
 
-    Column(Modifier.fillMaxSize().addFocusCleaner(focusManager), horizontalAlignment = Alignment.CenterHorizontally) {
-        TodayWeatherView(Modifier.weight(0.16f))
-        Spacer(Modifier.weight(0.01f))
-        MyFarmView(modifier = Modifier.weight(0.35f), focusManager)
-        //ExoPlayerUI(modifier = Modifier.weight(0.35f))
-        Spacer(Modifier.weight(0.03f))
-        MenuContainer(modifier = Modifier.weight(0.1f))
-        Spacer(modifier = Modifier.weight(0.03f))
-        StateView(modifier = Modifier.weight(0.22f))
+    HorizontalPager(state = pagerState, contentPadding = PaddingValues(0.dp), modifier = Modifier.fillMaxSize().padding(0.dp)) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .addFocusCleaner(focusManager), horizontalAlignment = Alignment.CenterHorizontally) {
+            TodayWeatherView(Modifier.weight(0.16f))
+            Spacer(Modifier.weight(0.01f))
+            MyFarmView(modifier = Modifier.weight(0.35f), focusManager)
+            Spacer(Modifier.weight(0.03f))
+            MenuContainer(modifier = Modifier.weight(0.1f))
+            Spacer(modifier = Modifier.weight(0.03f))
+            StateView(modifier = Modifier.weight(0.22f))
 
-        if (showWeekWeather) {
-            ForecastWeatherView {
-                homeViewModel.sendIntent(HomeViewIntent.HideWeekWeather)
+            if (showWeekWeather) {
+                ForecastWeatherView {
+                    homeViewModel.sendIntent(HomeViewIntent.HideWeekWeather)
+                }
+            }
+
+            if (newPicture != null) {
+                NewPictureView()
             }
         }
-
-        if (newPicture != null) {
-            NewPictureView()
-        }
     }
+
+
 }
 
 fun Modifier.addFocusCleaner(focusManager: FocusManager, doOnClear: () -> Unit = {}): Modifier {

@@ -191,4 +191,8 @@ class GardenRepository @Inject constructor(
             }
         }
     }
+
+    fun setCrtGarden(index: Int) {
+        _crtGarden.value = index
+    }
 }

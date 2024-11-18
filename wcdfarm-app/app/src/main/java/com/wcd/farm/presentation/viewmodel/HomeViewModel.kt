@@ -91,4 +91,8 @@ class HomeViewModel @AssistedInject constructor(
     fun changeGardenName(gardenId: Long, gardenName: String) {
         gardenRepository.changeGardenName(gardenId, gardenName)
     }
+
+    fun setCrtGarden(index: Int) {
+        gardenRepository.setCrtGarden(index)
+    }
 }

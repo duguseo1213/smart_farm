@@ -67,9 +67,6 @@ import com.wcd.farm.presentation.viewmodel.HomeViewModel
 fun MyFarmView(modifier: Modifier, focusManager: FocusManager) {
     val viewModel: HomeViewModel = mavericksViewModel()
     val farmDisplayType by viewModel.collectAsState(HomeViewState::displayType)
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
 
     val gardenList by viewModel.gardenList.collectAsState()
     val crtGarden by viewModel.crtGarden.collectAsState()
@@ -77,11 +74,15 @@ fun MyFarmView(modifier: Modifier, focusManager: FocusManager) {
     var changeName by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
 
-    LaunchedEffect(gardenList) {
+    LaunchedEffect(crtGarden) {
+        changeName = gardenList[crtGarden!!].gardenName
+    }
+
+    /*LaunchedEffect(gardenList) {
         if (crtGarden != null) {
             changeName = gardenList[crtGarden!!].gardenName
         }
-    }
+    }*/
 
     BoxWithConstraints(modifier = modifier.noRippleClickable {
         when (farmDisplayType) {
