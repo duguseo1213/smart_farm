@@ -89,6 +89,7 @@ public class CropService {
 
     public List<CropDto.GetCropResponse> getCrop(Long gardenId) {
         List<String> lists = cropRepository.getCropNamesByGardenId(gardenId);
+        log.info(lists.toString());
         List<CropDto.GetCropResponse> responses = new ArrayList<>();
         for(String cropName : lists ){
             Crop crop = cropRepository.getCrop(gardenId, cropName);
@@ -96,7 +97,7 @@ public class CropService {
             responses.add(CropDto.GetCropResponse.create(cropName,percentage));
         }
 
-        return null;
+        return responses;
     }
 
     public List<String> recommendCrop(String cropName) {
