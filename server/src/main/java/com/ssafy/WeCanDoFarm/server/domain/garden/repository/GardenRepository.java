@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -17,5 +18,5 @@ public interface GardenRepository extends JpaRepository<Garden, Long>, GardenQue
     List<UserToGarden> findByGardenId(@Param("gardenId") Long gardenId);
 
     @Query("SELECT gs FROM GardenStatus gs WHERE gs.garden.gardenId = :gardenId AND gs.createdDate >= :sevenDaysAgo")
-    List<GardenStatus> findGardenStatusFromLastWeek(@Param("gardenId") Long gardenId, @Param("sevenDaysAgo") LocalDate sevenDaysAgo);
+    List<GardenStatus> findGardenStatusFromLastWeek(@Param("gardenId") Long gardenId, @Param("sevenDaysAgo") LocalDateTime sevenDaysAgo);
 }
