@@ -27,12 +27,13 @@ public class GardenController {
     @GetMapping("/get-gardens")
     public SuccessResponse<List<GetGardenResponse>> getGarden(@CurrentUser User user) throws Exception {
         List<Garden> gardenList = gardenService.getGardens(user.getUsername());
-        log.info(gardenList.toString());
+        log.info(String.valueOf(gardenList.size()));
         List<GetGardenResponse> gardenResponseList = new ArrayList<>();
 
         for(int i=0;i<gardenList.size();i++){
 
             Garden garden = gardenList.get(i);
+            log.info(garden.toString());
             GetGardenResponse getGardenResponse;
             getGardenResponse = new GetGardenResponse();
             getGardenResponse.setGardenAddress(garden.getGardenAddress());
