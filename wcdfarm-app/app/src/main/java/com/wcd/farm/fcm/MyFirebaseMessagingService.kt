@@ -56,7 +56,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
                 }
             }
         } else {
-            Log.e("TEST", remoteMessage.notification!!.imageUrl.toString())
+            Log.e("TEST", "remoteMessage: " + remoteMessage.notification!!.imageUrl.toString())
             memorialRepository.setNewPicture(remoteMessage.notification!!.imageUrl.toString())
         }
         //Log.e("TEST", remoteMessage.data["image"])

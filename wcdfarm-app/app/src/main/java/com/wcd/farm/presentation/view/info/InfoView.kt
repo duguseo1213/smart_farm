@@ -35,8 +35,8 @@ fun InfoScreen() {
     }
 
     LaunchedEffect(selectedCrop) {
-        if (selectedCrop != "") {
-            infoViewModel.getRecommendCrops(selectedCrop)
+        if (selectedCrop.cropName != "") {
+            infoViewModel.getRecommendCrops(selectedCrop.cropName)
         }
     }
 

@@ -79,10 +79,10 @@ fun MyPageScreen() {
                         .padding(16.dp)
                 ) {
                     Text("SSAFY 농장", fontSize = 24.sp)
-
+                    val cropStateList = gardenCropList.map { crop -> "${crop.cropName}   ${crop.growthPercentage}%" }
                     FarmInfo("농장 주소", listOf("광주광역시 광산구 장덕동 982-10"))
                     FarmInfo("시작 날짜", listOf("2024-10-24"))
-                    FarmInfo("작물 현황", gardenCropList)
+                    FarmInfo("작물 현황", cropStateList)
                 }
             }
         }

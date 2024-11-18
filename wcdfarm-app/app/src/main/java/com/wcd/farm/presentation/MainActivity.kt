@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
             if (accessToken != null && refreshToken != null) {
                 appViewModel.setAccessToken(accessToken)
                 appViewModel.setRefreshToken(refreshToken)
-
+                appViewModel.setLoginState(true)
                 appViewModel.sendIntent(AppViewIntent.ShowMainView)
             }
         }

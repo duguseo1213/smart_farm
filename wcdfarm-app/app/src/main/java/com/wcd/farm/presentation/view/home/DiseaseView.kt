@@ -50,6 +50,9 @@ fun DiseaseScreen(onDismissRequest: () -> Unit) {
     val state by viewModel.collectAsState(DiseaseViewState::viewState)
     val showDiseaseDetectResult by viewModel.collectAsState(DiseaseViewState::showDiseaseDetectResult)
     val diseaseDetect by viewModel.diseaseDetect.collectAsState()
+    val onDiseaseDetectState by viewModel.collectAsState(DiseaseViewState::onDiseaseDetect)
+    val isPlantDisease by viewModel.collectAsState(DiseaseViewState::isPlantDisease)
+
 
     AlertDialog(onDismissRequest = onDismissRequest, confirmButton = {
         when (state) {
@@ -94,7 +97,7 @@ fun DiseaseScreen(onDismissRequest: () -> Unit) {
             when (state) {
                 0 -> CameraPreview()
                 1 -> {
-                    CaptureImage(showDiseaseDetectResult)
+                    CaptureImage(showDiseaseDetectResult, onDiseaseDetectState, isPlantDisease)
                 }
             }
         }
@@ -138,16 +141,13 @@ fun CameraPreview() {
 }
 
 @Composable
-fun CaptureImage(showDiseaseDetectResult: Boolean) {
+fun CaptureImage(showDiseaseDetectResult: Boolean, onDiseaseDetectState: Boolean, isPlantDisease: Boolean) {
     val viewModel: DiseaseViewModel = mavericksViewModel()
     val bitmap by viewModel.bitmap.collectAsState()
-    val onDiseaseDetectState by viewModel.collectAsState(DiseaseViewState::onDiseaseDetect)
-    val isPlantDisease by viewModel.collectAsState(DiseaseViewState::isPlantDisease)
     val diseaseDetect by viewModel.diseaseDetect.collectAsState()
 
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         if (bitmap != null) {
-
             Image(
                 bitmap = bitmap!!.asImageBitmap(),
                 contentDescription = "DiseasePhoto",
@@ -163,16 +163,18 @@ fun CaptureImage(showDiseaseDetectResult: Boolean) {
                     Text("검출중입니다")
                 } else {
                     if (isPlantDisease) {
+                        Log.e("TEST", "isPlantDisease: true")
                         Column {
                             Image(
                                 bitmap = bitmap!!.asImageBitmap(),
                                 contentDescription = "",
-                                modifier = Modifier.fillMaxSize(0.4f)
+                                modifier = Modifier.fillMaxWidth(0.8f).align(Alignment.CenterHorizontally)
                             )
                             Text("${diseaseDetect?.diseaseName} 검출", color = Color.White)
                             Text("${diseaseDetect?.diseaseSolvent}", color = Color.White)
                         }
                     } else {
+                        Log.e("TEST", "isPlantDisease: false")
                         Text("검출되지 않았습니다.", color = Color.White)
                     }
                 }

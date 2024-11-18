@@ -1,6 +1,7 @@
 package com.wcd.farm.data.repository
 
 import android.util.Log
+import com.wcd.farm.data.model.CropDTO
 import com.wcd.farm.data.model.GardenDTO
 import com.wcd.farm.data.model.GardenState
 import com.wcd.farm.data.remote.CropApi
@@ -30,10 +31,10 @@ class GardenRepository @Inject constructor(
     private val _gardenStreamKeyMap = MutableStateFlow<Map<Long, String>>(emptyMap())
     val gardenStreamKeyMap = _gardenStreamKeyMap.asStateFlow()
 
-    private val _selectedCrop = MutableStateFlow("")
+    private val _selectedCrop = MutableStateFlow<CropDTO>(CropDTO("", 0))
     val selectedCrop = _selectedCrop.asStateFlow()
 
-    private val _gardenCropList = MutableStateFlow<List<String>>(emptyList())
+    private val _gardenCropList = MutableStateFlow<List<CropDTO>>(emptyList())
     val gardenCropList = _gardenCropList.asStateFlow()
 
     private val _recommendCropList = MutableStateFlow<List<String>>(emptyList())
@@ -42,7 +43,7 @@ class GardenRepository @Inject constructor(
     fun requestRemoteWater() {
         CoroutineScope(Dispatchers.IO).launch {
             val body = mutableMapOf<String, String>()
-            body["gardenId"] = crtGarden.value.toString()
+            body["gardenId"] = gardenList.value[crtGarden.value!!].gardenId.toString()
             val response = gardenApi.postRemoteWater(body)
 
             if (response.isSuccessful) {
@@ -56,7 +57,7 @@ class GardenRepository @Inject constructor(
     fun requestTakePicture() {
         CoroutineScope(Dispatchers.IO).launch {
             val body = mutableMapOf<String, String>()
-            body["gardenId"] = crtGarden.value.toString()
+            body["gardenId"] = gardenList.value[crtGarden.value!!].gardenId.toString()
             val response = gardenApi.postTakePicture(body)
 
             if (response.isSuccessful) {
@@ -101,13 +102,15 @@ class GardenRepository @Inject constructor(
             val response = cropApi.getCrops(gardenId)
 
             if (response.isSuccessful) {
-                val gardenCropList = response.body()!!.data
+                Log.e("TEST", response.body().toString())
+                val gardenCropList = response.body()?.data
 
-                if (gardenCropList.isNotEmpty()) {
+                if (!gardenCropList.isNullOrEmpty()) {
                     selectCrop(gardenCropList[0])
+                    _gardenCropList.value = gardenCropList
                 }
 
-                _gardenCropList.value = gardenCropList
+
             }
         }
     }
@@ -146,8 +149,8 @@ class GardenRepository @Inject constructor(
         }
     }
 
-    fun selectCrop(cropName: String) {
-        _selectedCrop.value = cropName
+    fun selectCrop(crop: CropDTO) {
+        _selectedCrop.value = crop
     }
 
     fun addCrop(gardenId: Long, cropName: String) {
@@ -170,7 +173,7 @@ class GardenRepository @Inject constructor(
 
             if(response.isSuccessful) {
                 getGardenList()
-                Log.e("TEST", "success: " + response.body().toString())
+                Log.e("TEST", "addGarden: " + response.body().toString())
             } else {
                 Log.e("TEST", "error: " + response.errorBody()!!.string())
             }

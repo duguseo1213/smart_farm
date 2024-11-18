@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
 import com.wcd.farm.data.repository.ServerRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
@@ -83,10 +86,10 @@ object ServerClient {
                 .newBuilder()
                 .addHeader("Authorization", "Bearer $accessToken")
                 .build()
+
             chain.proceed(request)
         }
         .addInterceptor(retryInterceptor)
-        //.addInterceptor()
         .build()
 
     private val retrofit = Retrofit.Builder()

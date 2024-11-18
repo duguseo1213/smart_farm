@@ -117,7 +117,7 @@ fun MainLayout() {
             }
         }
     } else {
-        //homeViewModel.addGarden(2L)
+        homeViewModel.addGarden(2L)
     }
 
 }

@@ -1,7 +1,9 @@
 package com.wcd.farm.presentation.view.login
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,14 +16,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.airbnb.mvrx.compose.mavericksViewModel
 import com.wcd.farm.R
+import com.wcd.farm.presentation.intent.AppViewIntent
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
+import com.wcd.farm.presentation.viewmodel.AppViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,17 +38,7 @@ import kotlinx.coroutines.withContext
 fun LoginScreen() {
     val context = LocalContext.current
 
-    /*LaunchedEffect(Unit) {
-        val url =
-            "https://k11c104.p.ssafy.io/oauth2/authorization/kakao?redirect_uri=app://wcdfarm"
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.Main) {
-                context.startActivity(intent)
-            }
-        }
-    }*/
+    val appViewModel: AppViewModel = mavericksViewModel()
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,

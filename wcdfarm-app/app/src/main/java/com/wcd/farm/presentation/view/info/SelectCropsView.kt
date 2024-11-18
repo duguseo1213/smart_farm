@@ -53,7 +53,7 @@ fun SelectCropsView(modifier: Modifier) {
     val selectedCrop by viewModel.selectedCrop.collectAsState()
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        CropsSelectButton { if(selectedCrop != "") showCropsList = true }
+        CropsSelectButton { if(selectedCrop.cropName != "") showCropsList = true }
 
         CropsListView(showCropsList) {
             showCropsList = false
@@ -80,7 +80,7 @@ fun CropsSelectButton(onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = if(selectedCrop != "") selectedCrop else "등록된 작물이 없습니다.",
+                text = if(selectedCrop.cropName != "") selectedCrop.cropName else "등록된 작물이 없습니다.",
                 fontFamily = FontFamily(Font(R.font.bookend_semibold)),
                 color = Color(0xFF204833),
                 fontSize = 20.sp,
@@ -125,7 +125,7 @@ fun CropsItemView(onDismissRequest: () -> Unit) {
     val gardenCropList by viewModel.gardenCropList.collectAsState()
 
     for (crop in gardenCropList) {
-        DropdownMenuItem(text = { Text(crop) },
+        DropdownMenuItem(text = { Text(crop.cropName) },
             onClick = {
                 viewModel.selectCrop(crop)
                 onDismissRequest()

@@ -1,5 +1,6 @@
 package com.wcd.farm.data.remote
 
+import com.wcd.farm.data.model.CropDTO
 import com.wcd.farm.data.model.ResponseDTO
 import retrofit2.Response
 import retrofit2.http.GET
@@ -13,7 +14,7 @@ interface CropApi {
     }
 
     @GET("$CROP_BASE/get-crops/{gardenId}")
-    suspend fun getCrops(@Path("gardenId") gardenId: Long): Response<ResponseDTO<List<String>>>
+    suspend fun getCrops(@Path("gardenId") gardenId: Long): Response<ResponseDTO<List<CropDTO>>>
 
     @POST("$CROP_BASE/recommand-crop")
     suspend fun getRecommendCrop(@Query("cropName") cropName: String): Response<ResponseDTO<List<String>>>

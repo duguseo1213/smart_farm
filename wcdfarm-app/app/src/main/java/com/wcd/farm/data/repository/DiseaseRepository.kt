@@ -69,6 +69,8 @@ class DiseaseRepository @Inject constructor(private val gardenApi: GardenApi) {
                 val response = gardenApi.postDiseaseDetection(body)
 
                 if(response.isSuccessful) {
+                    Log.e("TEST", response.body().toString())
+
                     val result = response.body()?.data
 
                     if (result != null) {

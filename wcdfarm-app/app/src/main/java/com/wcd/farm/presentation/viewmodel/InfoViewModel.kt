@@ -1,6 +1,7 @@
 package com.wcd.farm.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.wcd.farm.data.model.CropDTO
 import com.wcd.farm.data.repository.GardenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -28,7 +29,7 @@ class InfoViewModel @Inject constructor(private val gardenRepository: GardenRepo
         gardenRepository.getRecommendCrops(cropName)
     }
 
-    fun selectCrop(cropName: String) {
-        gardenRepository.selectCrop(cropName)
+    fun selectCrop(crop: CropDTO) {
+        gardenRepository.selectCrop(crop)
     }
 }

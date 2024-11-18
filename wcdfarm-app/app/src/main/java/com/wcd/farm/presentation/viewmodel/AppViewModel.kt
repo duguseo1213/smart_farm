@@ -33,6 +33,8 @@ class AppViewModel @AssistedInject constructor(@Assisted initialState: AppViewSt
         handleIntent()
     }
 
+    val loginState = repository.loginState
+
     fun sendIntent(intent: AppViewIntent) = viewModelScope.launch(Dispatchers.Main) {
         appViewIntent.send(intent)
     }
@@ -58,5 +60,13 @@ class AppViewModel @AssistedInject constructor(@Assisted initialState: AppViewSt
 
     fun setRefreshToken(refreshToken: String) {
         repository.setRefreshToken(refreshToken)
+    }
+
+    fun setLoginState(state: Boolean) {
+        repository.setLoginState(state)
+    }
+
+    fun getLoginState() {
+        repository.getLoginState()
     }
 }

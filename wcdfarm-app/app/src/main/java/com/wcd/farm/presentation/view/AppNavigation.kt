@@ -1,13 +1,16 @@
 package com.wcd.farm.presentation.view
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import com.wcd.farm.presentation.intent.AppViewIntent
 import com.wcd.farm.presentation.state.AppViewState
 import com.wcd.farm.presentation.view.login.LoginScreen
 import com.wcd.farm.presentation.viewmodel.AppViewModel
@@ -18,6 +21,18 @@ fun AppNavigation() {
     val appViewState by appViewModel.collectAsState(AppViewState::appViewState)
 
     val navController = rememberNavController()
+    val loginState by appViewModel.loginState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        appViewModel.getLoginState()
+    }
+
+    LaunchedEffect(loginState) {
+        if(loginState) {
+            appViewModel.sendIntent(AppViewIntent.ShowMainView)
+        }
+    }
+
     LaunchedEffect(appViewState) {
         when (appViewState) {
             AppViewState.LOGIN -> navController.navigate(AppViewState.LOGIN)

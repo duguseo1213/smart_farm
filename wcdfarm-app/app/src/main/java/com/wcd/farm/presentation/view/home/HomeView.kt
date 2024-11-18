@@ -1,5 +1,6 @@
 package com.wcd.farm.presentation.view.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
@@ -55,10 +57,10 @@ fun HomeScreen() {
         //homeViewModel.setCrtGarden(gardenList.size - pagerState.currentPage - 1)
     }
 
-    HorizontalPager(state = pagerState, contentPadding = PaddingValues(0.dp), modifier = Modifier.fillMaxSize().padding(0.dp)) {
+    HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) {
         Column(
             Modifier
-                .fillMaxSize()
+                .fillMaxSize().padding(4.dp)
                 .addFocusCleaner(focusManager), horizontalAlignment = Alignment.CenterHorizontally) {
             TodayWeatherView(Modifier.weight(0.16f))
             Spacer(Modifier.weight(0.01f))

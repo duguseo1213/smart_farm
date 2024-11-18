@@ -78,11 +78,12 @@ fun MyFarmView(modifier: Modifier, focusManager: FocusManager) {
         changeName = gardenList[crtGarden!!].gardenName
     }
 
-    /*LaunchedEffect(gardenList) {
+    LaunchedEffect(gardenList) {
         if (crtGarden != null) {
             changeName = gardenList[crtGarden!!].gardenName
         }
-    }*/
+        viewModel.getStreamKeys()
+    }
 
     BoxWithConstraints(modifier = modifier.noRippleClickable {
         when (farmDisplayType) {
