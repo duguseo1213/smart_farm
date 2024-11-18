@@ -1,4 +1,5 @@
 import os
+import base64
 from PlantDisease import MyCnnModel
 from PlantDisease import PlantDiseaseLabel
 from AnimalDetection import animalDetectionLabel
@@ -10,6 +11,13 @@ from torchvision import transforms
 from PIL import Image
 from ultralytics import YOLO
 import io
+from openai import OpenAI
+import shutil
+
+
+def encode_image(image_path):
+  with open(image_path, "rb") as image_file:
+    return base64.b64encode(image_file.read()).decode('utf-8')
 
 load_dotenv() 
 app = FastAPI()
@@ -44,6 +52,10 @@ plant_disease_image_transform = transforms.Compose([
 # animal Detection Model
 animal_detection_model = YOLO(Animal_Detection_Model_PATH)
 human_detection_model = YOLO(Human_Detection_Model_PATH)
+
+# OpenAI API 키 설정
+# openai.api_key =  os.getenv('OPEN_AI_APT_KEY')
+
 @app.post("/plantDiseaseDetection")
 async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
 
@@ -103,5 +115,46 @@ async def animalDetection(imageFile: UploadFile = File(...)):
             return {"Human"}
             
     return {"none"}
+
+
+
+
+@app.post("/LettuceSegment")
+async def LettuceSegment(imageFile: UploadFile = File(...)):
+    
+    client = OpenAI(api_key=os.getenv("OPEN_AI_APT_KEY"))
+    
+    with open("temp_image.png", "wb") as buffer:
+        shutil.copyfileobj(imageFile.file, buffer)
+
+    image_path = "temp_image.png"
+
+    # Getting the base64 string
+    base64_image = encode_image(image_path)
+
+    response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {
+        "role": "user",
+        "content": [
+            {
+            "type": "text",
+            "text": "Please tell me the growth stage of the crop as a number between 1 and 5. If it is not a crop, respond with 0.",
+            },
+            {
+            "type": "image_url",
+            "image_url": {
+                "url":  f"data:image/jpeg;base64,{base64_image}"
+            },
+            },
+        ],
+        }
+    ],
+    )
+    print(response.choices[0])
+    return {"response": response.choices[0].message.content}
+
+
 
     

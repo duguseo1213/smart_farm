@@ -8,6 +8,7 @@ import com.ssafy.WeCanDoFarm.server.domain.garden.entity.Garden;
 import com.ssafy.WeCanDoFarm.server.domain.garden.entity.GardenStatus;
 import com.ssafy.WeCanDoFarm.server.domain.garden.service.GardenService;
 import com.ssafy.WeCanDoFarm.server.domain.user.entity.User;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class GardenController {
 
     private final GardenService gardenService;
 
-    @GetMapping("/get-gardens/{username}")
+    @GetMapping("/get-gardens")
     public SuccessResponse<List<GetGardenResponse>> getGarden(@CurrentUser User user) throws Exception {
         List<Garden> gardenList = gardenService.getGardens(user.getUsername());
         List<GetGardenResponse> gardenResponseList = new ArrayList<>();
@@ -58,6 +59,7 @@ public class GardenController {
     }
 
     @PostMapping("/add-user-to-garden")
+    @Operation(description = "userType은 LEADER,MEMBER 입니다.")
     public SuccessResponse<String> registerUserToGarden(@CurrentUser User user,@RequestBody RegisterUserToGardenRequest request) throws Exception {
 
         gardenService.registerUserToGarden(user,request);

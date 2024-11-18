@@ -7,3 +7,4 @@ app/AnimalDetection/__pycache__/
 ## File
 plant.pth
 best.pt
+.env
