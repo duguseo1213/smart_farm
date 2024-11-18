@@ -73,6 +73,9 @@ public class CropService {
         String[] list = request.getCrops().split("&");
         for(String crop : list) {
             cropRepository.save(Crop.create(garden,crop));
+
+            Crop temp_crop = cropRepository.getCrop(request.getGardenId(), crop);
+            stageRepository.save(CropGrowthStage.create(temp_crop,20));
         }
     }
 
