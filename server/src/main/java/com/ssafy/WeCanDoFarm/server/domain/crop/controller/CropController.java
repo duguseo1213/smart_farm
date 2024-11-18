@@ -2,6 +2,8 @@ package com.ssafy.WeCanDoFarm.server.domain.crop.controller;
 
 import com.ssafy.WeCanDoFarm.server.core.response.SuccessResponse;
 import com.ssafy.WeCanDoFarm.server.domain.crop.dto.CropDto;
+import com.ssafy.WeCanDoFarm.server.domain.crop.dto.CropGrowthStageDto;
+import com.ssafy.WeCanDoFarm.server.domain.crop.entitiy.CropGrowthStage;
 import com.ssafy.WeCanDoFarm.server.domain.crop.service.CropService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +45,16 @@ public class CropController {
     public SuccessResponse<List<String>> recommandCrop(String cropName){
 
         return SuccessResponse.of(cropService.recommendCrop(cropName));
+    }
+
+    @PostMapping("/create-crop-growth-stage")
+    public SuccessResponse<Void> createCropGrowthStage(CropGrowthStageDto.CropGrowthStageRequest request){
+        cropService.addCropGrowthStage(request);
+        return SuccessResponse.empty();
+    }
+
+    @GetMapping("/get-crop-growth-stages")
+    public SuccessResponse<List<CropGrowthStage>> getCropGrowthStages(CropGrowthStageDto.getCropGrowthsStageRequest request){
+        return SuccessResponse.of(cropService.getCropGrowthStage(request.getGardenId(), request.getCropName()));
     }
 }

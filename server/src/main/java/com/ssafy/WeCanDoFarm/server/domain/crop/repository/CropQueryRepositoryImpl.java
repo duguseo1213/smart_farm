@@ -1,6 +1,7 @@
 package com.ssafy.WeCanDoFarm.server.domain.crop.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.WeCanDoFarm.server.domain.crop.entitiy.Crop;
 import com.ssafy.WeCanDoFarm.server.domain.crop.entitiy.QCropDataRecommend;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,14 @@ public class CropQueryRepositoryImpl implements CropQueryRepository {
                 .join(cropDataRecommend.mainCrop,cropData)
                 .where(cropData.cropType.eq(cropName))
                 .fetch();
+    }
+
+    @Override
+    public Crop getCrop(Long gardenId,String cropName){
+        return queryFactory.select(crop)
+                .from(crop)
+                .join(crop.garden,garden)
+                .where(garden.gardenId.eq(gardenId),crop.cropName.eq(cropName))
+                .fetchOne();
     }
 }

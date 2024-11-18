@@ -1,4 +1,5 @@
 import os
+import base64
 from PlantDisease import MyCnnModel
 from PlantDisease import PlantDiseaseLabel
 from AnimalDetection import animalDetectionLabel
@@ -10,6 +11,13 @@ from torchvision import transforms
 from PIL import Image
 from ultralytics import YOLO
 import io
+from openai import OpenAI
+import shutil
+
+
+def encode_image(image_path):
+  with open(image_path, "rb") as image_file:
+    return base64.b64encode(image_file.read()).decode('utf-8')
 
 load_dotenv() 
 app = FastAPI()
@@ -31,8 +39,6 @@ Plant_Disease_Detection_Labels = 45
 Plant_Disease_Detection_State_Dict_PATH = os.path.join(script_dir,"PlantDisease/plant.pth")
 Animal_Detection_Model_PATH = os.path.join(script_dir,"AnimalDetection/best.pt")
 Human_Detection_Model_PATH = os.path.join(script_dir,"AnimalDetection/best_human.pt")
-# Lettuce_Detection_Model_PATH= os.path.join(script_dir,"LettuceDetection/best_lettuce.pt")
-Card_Detection_Model_PATH= os.path.join(script_dir,"LettuceDetection/best_card_detection.pt")
 # plantDiseaseDetection
 plant_disease_detection_model = MyCnnModel.MyCnn(Plant_Disease_Detection_Labels)
 plant_disease_detection_model.load_state_dict(torch.load(Plant_Disease_Detection_State_Dict_PATH, map_location=torch.device('cpu')))
@@ -46,8 +52,10 @@ plant_disease_image_transform = transforms.Compose([
 # animal Detection Model
 animal_detection_model = YOLO(Animal_Detection_Model_PATH)
 human_detection_model = YOLO(Human_Detection_Model_PATH)
-# Lettuce_detection_model = YOLO(Lettuce_Detection_Model_PATH)
-Card_detection_model = YOLO(Card_Detection_Model_PATH)
+
+# OpenAI API 키 설정
+# openai.api_key =  os.getenv('OPEN_AI_APT_KEY')
+
 @app.post("/plantDiseaseDetection")
 async def plantDiseaseDetection(imageFile: UploadFile = File(...)):
 
@@ -108,23 +116,45 @@ async def animalDetection(imageFile: UploadFile = File(...)):
             
     return {"none"}
 
+
+
+
 @app.post("/LettuceSegment")
 async def LettuceSegment(imageFile: UploadFile = File(...)):
-    image_data = await imageFile.read()  # UploadFile에서 데이터 읽기
-    image = Image.open(io.BytesIO(image_data))  # bytes 데이터를 PIL 이미지로 변환
     
-    results = Card_detection_model(image)
-    print(results)
+    client = OpenAI(api_key=os.getenv("OPEN_AI_APT_KEY"))
     
-    for result in results:
-        boxes = result.boxes  # Boxes object for bounding box outputs
-        masks = result.masks  # Masks object for segmentation masks outputs
-        keypoints = result.keypoints  # Keypoints object for pose outputs
-        probs = result.probs  # Probs object for classification outputs
-        obb = result.obb  # Oriented boxes object for OBB outputs
-        result.show()  # display to screen
-        result.save(filename="result.jpg")  # save to disk
-    
-    return {"none"}
+    with open("temp_image.png", "wb") as buffer:
+        shutil.copyfileobj(imageFile.file, buffer)
+
+    image_path = "temp_image.png"
+
+    # Getting the base64 string
+    base64_image = encode_image(image_path)
+
+    response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {
+        "role": "user",
+        "content": [
+            {
+            "type": "text",
+            "text": "Please tell me the growth stage of the crop as a number between 1 and 5. If it is not a crop, respond with 0.",
+            },
+            {
+            "type": "image_url",
+            "image_url": {
+                "url":  f"data:image/jpeg;base64,{base64_image}"
+            },
+            },
+        ],
+        }
+    ],
+    )
+    print(response.choices[0])
+    return {"response": response.choices[0].message.content}
+
+
 
     
