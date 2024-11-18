@@ -53,11 +53,9 @@ fun HomeScreen() {
                 val latitude = gardenList[crtGarden!!].lat
                 val longitude = gardenList[crtGarden!!].lon
 
-                Log.e("TEST", "latitude: $latitude, longitude: $longitude")
-
-                /*weatherViewModel.getNearForecastWeather(latitude, longitude)
+                weatherViewModel.getNearForecastWeather(latitude, longitude)
                 weatherViewModel.getForecastWeather(latitude, longitude)
-                weatherViewModel.getLiveWeather(latitude, longitude)*/
+                weatherViewModel.getLiveWeather(latitude, longitude)
                 crtGarden?.let { homeViewModel.setCrtWeatherGardenIndex(it) }
             }
         }

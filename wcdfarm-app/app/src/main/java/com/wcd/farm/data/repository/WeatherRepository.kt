@@ -99,101 +99,104 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi, 
 
         val options = getOptions(customOptions)
         CoroutineScope(Dispatchers.IO).launch {
-            val response = weatherApi.getNearWeather(options)
+            try {
+                val response = weatherApi.getNearWeather(options)
 
-            if (response.isSuccessful) {
-                val itemArray = getItem(response.body()!!)
-                val weatherList = itemArray.asList()
+                if (response.isSuccessful) {
+                    val itemArray = getItem(response.body()!!)
+                    val weatherList = itemArray.asList()
 
-                val list = _forecastWeather.value.toMutableList()
-                for (weather in weatherList) {
-                    val weatherObject = weather.asJsonObject
-                    val category = weatherObject["category"].asString
-                    val fcstDate = weatherObject["fcstDate"].asString
-                    val fcstTime = weatherObject["fcstTime"].asString
-                    val fcstValue = weatherObject["fcstValue"].asString
+                    val list = _forecastWeather.value.toMutableList()
+                    for (weather in weatherList) {
+                        val weatherObject = weather.asJsonObject
+                        val category = weatherObject["category"].asString
+                        val fcstDate = weatherObject["fcstDate"].asString
+                        val fcstTime = weatherObject["fcstTime"].asString
+                        val fcstValue = weatherObject["fcstValue"].asString
 
-                    val index = fcstDate.toInt() - baseDate.toInt() - 1
-                    when (category) {
-                        "TMN" -> {
-                            val minTmp = fcstValue.toDouble()
-                            if (baseDate == fcstDate) {
-                                _weather.value = _weather.value.copy(minTmp = minTmp)
-                            } else {
-                                list[index] = list[index].copy(minTmp = minTmp.toInt())
-                            }
-                        }
-
-                        "TMX" -> {
-                            val maxTmp = fcstValue.toDouble()
-                            if (baseDate == fcstDate) {
-                                _weather.value = _weather.value.copy(maxTmp = maxTmp)
-                            } else {
-                                list[index] = list[index].copy(maxTmp = maxTmp.toInt())
-                            }
-                        }
-
-                        "POP" -> {
-                            if (baseDate != fcstDate) {
-                                val rainProbability = fcstValue.toInt()
-                                if (fcstTime == "0900") {
-                                    list[index] =
-                                        list[index].copy(amRainProbability = rainProbability)
-                                } else if (fcstTime == "1800") {
-                                    list[index] =
-                                        list[index].copy(pmRainProbability = rainProbability)
+                        val index = fcstDate.toInt() - baseDate.toInt() - 1
+                        when (category) {
+                            "TMN" -> {
+                                val minTmp = fcstValue.toDouble()
+                                if (baseDate == fcstDate) {
+                                    _weather.value = _weather.value.copy(minTmp = minTmp)
+                                } else {
+                                    list[index] = list[index].copy(minTmp = minTmp.toInt())
                                 }
                             }
 
-                        }
-
-                        "SKY" -> {
-                            val skyType = fcstValue.toInt()
-                            if (baseDate != fcstDate) {
-                                val weatherType = if (skyType == 1) 1 else 2
-                                if (fcstTime == "0900") {
-                                    list[index] = list[index].copy(amWeather = weatherType)
-                                } else if (fcstTime == "1800") {
-                                    list[index] = list[index].copy(pmWeather = weatherType)
+                            "TMX" -> {
+                                val maxTmp = fcstValue.toDouble()
+                                if (baseDate == fcstDate) {
+                                    _weather.value = _weather.value.copy(maxTmp = maxTmp)
+                                } else {
+                                    list[index] = list[index].copy(maxTmp = maxTmp.toInt())
                                 }
                             }
-                        }
 
-                        "PTY" -> {
-                            val rainType = fcstValue.toInt()
-                            if (baseDate != fcstDate && rainType != 0) {
-                                val weatherType: Int = if (rainType != 3) 2 else 3
-                                if (fcstTime == "0900") {
-                                    list[index] = list[index].copy(amWeather = weatherType)
-                                } else if (fcstTime == "1800") {
-                                    list[index] = list[index].copy(pmWeather = weatherType)
+                            "POP" -> {
+                                if (baseDate != fcstDate) {
+                                    val rainProbability = fcstValue.toInt()
+                                    if (fcstTime == "0900") {
+                                        list[index] =
+                                            list[index].copy(amRainProbability = rainProbability)
+                                    } else if (fcstTime == "1800") {
+                                        list[index] =
+                                            list[index].copy(pmRainProbability = rainProbability)
+                                    }
+                                }
+
+                            }
+
+                            "SKY" -> {
+                                val skyType = fcstValue.toInt()
+                                if (baseDate != fcstDate) {
+                                    val weatherType = if (skyType == 1) 1 else 2
+                                    if (fcstTime == "0900") {
+                                        list[index] = list[index].copy(amWeather = weatherType)
+                                    } else if (fcstTime == "1800") {
+                                        list[index] = list[index].copy(pmWeather = weatherType)
+                                    }
+                                }
+                            }
+
+                            "PTY" -> {
+                                val rainType = fcstValue.toInt()
+                                if (baseDate != fcstDate && rainType != 0) {
+                                    val weatherType: Int = if (rainType != 3) 2 else 3
+                                    if (fcstTime == "0900") {
+                                        list[index] = list[index].copy(amWeather = weatherType)
+                                    } else if (fcstTime == "1800") {
+                                        list[index] = list[index].copy(pmWeather = weatherType)
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                _forecastWeather.value = list
+                    _forecastWeather.value = list
+                }
+            } catch (e: Exception) {
+                e.message?.let { Log.e("TEST", it) }
             }
+
         }
     }
 
     fun getForecastWeather(latitude: Double, longitude: Double, time: LocalDateTime) {
-
-
-
         CoroutineScope(Dispatchers.IO).launch {
-
             val areaCodeResponse = meteoApi.getAreaCode(latitude, longitude)
-
             if(areaCodeResponse.isSuccessful) {
                 val areaCode = areaCodeResponse.body()!!.data.areacode
                 val baseTime = time.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "0600"
                 val customOptions: MutableMap<String, String> = mutableMapOf()
-                customOptions["regId"] = areaCode
+                if(areaCode.startsWith("11B")) {
+                    customOptions["regId"] = areaCode.substring(0, 3) + "00000"
+                } else {
+                    customOptions["regId"] = areaCode.substring(0, 5) + "000"
+                }
                 customOptions["tmFc"] = baseTime
                 val options = getOptions(customOptions)
-
                 val response = weatherApi.getForecastWeather(options)
                 if (response.isSuccessful) {
                     val list = _forecastWeather.value.toMutableList()
@@ -224,7 +227,7 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi, 
                 }
 
                 val customOptions2: MutableMap<String, String> = mutableMapOf()
-                customOptions2["regId"] = "11F20501"
+                customOptions2["regId"] = areaCode
                 customOptions2["tmFc"] = baseTime
 
                 val options2 = getOptions(customOptions2)

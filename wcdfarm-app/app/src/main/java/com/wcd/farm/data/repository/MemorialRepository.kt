@@ -67,7 +67,6 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
 1
                 if (pictureList != null) {
                     val newMap = mutableMapOf<String, MutableList<PictureDTO>>()
-                    //_pictureList.value = pictureList
                     for(picture in pictureList) {
                         val time = LocalDateTime.parse(picture.pictureDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                         val date = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -109,6 +108,8 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
             if(response.isSuccessful) {
                 _timeLapseImageList.value = response.body()!!.data
                 Log.e("TEST", "timeLapse: " + response.body().toString())
+            } else {
+                Log.e("TEST", "errorBody: " + response.errorBody()!!.string())
             }
         }
     }
@@ -178,5 +179,9 @@ class MemorialRepository @Inject constructor(private val galleryApi: GalleryApi,
 
     fun setTimeLapseImage(index: Int?) {
         _crtTimeLapseImage.value = index
+    }
+
+    fun clearPictures() {
+        _datePictureListMap.value = mutableMapOf()
     }
 }

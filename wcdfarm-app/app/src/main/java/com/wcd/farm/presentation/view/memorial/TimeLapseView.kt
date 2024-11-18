@@ -1,5 +1,6 @@
 package com.wcd.farm.presentation.view.memorial
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +34,7 @@ import com.airbnb.mvrx.compose.mavericksViewModel
 import com.wcd.farm.data.model.PictureDTO
 import com.wcd.farm.data.model.TimeLapseImageDTO
 import com.wcd.farm.presentation.viewmodel.MemorialViewModel
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -50,31 +53,30 @@ fun TimeLapseScreen() {
         viewModel.startTimeLapse()
     }
 
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.stopTimeLapse()
+        }
+    }
+
     crtTimeLapseImage?.let { TimeLapseImage(timeLapseImageList[it]) }
 }
 
 @Composable
 fun TimeLapseImage(timeLapseImage: TimeLapseImageDTO) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color.White)
-            .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+    //Text(timeLapseImage.image)
+    Column {
+        val dateTime = ZonedDateTime.parse(timeLapseImage.createdDate)
+        val date = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        Text(date, fontSize = 22.sp, fontFamily = customFontFamily3)
+        AsyncImage(
+            model = timeLapseImage.image,
+            contentDescription = "Farm",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
                 .fillMaxWidth()
-        ) {
-            AsyncImage(
-                model = timeLapseImage.image,
-                contentDescription = "Farm",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(5.dp))
-            )
-        }
+                .height(200.dp)
+                .clip(RoundedCornerShape(5.dp))
+        )
     }
 }

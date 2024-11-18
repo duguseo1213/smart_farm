@@ -81,7 +81,9 @@ fun GalleryView() {
     val crtGarden by viewModel.crtGarden.collectAsState()
 
     LaunchedEffect(crtGarden) {
+        viewModel.clearPictures()
         crtGarden?.let { viewModel.getAllPictures(gardenList[it].gardenId) }
+        crtGarden?.let { viewModel.getTimeLapse(gardenList[crtGarden!!].gardenId) }
     }
 
     LaunchedEffect(selectedDate) {

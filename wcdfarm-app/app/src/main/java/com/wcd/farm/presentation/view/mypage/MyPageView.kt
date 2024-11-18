@@ -50,6 +50,8 @@ import com.wcd.farm.presentation.view.home.noRippleClickable
 import com.wcd.farm.presentation.viewmodel.HomeViewModel
 import com.wcd.farm.presentation.viewmodel.InfoViewModel
 import com.wcd.farm.presentation.viewmodel.MyPageViewModel
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 
 @Composable
@@ -113,7 +115,13 @@ fun MyPageScreen() {
                     val cropStateList =
                         gardenCropList.map { crop -> "${crop.cropName}   ${crop.growthPercentage}%" }
                     FarmInfo("농장 주소", listOf(gardenList[crtGarden!!].gardenAddress))
-                    FarmInfo("시작 날짜", listOf(gardenList[crtGarden!!].createdDate))
+                    FarmInfo(
+                        "시작 날짜", listOf(
+                            ZonedDateTime.parse(gardenList[crtGarden!!].gardenCreated).format(
+                                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                            )
+                        )
+                    )
                     FarmInfo("작물 현황", cropStateList)
 
                     Spacer(modifier = Modifier.height(20.dp))

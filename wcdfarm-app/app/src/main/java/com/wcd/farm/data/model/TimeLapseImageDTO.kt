@@ -6,5 +6,5 @@ import java.sql.Date
 data class TimeLapseImageDTO(
     val gardenId: BigInteger,
     val image: String,
-    val createdDate: Date
+    val createdDate: String
 )

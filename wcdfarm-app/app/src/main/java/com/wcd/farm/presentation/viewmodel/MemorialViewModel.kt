@@ -17,6 +17,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -38,6 +39,8 @@ class MemorialViewModel @AssistedInject constructor(
     }
 
     companion object : MavericksViewModelFactory<MemorialViewModel, MemorialViewState> by hiltMavericksViewModelFactory()
+
+    private var timeLapseJob: Job? = null
 
     val gardenList = gardenRepository.gardenList
     val selectedDate = repository.selectedDate
@@ -108,7 +111,8 @@ class MemorialViewModel @AssistedInject constructor(
     }
 
     fun startTimeLapse() {
-        viewModelScope.launch {
+        timeLapseJob?.cancel()
+        timeLapseJob = viewModelScope.launch {
             if(timeLapseList.value.isEmpty()) {
                 setCrtTimeLapseImage(null)
             } else {
@@ -116,12 +120,17 @@ class MemorialViewModel @AssistedInject constructor(
             }
 
             while (true) {
-                delay(500)
+                delay(1000)
                 val currentIndex = crtTimeLapseImage.value
                 val nextIndex = (currentIndex?.plus(1))?.rem(timeLapseList.value.size)
                 setCrtTimeLapseImage(nextIndex)
             }
         }
+    }
+
+    fun stopTimeLapse() {
+        timeLapseJob?.cancel()
+        timeLapseJob = null
     }
 
     private fun setCrtTimeLapseImage(index: Int?) {
@@ -134,5 +143,9 @@ class MemorialViewModel @AssistedInject constructor(
 
     fun updatePictures(date: String) {
         repository.updatePictures(date)
+    }
+
+    fun clearPictures() {
+        repository.clearPictures()
     }
 }
