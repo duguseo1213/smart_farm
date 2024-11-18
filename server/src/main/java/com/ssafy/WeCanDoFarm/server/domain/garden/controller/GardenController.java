@@ -27,6 +27,7 @@ public class GardenController {
     @GetMapping("/get-gardens")
     public SuccessResponse<List<GetGardenResponse>> getGarden(@CurrentUser User user) throws Exception {
         List<Garden> gardenList = gardenService.getGardens(user.getUsername());
+        log.info(gardenList.toString());
         List<GetGardenResponse> gardenResponseList = new ArrayList<>();
 
         for(int i=0;i<gardenList.size();i++){
