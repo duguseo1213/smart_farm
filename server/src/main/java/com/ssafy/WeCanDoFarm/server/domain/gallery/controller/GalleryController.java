@@ -43,8 +43,8 @@ public class GalleryController {
 
         return SuccessResponse.of(galleryPictureService.getPictures(gardenId));
     }
-    @GetMapping("/get-pictures-on-date")
-    public SuccessResponse<List<GetPicturesResponse>> getPictures(@RequestBody GetPictureOnDateRequest request) throws Exception
+    @PostMapping("/get-pictures-on-date")
+    public SuccessResponse<List<GetPicturesResponse>> getPictures(GetPictureOnDateRequest request) throws Exception
     {
         return SuccessResponse.of(galleryPictureService.getPicturesOnDate(request));
     }
