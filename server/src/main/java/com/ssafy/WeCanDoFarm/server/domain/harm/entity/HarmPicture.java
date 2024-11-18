@@ -39,6 +39,7 @@ public class HarmPicture {
         picture.garden = garden;
         picture.harmPicture = harmPicture;
         picture.harmTarget = harmTarget;
+        picture.createdDate = new Date();
         return picture;
     }
 }
