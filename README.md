@@ -61,11 +61,12 @@
 ### Hardware
 <img src="Picture/hard1.png" alt="hard1" width="500px">
 <img src="Picture/hard2.png" alt="hard2" width="500px">
-![Hardware](Picture/hard3.jpg)
-![Hardware](Picture/hard4.jpg)
-![Hardware](Picture/hard5.jpg)
-![Hardware](Picture/hard6.jpg)
-![Hardware](Picture/hard7.jpg)
+<img src="Picture/hard3.jpg" alt="hard3" width="500px">
+<img src="Picture/hard4.jpg" alt="hard4" width="500px">
+<img src="Picture/hard5.jpg" alt="hard5" width="500px">
+<img src="Picture/hard6.jpg" alt="hard6" width="500px">
+<img src="Picture/hard7.jpg" alt="hard7" width="500px">
+
 
 
 ## Architecture
