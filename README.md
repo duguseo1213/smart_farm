@@ -48,6 +48,7 @@
 </div>
 
 ### App
+<img src="Picture/app1.png" alt="App1" width="200px">
 ![App1](Picture/app1.png)
 ![App2](Picture/app2.png)
 ![App3](Picture/app3.png)
