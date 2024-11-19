@@ -115,8 +115,9 @@
       <td>
         <ul>
           <li><strong>SSAFY 11th Embedded</strong></li>
-          <li>역할1</li>
-          <li>역할2</li>
+          <li>팀장</li>
+          <li>하드웨어 제작</li>
+          <li>CCTV 녹화 및 동물 탐지후 서버 전송</li>
         </ul>
       </td>
       <td>
