@@ -60,7 +60,11 @@
 ### Hardware
 ![Hardware](Picture/hard1.png)
 ![Hardware](Picture/hard2.png)
-
+![Hardware](Picture/hard3.png)
+![Hardware](Picture/hard4.png)
+![Hardware](Picture/hard5.png)
+![Hardware](Picture/hard6.png)
+![Hardware](Picture/hard7.png)
 
 
 ## Architecture
