@@ -118,8 +118,9 @@
       <td>
         <ul>
           <li><strong>SSAFY 11th Java</strong></li>
-          <li>역할1</li>
-          <li>역할2</li>
+          <li>RestAPI개발 및 mqtt서버 구축</li>
+          <li>CI/CD 인프라 구축</li>
+          <li>rtmp 미디어 서버 구축</li>
         </ul>
       </td>
       <td>
