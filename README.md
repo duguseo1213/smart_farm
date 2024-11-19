@@ -59,8 +59,8 @@
 
 
 ### Hardware
-<img src="Picture/hard1.png" alt="hard1" width="300px">
-<img src="Picture/hard2.png" alt="hard2" width="300px">
+<img src="Picture/hard1.png" alt="hard1" width="400px">
+<img src="Picture/hard2.png" alt="hard2" width="400px">
 ![Hardware](Picture/hard3.jpg)
 ![Hardware](Picture/hard4.jpg)
 ![Hardware](Picture/hard5.jpg)
