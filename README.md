@@ -2,7 +2,6 @@
 
 # 프로젝트명 : 팜요 Farm-us
 ![App1](Picture/farmus.png)
-- 이미지
 - 배포 URL : https://drive.google.com/file/d/1OseafIsXObwfuNPSEKQ_w3IaEkS9iNXR/view?usp=sharing
 - Test ID : evilparan@gmail.com
 - Test PW : farmustest1!
