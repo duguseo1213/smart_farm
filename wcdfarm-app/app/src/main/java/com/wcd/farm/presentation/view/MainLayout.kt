@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.DataExploration
@@ -70,8 +71,10 @@ fun MainLayout() {
     val diseaseViewModel: DiseaseViewModel = mavericksViewModel()
     val showDiseaseView by diseaseViewModel.collectAsState(DiseaseViewState::showDiseaseView)
     val homeViewModel: HomeViewModel = mavericksViewModel()
-
+    val gardenList by homeViewModel.gardenList.collectAsState()
     val crtGarden by homeViewModel.crtGarden.collectAsState()
+
+    val pagerState = rememberPagerState { gardenList.size }
 
     LaunchedEffect(Unit) {
 
@@ -105,7 +108,7 @@ fun MainLayout() {
             Box(modifier = Modifier.padding(innerPadding)) {
                 Box(modifier = Modifier.padding(36.dp, 18.dp)) {
                     when (currentScreen.value) {
-                        HOME -> HomeScreen()
+                        HOME -> HomeScreen(pagerState)
                         INFO -> InfoScreen()
                         MEMORIAL -> MemorialScreen()
                         MY_PAGE -> MyPageScreen()

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +33,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(pagerState: PagerState) {
     val homeViewModel: HomeViewModel = mavericksViewModel()
     val weatherViewModel: WeatherViewModel = hiltViewModel()
     val infoViewModel: InfoViewModel = hiltViewModel()
@@ -67,8 +68,6 @@ fun HomeScreen() {
             }
         }
     }
-
-    val pagerState = rememberPagerState { gardenList.size }
 
     LaunchedEffect(pagerState.currentPage) {
         homeViewModel.setCrtGarden(pagerState.currentPage)

@@ -75,7 +75,6 @@ fun TimeLapseImage(timeLapseImage: TimeLapseImageDTO) {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
                 .clip(RoundedCornerShape(5.dp))
         )
     }

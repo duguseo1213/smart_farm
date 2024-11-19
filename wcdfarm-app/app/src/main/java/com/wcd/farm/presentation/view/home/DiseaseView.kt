@@ -32,12 +32,15 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil3.compose.AsyncImage
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import com.wcd.farm.R
 import com.wcd.farm.presentation.intent.DiseaseViewIntent
 import com.wcd.farm.presentation.state.DiseaseViewState
 import com.wcd.farm.presentation.viewmodel.DiseaseViewModel
@@ -171,14 +174,16 @@ fun CaptureImage(showDiseaseDetectResult: Boolean, onDiseaseDetectState: Boolean
                                 modifier = Modifier.fillMaxWidth(0.8f).align(Alignment.CenterHorizontally)
                             )
                             Text("${diseaseDetect?.diseaseName} 검출", color = Color.White,fontFamily = FontFamily(
-                                Font(R.font.ef_yoony))
+                                Font(R.font.ef_yoony)
+                            )
+                            )
                             Text("${diseaseDetect?.diseaseSolvent}", color = Color.White, fontFamily = FontFamily(
-                                Font(R.font.ef_yoony))
+                                Font(R.font.ef_yoony)))
                         }
                     } else {
                         Log.e("TEST", "isPlantDisease: false")
                         Text("검출되지 않았습니다.", color = Color.White,fontFamily = FontFamily(
-                                Font(R.font.ef_yoony))
+                                Font(R.font.ef_yoony)))
                     }
                 }
             }

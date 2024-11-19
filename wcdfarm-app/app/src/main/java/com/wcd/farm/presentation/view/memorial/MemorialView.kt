@@ -55,6 +55,7 @@ import com.wcd.farm.presentation.state.MemorialViewState
 import com.wcd.farm.presentation.view.theme.buttonTransparentTheme
 import com.wcd.farm.presentation.viewmodel.MemorialViewModel
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -171,7 +172,8 @@ fun EmptyListView(notify: String) {
 @Composable
 fun InvasionView(harm: HarmDTO, harmType: String) {
     val viewModel: MemorialViewModel = mavericksViewModel()
-    val date = ZonedDateTime.parse(harm.createdDate)
+    val createdDate = ZonedDateTime.parse(harm.createdDate)
+    val date = createdDate.withZoneSameInstant(ZoneId.of("Asia/Seoul"))
 
     val invasionDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     val invasionTime = date.format(DateTimeFormatter.ofPattern("a hh:mm"))
@@ -222,6 +224,7 @@ fun InvasionView(harm: HarmDTO, harmType: String) {
             TextButton(
                 onClick = {
                     viewModel.selectHarm(harm)
+                    viewModel.getInvasionVideoUrl(harm.harmPictureId)
                     viewModel.sendIntent(MemorialViewIntent.ShowInvasionView)
                 },
                 modifier = Modifier.fillMaxSize(),
