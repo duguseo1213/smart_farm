@@ -49,12 +49,12 @@
 
 ### App
 <img src="Picture/app1.png" alt="App1" width="200px">
-![App1](Picture/app1.png)
-![App2](Picture/app2.png)
-![App3](Picture/app3.png)
-![App4](Picture/app4.png)
-![App5](Picture/app5.png)
-![App6](Picture/app6.png)
+<img src="Picture/app2.png" alt="App2" width="200px">
+<img src="Picture/app3.png" alt="App3" width="200px">
+<img src="Picture/app4.png" alt="App4" width="200px">
+<img src="Picture/app5.png" alt="App5" width="200px">
+<img src="Picture/app6.png" alt="App6" width="200px">
+
 
 
 
