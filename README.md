@@ -179,8 +179,10 @@
 
 
 ### 개선 목표
-<ul>
-  <li>텃밭 커뮤니티</li>
-  <li>On Device AI</li>
-  <li>집수 시스템</li>
-</ul>
+<div>
+  <ul>
+      <li>텃밭 커뮤니티</li>
+      <li>On Device AI</li>
+      <li>집수 시스템</li>
+  </ul>
+</div>
