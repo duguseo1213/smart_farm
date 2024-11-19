@@ -175,8 +175,8 @@
       <td>
         <ul>
           <li><strong>SSAFY 11th Embedded</strong></li>
-          <li>역할1</li>
-          <li>역할2</li>
+          <li>UI 구성 및 구현</li>
+          <li>발표자료 제작</li>
         </ul>
       </td>
     </tr>
