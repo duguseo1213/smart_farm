@@ -151,8 +151,9 @@
       <td>
         <ul>
           <li><strong>SSAFY 11th Embedded</strong></li>
-          <li>역할1</li>
-          <li>역할2</li>
+          <li>하드웨어 제작</li>
+          <li>온습도 센서, 토양습도센서, 조도센서 값 측정</li>
+          <li>rtmp 서버 전송</li>
         </ul>
       </td>
       <td>
