@@ -67,11 +67,6 @@
 
 ### AI
 
-## Hardware
-
-<div align="center">
-    ![Hardware](link)
-</div>
 
 ## Architecture
 
