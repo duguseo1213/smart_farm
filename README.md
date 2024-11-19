@@ -3,9 +3,9 @@
 # 프로젝트명 : 팜요 Farm-yo
 
 - 이미지
-- 배포 URL : 
-- Test ID : 
-- Test PW : 
+- 배포 URL : https://drive.google.com/file/d/1OseafIsXObwfuNPSEKQ_w3IaEkS9iNXR/view?usp=sharing
+- Test ID : evilparan@gmail.com
+- Test PW : farmustest1!
 
 ## 개요
 
@@ -167,8 +167,8 @@
       <td>
         <ul>
           <li><strong>SSAFY 11th Embedded</strong></li>
-          <li>역할1</li>
-          <li>역할2</li>
+          <li>앱 설계</li>
+          <li>앱 개발</li>
         </ul>
       </td>
     </tr>
