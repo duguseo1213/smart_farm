@@ -1,6 +1,6 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=BDBDC8&height=150&section=header" width="100%" >
 
-# 프로젝트명 : 팜요 Farm-yo
+# 프로젝트명 : 팜요 Farm-us
 ![App1](Picture/farmus.png)
 - 이미지
 - 배포 URL : https://drive.google.com/file/d/1OseafIsXObwfuNPSEKQ_w3IaEkS9iNXR/view?usp=sharing
