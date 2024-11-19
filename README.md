@@ -61,7 +61,8 @@
 
 
 ### Hardware
-
+![Hardware](Picture/hard1.png)
+![Hardware](Picture/hard2.png)
 
 
 ### AI
