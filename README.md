@@ -181,8 +181,8 @@
 ### 개선 목표
 <div>
   <ul>
-      <li>텃밭 커뮤니티</li>
-      <li>On Device AI</li>
-      <li>집수 시스템</li>
+      <li>텃밭 커뮤니티 기능을 통한 인싸 되기</li>
+      <li>On Device AI 기능을 통한 AI서버 과부하 줄이기</li>
+      <li>집수 시스템을 통한 물절약</li>
   </ul>
 </div>
