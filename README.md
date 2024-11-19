@@ -160,8 +160,9 @@
       <td>
         <ul>
           <li><strong>SSAFY 11th Java</strong></li>
-          <li>역할1</li>
-          <li>역할2</li>
+          <li>RestAPI개발</li>
+          <li>AI 학습 및 AI Server 구축</li>
+          <li>Oauth를 활용한 회원 시스템 개발</li>
         </ul>
       </td>
       <td>
