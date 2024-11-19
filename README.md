@@ -74,10 +74,10 @@
 </div>
 
 ## ERD
-
 <div align="center">
-
-    ![erd](link)
+  <p align="center">
+    <img src="/uploads/6de67c4d6230a3e0033dc43a315ea2a8/WCDFarm.png">
+  </p>
 </div>
 
 ### 개발 기간
