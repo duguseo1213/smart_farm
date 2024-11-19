@@ -32,8 +32,6 @@
 - Design : Figma
 - 협업 툴 : Notion, Jira, Mattermost
 
-## 기능 소개
-
 
 ## 시연 영상
 
@@ -63,8 +61,6 @@
 ![Hardware](Picture/hard1.png)
 ![Hardware](Picture/hard2.png)
 
-
-### AI
 
 
 ## Architecture
@@ -181,8 +177,10 @@
 
 </div>
 
-### 트러블 슈팅
-
 
 ### 개선 목표
-
+<ul>
+  <li>텃밭 커뮤니티</li>
+  <li>On Device AI</li>
+  <li>집수 시스템</li>
+</ul>
