@@ -75,17 +75,14 @@
       <td align="center">
         <img src="Picture/app4.png" width="100px"/>
         <br />
-        <sub><b>EM : 여현대</b></sub>
       </td>
       <td align="center">
         <img src="Picture/app5.png"  width="100px"/>
         <br />
-        <sub><b>BE : 박범수</b></sub>
       </td>
       <td align="center">
         <img src="Picture/app6.png"  width="100px"/>
         <br />
-        <sub><b>FE : 강효린</b></sub>
       </td>
     </tr>
     
