@@ -70,7 +70,9 @@
 
 <div align="center">
 
-    ![architecture](link)
+  <p align="center">
+    <img src="/uploads/6654f644ab3a1ec5c947bc31bb8c2a6d/그림1.png">
+  </p>
 </div>
 
 ## ERD
