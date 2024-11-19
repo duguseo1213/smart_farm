@@ -1,0 +1,145 @@
+package com.ssafy.WeCanDoFarm.server.core.configuration;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.WeCanDoFarm.server.core.properties.MqttProperties;
+import com.ssafy.WeCanDoFarm.server.domain.mqtt.handler.*;
+import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.annotation.Gateway;
+import org.springframework.integration.annotation.MessagingGateway;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.Transformers;
+import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
+import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
+import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
+import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
+import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHandler;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.integration.mqtt.support.MqttHeaders;
+
+@Configuration
+@EnableConfigurationProperties(MqttProperties.class)
+public class MqttConfig {
+
+    //private final SampleMessageHandler sampleMessageHandler;
+    private final FunctionMessageHandler functionMessageHandler;
+    private final GardenDataMessageHandler gardenDataMessageHandler;
+    private final MqttProperties mqttProperties;
+    private final ObjectMapper objectMapper;
+
+    public MqttConfig(FunctionMessageHandler functionMessageHandler, GardenDataMessageHandler gardenDataMessageHandler, MqttProperties mqttProperties, ObjectMapper objectMapper) {
+        //this.sampleMessageHandler = sampleMessageHandler;
+        this.functionMessageHandler = functionMessageHandler;
+        this.gardenDataMessageHandler = gardenDataMessageHandler;
+        this.mqttProperties = mqttProperties;
+        this.objectMapper = objectMapper;
+    }
+
+    @Bean
+    public MqttPahoClientFactory mqttPahoClientFactory() {
+        DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
+        factory.setConnectionOptions(connectOptions());
+        return factory;
+    }
+
+    private MqttConnectOptions connectOptions() {
+        MqttConnectOptions options = new MqttConnectOptions();
+        options.setServerURIs(new String[]{mqttProperties.connectionInfo()});
+        return options;
+    }
+
+    @Bean
+    public IntegrationFlow mqttInboundFlow() {
+        return IntegrationFlow.from(mqttChannelAdapter())
+                .route(Object.class, this::getMessageType, mapping -> mapping
+                        .subFlowMapping(GardenDataMessage.class, sf -> sf
+                                .transform(Transformers.fromJson(GardenDataMessage.class))
+                                .handle(message -> {
+                                    try {
+                                        gardenDataMessageHandler.handle((Message<GardenDataMessage>) message);
+                                    } catch (Exception e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }))
+                        .subFlowMapping(FunctionMessage.class, sf -> sf
+                                .transform(Transformers.fromJson(FunctionMessage.class))
+                                .handle(message -> {
+                                    functionMessageHandler.handle((Message<FunctionMessage>) message);
+                                }))
+                        .subFlowMapping(Object.class, sf -> sf // Object.class에 대한 기본 처리
+                                .handle(message -> {
+                                    System.out.println("Unhandled message type: " + message);
+                                })
+                        ))
+
+                .get();
+    }
+    // 메시지 타입을 결정하는 메소드
+    private Class getMessageType(Object payload) {
+        if (payload.toString().contains("temperature")) {
+            return GardenDataMessage.class;
+        } else if (payload.toString().contains("functionId")) {
+            return FunctionMessage.class;
+        }
+        return Object.class; // 기본 핸들링
+    }
+
+    private MqttPahoMessageDrivenChannelAdapter mqttChannelAdapter() {
+        MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(
+                MqttClient.generateClientId(),
+                mqttPahoClientFactory(),
+                mqttProperties.getTopic()
+        );
+        adapter.setCompletionTimeout(5000);
+        adapter.setConverter(new DefaultPahoMessageConverter());
+        adapter.setQos(mqttProperties.getQos());
+        return adapter;
+    }
+
+    @Bean
+    public IntegrationFlow mqttOutboundFlow() {
+        return IntegrationFlow.from(MQTT_OUTBOUND_CHANNEL)
+                .transform((Object payload) -> {
+                    try {
+                        if (payload instanceof GardenDataMessage ||payload instanceof FunctionMessage) {
+                            return objectMapper.writeValueAsString(payload);
+                        } else {
+                            return payload;
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException("Failed to convert message", e);
+                    }
+                })
+                .handle(mqttOutboundMessageHandler())
+                .get();
+    }
+
+    private MessageHandler mqttOutboundMessageHandler() {
+        MqttPahoMessageHandler handler = new MqttPahoMessageHandler(MqttAsyncClient.generateClientId(), mqttPahoClientFactory());
+        handler.setAsync(true);
+        handler.setDefaultTopic(mqttProperties.getTopic());
+        handler.setDefaultQos(mqttProperties.getQos());
+        return handler;
+    }
+
+    @MessagingGateway(defaultRequestChannel = MQTT_OUTBOUND_CHANNEL)
+    public interface MqttOutboundGateway {
+
+        @Gateway
+        void publish(@Header(MqttHeaders.TOPIC) String topic, String data);
+
+        @Gateway
+        void publish(@Header(MqttHeaders.TOPIC) String topic, FunctionMessage data);
+
+        @Gateway
+        void publish(GardenDataMessage data);
+    }
+
+    public static final String MQTT_OUTBOUND_CHANNEL = "outboundChannel";
+}

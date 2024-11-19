@@ -1,0 +1,10 @@
+## Folder
+app/__pycache__/
+app/PlantDisease/__pycache__/
+app/AnimalDetection/__pycache__/
+.idea/
+
+## File
+plant.pth
+best.pt
+.env
