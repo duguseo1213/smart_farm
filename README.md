@@ -51,7 +51,92 @@
 </div>
 
 ### App
-
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <img src="Picture/app1.png" alt="EM 팀장 : 이종하" width="100px"/>
+        <br />
+        <sub><b>EM 팀장 : 이종하</b></sub>
+      </td>
+      <td align="center">
+        <img src="Picture/app2.png" alt="BE : 서동인" width="100px"/>
+        <br />
+        <sub><b>BE : 서동인</b></sub>
+      </td>
+      <td align="center">
+        <img src="Picture/app3.png" alt="FE : 오혜성" width="100px"/>
+        <br />
+        <sub><b>FE : 오혜성</b></sub>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+          <li><strong>SSAFY 11th Embedded</strong></li>
+          <li>역할1</li>
+          <li>역할2</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><strong>SSAFY 11th Java</strong></li>
+          <li>RestAPI개발 및 mqtt서버 구축</li>
+          <li>CI/CD 인프라 구축</li>
+          <li>rtmp 미디어 서버 구축</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><strong>SSAFY 11th Embedded</strong></li>
+          <li>역할1</li>
+          <li>역할2</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <img src="Picture/app4.jpg" alt="EM : 여현대" width="100px"/>
+        <br />
+        <sub><b>EM : 여현대</b></sub>
+      </td>
+      <td align="center">
+        <img src="Picture/app5.png" alt="BE : 박범수" width="100px"/>
+        <br />
+        <sub><b>BE : 박범수</b></sub>
+      </td>
+      <td align="center">
+        <img src="Picture/app6.png" alt="FE : 강효린" width="100px"/>
+        <br />
+        <sub><b>FE : 강효린</b></sub>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+          <li><strong>SSAFY 11th Embedded</strong></li>
+          <li>하드웨어 제작</li>
+          <li>온습도 센서, 토양습도센서, 조도센서 값 측정</li>
+          <li>rtmp 서버 전송</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><strong>SSAFY 11th Java</strong></li>
+          <li>역할1</li>
+          <li>역할2</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><strong>SSAFY 11th Embedded</strong></li>
+          <li>역할1</li>
+          <li>역할2</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 
 ### Hardware
