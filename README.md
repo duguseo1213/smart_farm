@@ -51,43 +51,10 @@
 </div>
 
 ### App
-<table>
-  <tbody>
-    <tr>
-      <td align="center">
-        <img src="Picture/app1.png"  width="100px"/>
-        <br />
-        
-      </td>
-      <td align="center">
-        <img src="Picture/app2.png"  width="100px"/>
-        <br />
-        
-      </td>
-      <td align="center">
-        <img src="Picture/app3.png"  width="100px"/>
-        <br />
-        
-      </td>
-    </tr>
-    
-    <tr>
-      <td align="center">
-        <img src="Picture/app4.png" width="100px"/>
-        <br />
-      </td>
-      <td align="center">
-        <img src="Picture/app5.png"  width="100px"/>
-        <br />
-      </td>
-      <td align="center">
-        <img src="Picture/app6.png"  width="100px"/>
-        <br />
-      </td>
-    </tr>
-    
-  </tbody>
-</table>
+![App1](Picture/app1.png)
+![App2](Picture/app2.png)
+![App3](Picture/app3.png)
+
 
 
 ### Hardware
